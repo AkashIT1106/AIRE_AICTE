@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+coverage
+.git
+.agents
+.gemini
+pnpm-lock.yaml
+skills-lock.json
+infrastructure/nginx/nginx.conf
+infrastructure/redis/redis.conf
+infrastructure/postgres/init.sql
+infrastructure/scripts/verify-foundation.sh
+

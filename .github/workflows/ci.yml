@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: aire_user
+          POSTGRES_PASSWORD: aire_secure_dev_password
+          POSTGRES_DB: aire_db
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.4.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm run format:check
+
+      - name: TypeScript typecheck
+        run: pnpm run typecheck
+
+      - name: Generate Prisma client
+        run: pnpm run prisma:generate
+
+      - name: Run Prisma migrations
+        run: pnpm run prisma:migrate
+        env:
+          DATABASE_URL: postgresql://aire_user:aire_secure_dev_password@localhost:5433/aire_db?schema=public
+
+      - name: Run test suites
+        run: pnpm run test
+        env:
+          DATABASE_URL: postgresql://aire_user:aire_secure_dev_password@localhost:5433/aire_db?schema=public
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          NODE_ENV: test
+
+      - name: Build applications & packages
+        run: pnpm run build

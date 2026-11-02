@@ -1,0 +1,34 @@
+FROM node:22-alpine AS base
+
+RUN corepack enable && corepack prepare pnpm@12.4.2 --activate
+
+WORKDIR /app
+
+# Copy root workspace and package manifests
+COPY pnpm-lock.yaml* pnpm-workspace.yaml package.json ./
+COPY packages/shared-types/package.json ./packages/shared-types/
+COPY packages/validation/package.json ./packages/validation/
+COPY packages/api-contracts/package.json ./packages/api-contracts/
+COPY packages/authorization/package.json ./packages/authorization/
+COPY packages/policy-engine/package.json ./packages/policy-engine/
+COPY client/package.json ./client/
+COPY server/package.json ./server/
+COPY workers/package.json ./workers/
+COPY tsconfig.base.json ./
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source files
+COPY packages/ ./packages/
+COPY client/ ./client/
+
+# Build shared packages and client
+RUN pnpm --filter @aire/shared-types build && \
+    pnpm --filter @aire/validation build && \
+    pnpm --filter @aire/api-contracts build && \
+    pnpm --filter @aire/client build
+
+EXPOSE 5173
+
+CMD ["pnpm", "--filter", "@aire/client", "preview", "--host", "--port", "5173"]

@@ -1,0 +1,28 @@
+{
+  "name": "aire",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AICTE Admission Reconciliation & Evidence Platform",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@12.4.2",
+  "scripts": {
+    "build": "pnpm -r run build",
+    "test": "pnpm -r run test",
+    "typecheck": "pnpm -r run typecheck",
+    "lint": "pnpm -r --if-present run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "prisma:generate": "pnpm --filter @aire/server prisma:generate",
+    "prisma:migrate": "pnpm --filter @aire/server prisma:migrate",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "verify": "bash infrastructure/scripts/verify-foundation.sh"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.0",
+    "typescript": "^5.7.3"
+  }
+}
