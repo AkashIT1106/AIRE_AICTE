@@ -143,3 +143,52 @@ The following decisions were identified during the Stage 0 UI/UX audit (`docs/04
 - **Options:** (a) Zero decorative animations; all transitions respect `prefers-reduced-motion` strictly. (b) Fluid animated micro-interactions.
 - **Decision Owner:** UX Lead
 - **Status:** `Open` (Proposed: Option a)
+
+### D-009 — Step-Up Re-Authentication Session Threshold
+
+- **Question:** Should the 15-minute re-authentication threshold for irreversible operations (sealing cohorts, issuing Show Cause notices) be fixed or configurable?
+- **Options:** (a) Fixed at 15 minutes for all roles. (b) Configurable per organizational policy.
+- **Decision Owner:** Security Lead
+- **Status:** `Open` (Proposed: Option a — deterministic security baseline)
+
+### D-010 — Idle Session Timeout Warning Window
+
+- **Question:** At what point before the 30-minute idle session timeout should the warning modal appear?
+- **Options:** (a) 5 minutes before (at minute 25). (b) 2 minutes before (at minute 28).
+- **Decision Owner:** UX Lead
+- **Status:** `Open` (Proposed: Option a — gives sufficient time to save draft batches or evidence)
+
+### D-011 — Search Input Debounce Timing
+
+- **Question:** Standardize debounce delay for text search inputs across high-density data tables.
+- **Options:** (a) 300ms debounce. (b) 500ms debounce. (c) Immediate query on Enter key only.
+- **Decision Owner:** Frontend Lead
+- **Status:** `Open` (Proposed: Option a — industry standard balance of responsiveness and server load)
+
+### D-012 — Automated Accessibility Verification in CI Pipeline
+
+- **Question:** Which automated tooling should enforce WCAG 2.2 AA in the CI/CD pipeline?
+- **Options:** (a) `@axe-core/react` + Playwright axe-core audits. (b) Lighthouse CI. (c) Pa11y CLI.
+- **Decision Owner:** Quality Lead
+- **Status:** `Open` (Proposed: Option a)
+
+### D-013 — Toast Notification Stacking & Dismissal Limits
+
+- **Question:** Maximum simultaneous toast notifications and dismissal behavior.
+- **Options:** (a) Maximum 3 visible toasts; informational toasts auto-dismiss in 4s; error toasts require manual dismissal. (b) Single toast replacement.
+- **Decision Owner:** UX Lead
+- **Status:** `Open` (Proposed: Option a)
+
+### D-014 — Ingestion Column Header Matching Heuristic
+
+- **Question:** How should the batch ingestion engine match uploaded CSV/XLSX headers to AIRE canonical fields?
+- **Options:** (a) Case-insensitive normalized substring matching with manual confirmation UI. (b) Strict exact-string match only. (c) Machine learning candidate mapping.
+- **Decision Owner:** Product Owner
+- **Status:** `Open` (Proposed: Option a — tolerant of minor institutional spelling variations)
+
+### D-015 — Public Verifier Authentication Boundary
+
+- **Question:** Should the External Verifier Terminal (`/verify/:token`) require verifier account registration or remain open for public cryptographic lookup?
+- **Options:** (a) Publicly accessible without account login; token cryptographic signature provides non-repudiation and zero PII is disclosed. (b) Require corporate verifier login.
+- **Decision Owner:** Security Lead & Product Owner
+- **Status:** `Open` (Proposed: Option a — aligns with public degree verification standards)
