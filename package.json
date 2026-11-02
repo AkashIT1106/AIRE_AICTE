@@ -19,7 +19,9 @@
     "prisma:migrate": "pnpm --filter @aire/server prisma:migrate",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
-    "verify": "bash infrastructure/scripts/verify-foundation.sh"
+    "ci": "bash infrastructure/scripts/ci-local.sh",
+    "ci:local": "bash infrastructure/scripts/ci-local.sh",
+    "verify": "bash infrastructure/scripts/ci-local.sh"
   },
   "devDependencies": {
     "prettier": "^3.5.0",
