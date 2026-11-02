@@ -12,7 +12,7 @@
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "typecheck": "pnpm -r run typecheck",
-    "lint": "pnpm -r --if-present run lint",
+    "lint": "oxlint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
     "prisma:generate": "pnpm --filter @aire/server prisma:generate",
@@ -24,6 +24,7 @@
     "verify": "bash infrastructure/scripts/ci-local.sh"
   },
   "devDependencies": {
+    "oxlint": "^1.90.0",
     "prettier": "^3.5.0",
     "typescript": "^5.7.3"
   }
