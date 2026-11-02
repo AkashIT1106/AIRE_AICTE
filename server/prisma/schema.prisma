@@ -1,0 +1,57 @@
+// AIRE Platform Initial Foundation Schema
+// Specification: PROJECT_PLAN.md Section 11.4, 12.2, 12.3 (Audit and Operations)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Baseline operational health probe tracking table
+model SystemHealthCheck {
+  id        String   @id @default(uuid())
+  probeName String   @map("probe_name")
+  status    String
+  metadata  Json?
+  checkedAt DateTime @default(now()) @map("checked_at")
+
+  @@map("system_health_checks")
+}
+
+/// Baseline audit event table per Section 12.3 and 39.1
+model AuditEventBaseline {
+  id            String   @id @default(uuid())
+  timestamp     DateTime @default(now())
+  severity      String   @default("info")
+  service       String
+  correlationId String   @map("correlation_id")
+  actorId       String?  @map("actor_id")
+  resourceType  String   @map("resource_type")
+  resourceId    String?  @map("resource_id")
+  eventType     String   @map("event_type")
+  outcome       String
+  metadata      Json?
+
+  @@index([correlationId])
+  @@index([timestamp])
+  @@map("audit_events_baseline")
+}
+
+/// Transactional outbox event table per Section 11.4 and 12.3
+model OutboxEvent {
+  id            String    @id @default(uuid())
+  aggregateType String    @map("aggregate_type")
+  aggregateId   String    @map("aggregate_id")
+  eventType     String    @map("event_type")
+  payload       Json
+  correlationId String    @map("correlation_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  publishedAt   DateTime? @map("published_at")
+  status        String    @default("PENDING")
+
+  @@index([status, createdAt])
+  @@map("outbox_events")
+}
+
