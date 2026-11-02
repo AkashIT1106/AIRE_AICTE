@@ -1,11 +1,7 @@
 # Architecture Index
 
-Technical architecture documentation for AIRE:
+> [!NOTE]
+> This index has been superseded by AIRE's modular documentation system.
+> The authoritative specification is located at: [`docs/03-architecture/architecture-overview.md`](../03-architecture/architecture-overview.md)
 
-1. System Architecture (`docs/01-architecture/SYSTEM_ARCHITECTURE.md`)
-2. Technology Stack & Decisions (`docs/01-architecture/TECH_STACK_AND_DECISIONS.md`)
-3. Backend Architecture (`docs/01-architecture/BACKEND_ARCHITECTURE.md`)
-4. Frontend Architecture (`docs/01-architecture/FRONTEND_ARCHITECTURE.md`)
-5. Event-Driven Architecture (`docs/01-architecture/EVENT_DRIVEN_ARCHITECTURE.md`)
-6. Data Flow (`docs/01-architecture/DATA_FLOW.md`)
-7. Architecture Decision Records (`docs/01-architecture/ARCHITECTURE_DECISION_RECORDS.md`)
+Please refer to the [Documentation Portal](../README.md) and [Documentation Map](../00-governance/documentation-map.md).

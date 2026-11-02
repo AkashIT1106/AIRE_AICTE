@@ -1,17 +1,7 @@
 # Implementation Index
 
-Phased roadmap for AIRE development:
+> [!NOTE]
+> This index has been superseded by AIRE's modular documentation system.
+> The authoritative specification is located at: [`docs/09-delivery/implementation-roadmap.md`](../09-delivery/implementation-roadmap.md)
 
-- **Phase 0**: Research & Requirements Validation
-- **Phase 1**: Engineering Foundation (Current)
-- **Phase 2**: Identity, Access & Security Foundation
-- **Phase 3**: Institution, Programme & Approval Registry
-- **Phase 4**: Submission & Ingestion Pipeline
-- **Phase 5**: Identity Vault & Admission Ledger
-- **Phase 6**: Reconciliation Engine & Entitlements
-- **Phase 7**: Exception Review Workbench
-- **Phase 8**: Verifiable Records & AEP Generation
-- **Phase 9**: Dashboards, Analytics & Reporting
-- **Phase 10**: Integration Expansion
-- **Phase 11**: Security & Privacy Hardening
-- **Phase 12**: Demonstration & Delivery
+Please refer to the [Documentation Portal](../README.md) and [Documentation Map](../00-governance/documentation-map.md).

@@ -12,19 +12,33 @@ Prioritize:
 - Human authority over regulatory policy and final decisions.
 - Small, complete, securely isolated workflows over unfinished feature breadth.
 
-## 2. Source of truth
+## 2. Source of truth and documentation protocol
 
-Read `PROJECT_PLAN.md` before architectural or product decisions. Read relevant specifications under `docs/` before implementing their modules.
+Before starting any task, read [`docs/README.md`](docs/README.md) and [`docs/00-governance/documentation-map.md`](docs/00-governance/documentation-map.md) to locate the relevant specifications.
 
-When sources conflict, follow this order:
+**Agent Documentation Operating Rules:**
+
+1. **Read `docs/README.md` and `docs/00-governance/documentation-map.md`** before starting project work.
+2. **Read only the authoritative documents** relevant to the assigned task, plus their direct dependencies.
+3. **Do not use `PROJECT_PLAN.md` as the implementation source of truth.** Its contents are decomposed into `docs/`. It remains as an executive index and historical baseline.
+4. **Do not infer behavior from audit findings or proposals.** Diagnostic findings in `docs/04-frontend/` are historical evidence snapshots, not approved product scope.
+5. **Do not invent missing requirements.** Record ambiguity or unconfirmed policies as `OPEN` or `NEEDS VERIFICATION`.
+6. **Update the authoritative document** when a requirement or technical decision is approved or changed.
+7. **Update traceability and cross-links** in `docs/00-governance/requirements-traceability.md` when applicable.
+8. **Keep implementation status evidence-based.** Never mark a feature, check, or requirement as `IMPLEMENTED` or `VERIFIED` without verifiable code, executed test runs, or migrations.
+9. **Do not duplicate requirements across documents.** Link to the authoritative document via relative paths.
+10. **Follow existing repository conventions** and operating guidelines where they do not conflict with this documentation authority system.
+
+When sources conflict, follow this strict priority order:
 
 1. Current explicit user instruction, unless unsafe or contrary to project constraints.
-2. `PROJECT_PLAN.md` and approved decisions.
-3. Approved task prompt under `prompts/`.
-4. Relevant specifications under `docs/`.
-5. Existing code and repository conventions.
-6. Official documentation for installed technology versions.
-7. Engineering judgment.
+2. Source of Truth Policy ([`docs/00-governance/source-of-truth-policy.md`](docs/00-governance/source-of-truth-policy.md)).
+3. Authoritative modular specifications under `docs/`.
+4. Approved task prompt under `prompts/`.
+5. Decisions Register ([`docs/00-governance/decisions/decision-register.md`](docs/00-governance/decisions/decision-register.md)).
+6. Existing code and repository conventions.
+7. Official documentation for installed technology versions.
+8. Engineering judgment.
 
 Do not silently resolve material conflicts. Ask for a decision or document a safe, reversible assumption. Never treat a mock, assumption, UI, or unverified report as authoritative evidence.
 
