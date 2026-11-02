@@ -6,9 +6,23 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      DATABASE_URL: postgresql://aire_user:aire_secure_dev_password@localhost:5433/aire_db?schema=public
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
+      NODE_ENV: test
 
     services:
       postgres:
@@ -53,27 +67,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate Prisma client
+        run: pnpm run prisma:generate
+
       - name: Check formatting
         run: pnpm run format:check
+
+      - name: Lint workspace
+        run: pnpm run lint
 
       - name: TypeScript typecheck
         run: pnpm run typecheck
 
-      - name: Generate Prisma client
-        run: pnpm run prisma:generate
+      - name: Build applications & packages
+        run: pnpm run build
 
       - name: Run Prisma migrations
         run: pnpm run prisma:migrate
-        env:
-          DATABASE_URL: postgresql://aire_user:aire_secure_dev_password@localhost:5433/aire_db?schema=public
 
       - name: Run test suites
         run: pnpm run test
-        env:
-          DATABASE_URL: postgresql://aire_user:aire_secure_dev_password@localhost:5433/aire_db?schema=public
-          REDIS_HOST: localhost
-          REDIS_PORT: 6379
-          NODE_ENV: test
-
-      - name: Build applications & packages
-        run: pnpm run build
