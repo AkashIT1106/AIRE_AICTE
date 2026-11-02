@@ -2804,7 +2804,7 @@ Every module specification should use this structure:
 
 ## 36.2 Code quality
 
-- ESLint.
+- Oxlint.
 - Prettier.
 - Strict TypeScript.
 - Consistent naming.
