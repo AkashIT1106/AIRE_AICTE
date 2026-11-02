@@ -35,6 +35,12 @@ export const environmentSchema = z.object({
     .string()
     .min(16)
     .default("development_jwt_secret_min_16_chars_default"),
+  BETTER_AUTH_SECRET: z
+    .string()
+    .min(16)
+    .default("development_better_auth_secret_min_32_chars_default_test"),
+  BETTER_AUTH_URL: z.string().default("http://localhost:4000"),
+  APP_DATABASE_URL: z.string().optional(),
 });
 
 export type EnvironmentConfig = z.infer<typeof environmentSchema>;

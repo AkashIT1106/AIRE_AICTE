@@ -1,5 +1,6 @@
-// AIRE Platform Initial Foundation Schema
-// Specification: PROJECT_PLAN.md Section 11.4, 12.2, 12.3 (Audit and Operations)
+// AIRE Platform Database Schema
+// Phase 1 + Phase 2 (Identity, Access, Tenant Isolation & Audit)
+// Specifications: PROJECT_PLAN.md Sections 11.4, 12.2, 12.3, 16, 17, 19
 
 generator client {
   provider = "prisma-client-js"
@@ -8,6 +9,10 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+// -----------------------------------------------------------------------------
+// Phase 1: Operational Baseline Models
+// -----------------------------------------------------------------------------
 
 /// Baseline operational health probe tracking table
 model SystemHealthCheck {
@@ -55,3 +60,158 @@ model OutboxEvent {
   @@map("outbox_events")
 }
 
+// -----------------------------------------------------------------------------
+// Phase 2: Better Auth Core Models
+// -----------------------------------------------------------------------------
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false) @map("email_verified")
+  image         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  sessions      Session[]
+  accounts      Account[]
+  memberships   InstitutionMember[]
+  platformRoles PlatformUserRole[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime @map("expires_at")
+  token     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String    @map("account_id")
+  providerId            String    @map("provider_id")
+  userId                String    @map("user_id")
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?   @map("access_token")
+  refreshToken          String?   @map("refresh_token")
+  idToken               String?   @map("id_token")
+  accessTokenExpiresAt  DateTime? @map("access_token_expires_at")
+  refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime  @map("expires_at")
+  createdAt  DateTime? @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at")
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// -----------------------------------------------------------------------------
+// Phase 2: AIRE Multi-Tenant Authorization & Records
+// -----------------------------------------------------------------------------
+
+model Institution {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  name      String
+  status    String   @default("ACTIVE") // ACTIVE, SUSPENDED, INACTIVE
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  members InstitutionMember[]
+  records InstitutionRecord[]
+
+  @@map("institutions")
+}
+
+model InstitutionMember {
+  id            String   @id @default(uuid())
+  institutionId String   @map("institution_id")
+  userId        String   @map("user_id")
+  role          String   @default("INSTITUTION_OPERATOR") // INSTITUTION_ADMIN, INSTITUTION_OPERATOR
+  status        String   @default("ACTIVE") // ACTIVE, INACTIVE, REVOKED
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([institutionId, userId])
+  @@index([userId, status])
+  @@index([institutionId, status])
+  @@map("institution_members")
+}
+
+model PlatformUserRole {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  role      String   // SUPER_ADMIN, AICTE_ADMIN, AICTE_REVIEWER, AUDITOR
+  status    String   @default("ACTIVE") // ACTIVE, REVOKED
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, role])
+  @@index([userId, status])
+  @@map("platform_user_roles")
+}
+
+/// Tenant-scoped entity protected by PostgreSQL Row-Level Security (RLS)
+model InstitutionRecord {
+  id            String   @id @default(uuid())
+  institutionId String   @map("institution_id")
+  title         String
+  payload       Json?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+
+  @@index([institutionId])
+  @@map("institution_records")
+}
+
+/// Comprehensive Phase 2 Audit Event Table
+model AuditEvent {
+  id            String   @id @default(uuid())
+  timestamp     DateTime @default(now())
+  severity      String   @default("info") // info, warn, error
+  service       String   @default("aire-server")
+  correlationId String   @map("correlation_id")
+  actorId       String?  @map("actor_id")
+  tenantId      String?  @map("tenant_id")
+  action        String
+  resourceType  String   @map("resource_type")
+  resourceId    String?  @map("resource_id")
+  status        String   // SUCCESS, FAILURE, DENIED
+  metadata      Json?
+
+  @@index([correlationId])
+  @@index([tenantId])
+  @@index([timestamp])
+  @@map("audit_events")
+}

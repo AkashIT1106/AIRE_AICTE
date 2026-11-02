@@ -5,6 +5,7 @@
 You are the engineering agent for **AIRE — AICTE Admission Reconciliation & Evidence Platform**. Implement approved requirements with production-minded quality. You are not the product owner, regulatory authority, security approver, or legal interpreter.
 
 Prioritize:
+
 - Correctness, provenance, and reproducibility.
 - Privacy, purpose limitation, and least privilege.
 - Authorization at application, backend, and database layers.
@@ -16,6 +17,7 @@ Prioritize:
 Read `PROJECT_PLAN.md` before architectural or product decisions. Read relevant specifications under `docs/` before implementing their modules.
 
 When sources conflict, follow this order:
+
 1. Current explicit user instruction, unless unsafe or contrary to project constraints.
 2. `PROJECT_PLAN.md` and approved decisions.
 3. Approved task prompt under `prompts/`.
@@ -40,20 +42,21 @@ AIRE is not a replacement for APAAR, ABC, AICTE, or institutional ERP systems; a
 
 Follow the planned modular monolith with independently scalable workers. Do not introduce microservices or major dependencies without an approved decision.
 
-| Area | Planned baseline |
-|---|---|
-| Frontend | React, TypeScript, Vite, Tailwind CSS, React Router |
-| Client data/forms | TanStack Query, React Hook Form, Zod |
-| Backend | Node.js, Express, TypeScript |
-| Data | PostgreSQL, Prisma |
-| Jobs | Redis, BullMQ |
-| API/logging | OpenAPI, Pino |
-| Optional document AI | Python, FastAPI |
-| Infrastructure | Docker-based |
+| Area                 | Planned baseline                                    |
+| -------------------- | --------------------------------------------------- |
+| Frontend             | React, TypeScript, Vite, Tailwind CSS, React Router |
+| Client data/forms    | TanStack Query, React Hook Form, Zod                |
+| Backend              | Node.js, Express, TypeScript                        |
+| Data                 | PostgreSQL, Prisma                                  |
+| Jobs                 | Redis, BullMQ                                       |
+| API/logging          | OpenAPI, Pino                                       |
+| Optional document AI | Python, FastAPI                                     |
+| Infrastructure       | Docker-based                                        |
 
 The repository's installed versions and configuration are the immediate context; this table does not prove a package is installed or current.
 
 Rules:
+
 - PostgreSQL is authoritative; Redis is not a business source of truth.
 - The frontend never accesses the database directly.
 - External integrations belong behind backend adapters.
@@ -81,41 +84,44 @@ If implementation reveals a material scope or architecture change, stop and revi
 Before designing, implementing, modifying, or reviewing code in any domain covered below, the engineering agent **must** consult the corresponding skill documentation (`SKILL.md`):
 
 #### Workspace skills (`.agents/skills/`)
-| Skill | Trigger / When to use | Link |
-|---|---|---|
-| `supabase-postgres-best-practices` | Postgres schema design, migrations, RLS policies, indexing, performance, security | [`.agents/skills/supabase-postgres-best-practices/SKILL.md`](.agents/skills/supabase-postgres-best-practices/SKILL.md) |
-| `prisma-client-api` | Prisma queries, CRUD operations, transactions, filtering, client configuration | [`.agents/skills/prisma-client-api/SKILL.md`](.agents/skills/prisma-client-api/SKILL.md) |
-| `prisma-cli` | Prisma CLI workflows (migrate, generate, db push/pull, studio) | [`.agents/skills/prisma-cli/SKILL.md`](.agents/skills/prisma-cli/SKILL.md) |
-| `prisma-postgres` | PostgreSQL connection and configuration specifics for Prisma | [`.agents/skills/prisma-postgres/SKILL.md`](.agents/skills/prisma-postgres/SKILL.md) |
-| `prisma-database-setup` | Initializing and setting up Prisma ORM database connections | [`.agents/skills/prisma-database-setup/SKILL.md`](.agents/skills/prisma-database-setup/SKILL.md) |
-| `bullmq-specialist` | Redis-backed BullMQ job queues, workers, delayed/repeatable jobs, concurrency, idempotency | [`.agents/skills/bullmq-specialist/SKILL.md`](.agents/skills/bullmq-specialist/SKILL.md) |
-| `redis-core` | Redis data structures, key naming patterns, caching strategies, session stores | [`.agents/skills/redis-core/SKILL.md`](.agents/skills/redis-core/SKILL.md) |
-| `vercel-react-best-practices` | React performance optimization, rendering patterns, data fetching, bundle optimization | [`.agents/skills/vercel-react-best-practices/SKILL.md`](.agents/skills/vercel-react-best-practices/SKILL.md) |
-| `shadcn` | UI components, Tailwind CSS styling, Radix primitives, form design, accessibility | [`.agents/skills/shadcn/SKILL.md`](.agents/skills/shadcn/SKILL.md) |
-| `zod` | Schema validation, safe parsing, API payload validation, type inference (`z.infer`) | [`.agents/skills/zod/SKILL.md`](.agents/skills/zod/SKILL.md) |
-| `typescript-advanced-types` | Complex TypeScript type logic, generics, conditional/mapped types, utility types | [`.agents/skills/typescript-advanced-types/SKILL.md`](.agents/skills/typescript-advanced-types/SKILL.md) |
-| `fastapi` | FastAPI backend services, Pydantic models, async endpoints, streaming responses (Document AI) | [`.agents/skills/fastapi/SKILL.md`](.agents/skills/fastapi/SKILL.md) |
-| `fastapi-templates` | Scaffolding production-ready FastAPI projects and modular API structures | [`.agents/skills/fastapi-templates/SKILL.md`](.agents/skills/fastapi-templates/SKILL.md) |
-| `multi-stage-dockerfile` | Creating and optimizing multi-stage Dockerfiles for Node.js, Python, and web servers | [`.agents/skills/multi-stage-dockerfile/SKILL.md`](.agents/skills/multi-stage-dockerfile/SKILL.md) |
-| `nginx-configuration` | Nginx reverse proxy, API gateway routing, SSL/TLS, load balancing, caching | [`.agents/skills/nginx-configuration/SKILL.md`](.agents/skills/nginx-configuration/SKILL.md) |
-| `find-skills` | Discovering and recommending new agent skills when encountering unsupported workflows | [`.agents/skills/find-skills/SKILL.md`](.agents/skills/find-skills/SKILL.md) |
+
+| Skill                              | Trigger / When to use                                                                         | Link                                                                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `supabase-postgres-best-practices` | Postgres schema design, migrations, RLS policies, indexing, performance, security             | [`.agents/skills/supabase-postgres-best-practices/SKILL.md`](.agents/skills/supabase-postgres-best-practices/SKILL.md) |
+| `prisma-client-api`                | Prisma queries, CRUD operations, transactions, filtering, client configuration                | [`.agents/skills/prisma-client-api/SKILL.md`](.agents/skills/prisma-client-api/SKILL.md)                               |
+| `prisma-cli`                       | Prisma CLI workflows (migrate, generate, db push/pull, studio)                                | [`.agents/skills/prisma-cli/SKILL.md`](.agents/skills/prisma-cli/SKILL.md)                                             |
+| `prisma-postgres`                  | PostgreSQL connection and configuration specifics for Prisma                                  | [`.agents/skills/prisma-postgres/SKILL.md`](.agents/skills/prisma-postgres/SKILL.md)                                   |
+| `prisma-database-setup`            | Initializing and setting up Prisma ORM database connections                                   | [`.agents/skills/prisma-database-setup/SKILL.md`](.agents/skills/prisma-database-setup/SKILL.md)                       |
+| `bullmq-specialist`                | Redis-backed BullMQ job queues, workers, delayed/repeatable jobs, concurrency, idempotency    | [`.agents/skills/bullmq-specialist/SKILL.md`](.agents/skills/bullmq-specialist/SKILL.md)                               |
+| `redis-core`                       | Redis data structures, key naming patterns, caching strategies, session stores                | [`.agents/skills/redis-core/SKILL.md`](.agents/skills/redis-core/SKILL.md)                                             |
+| `vercel-react-best-practices`      | React performance optimization, rendering patterns, data fetching, bundle optimization        | [`.agents/skills/vercel-react-best-practices/SKILL.md`](.agents/skills/vercel-react-best-practices/SKILL.md)           |
+| `shadcn`                           | UI components, Tailwind CSS styling, Radix primitives, form design, accessibility             | [`.agents/skills/shadcn/SKILL.md`](.agents/skills/shadcn/SKILL.md)                                                     |
+| `zod`                              | Schema validation, safe parsing, API payload validation, type inference (`z.infer`)           | [`.agents/skills/zod/SKILL.md`](.agents/skills/zod/SKILL.md)                                                           |
+| `typescript-advanced-types`        | Complex TypeScript type logic, generics, conditional/mapped types, utility types              | [`.agents/skills/typescript-advanced-types/SKILL.md`](.agents/skills/typescript-advanced-types/SKILL.md)               |
+| `fastapi`                          | FastAPI backend services, Pydantic models, async endpoints, streaming responses (Document AI) | [`.agents/skills/fastapi/SKILL.md`](.agents/skills/fastapi/SKILL.md)                                                   |
+| `fastapi-templates`                | Scaffolding production-ready FastAPI projects and modular API structures                      | [`.agents/skills/fastapi-templates/SKILL.md`](.agents/skills/fastapi-templates/SKILL.md)                               |
+| `multi-stage-dockerfile`           | Creating and optimizing multi-stage Dockerfiles for Node.js, Python, and web servers          | [`.agents/skills/multi-stage-dockerfile/SKILL.md`](.agents/skills/multi-stage-dockerfile/SKILL.md)                     |
+| `nginx-configuration`              | Nginx reverse proxy, API gateway routing, SSL/TLS, load balancing, caching                    | [`.agents/skills/nginx-configuration/SKILL.md`](.agents/skills/nginx-configuration/SKILL.md)                           |
+| `find-skills`                      | Discovering and recommending new agent skills when encountering unsupported workflows         | [`.agents/skills/find-skills/SKILL.md`](.agents/skills/find-skills/SKILL.md)                                           |
 
 #### Environment & platform skills
-| Skill | Trigger / When to use | Link |
-|---|---|---|
-| `graphify` | Codebase architecture comprehension, relationship mapping, knowledge graph queries | [`graphify`](file:///home/snehan/.gemini/config/skills/graphify/SKILL.md) |
-| `generative_ui` | Creating interactive HTML/data visualization widgets in chat or standalone artifacts | [`generative_ui`](file:///home/snehan/.gemini/antigravity/builtin/skills/generative_ui/SKILL.md) |
-| `antigravity-guide` | Antigravity environment, CLI flags, IDE shortcuts, slash commands, customization docs | [`antigravity-guide`](file:///home/snehan/.gemini/antigravity/builtin/skills/antigravity_guide/SKILL.md) |
-| `agy-customizations` | Authoring, loading priority, and lifecycle for custom skills, rules, and plugins | [`agy-customizations`](file:///home/snehan/.gemini/antigravity/builtin/skills/agy-customizations/SKILL.md) |
-| `plugin` | Managing, enabling, disabling, or packaging plugins and bundled skills | [`plugin`](file:///home/snehan/.gemini/antigravity/builtin/skills/plugin/SKILL.md) |
-| `automation` | Designing recurring cron jobs or scheduled background tasks (`/schedule`) | [`automation`](file:///home/snehan/.gemini/antigravity/builtin/skills/automation/SKILL.md) |
-| `migrate-workflows` | Migrating legacy workflows to modern agent skills | [`migrate-workflows`](file:///home/snehan/.gemini/antigravity/builtin/skills/migrate-workflows/SKILL.md) |
-| `ui-plugin-navigation` | Discovering UI plugin panels and generating toggle pills in chat | [`ui-plugin-navigation`](file:///home/snehan/.gemini/antigravity/builtin/skills/ui-plugin-navigation/SKILL.md) |
-| `reverse-engineer-anything` | Decompiling, inspecting, or reverse engineering external binaries, packages, or web bundles | [`reverse-engineer-anything`](file:///home/snehan/.gemini/config/skills/reverse-engineer-anything/SKILL.md) |
+
+| Skill                       | Trigger / When to use                                                                       | Link                                                                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `graphify`                  | Codebase architecture comprehension, relationship mapping, knowledge graph queries          | [`graphify`](file:///home/snehan/.gemini/config/skills/graphify/SKILL.md)                                      |
+| `generative_ui`             | Creating interactive HTML/data visualization widgets in chat or standalone artifacts        | [`generative_ui`](file:///home/snehan/.gemini/antigravity/builtin/skills/generative_ui/SKILL.md)               |
+| `antigravity-guide`         | Antigravity environment, CLI flags, IDE shortcuts, slash commands, customization docs       | [`antigravity-guide`](file:///home/snehan/.gemini/antigravity/builtin/skills/antigravity_guide/SKILL.md)       |
+| `agy-customizations`        | Authoring, loading priority, and lifecycle for custom skills, rules, and plugins            | [`agy-customizations`](file:///home/snehan/.gemini/antigravity/builtin/skills/agy-customizations/SKILL.md)     |
+| `plugin`                    | Managing, enabling, disabling, or packaging plugins and bundled skills                      | [`plugin`](file:///home/snehan/.gemini/antigravity/builtin/skills/plugin/SKILL.md)                             |
+| `automation`                | Designing recurring cron jobs or scheduled background tasks (`/schedule`)                   | [`automation`](file:///home/snehan/.gemini/antigravity/builtin/skills/automation/SKILL.md)                     |
+| `migrate-workflows`         | Migrating legacy workflows to modern agent skills                                           | [`migrate-workflows`](file:///home/snehan/.gemini/antigravity/builtin/skills/migrate-workflows/SKILL.md)       |
+| `ui-plugin-navigation`      | Discovering UI plugin panels and generating toggle pills in chat                            | [`ui-plugin-navigation`](file:///home/snehan/.gemini/antigravity/builtin/skills/ui-plugin-navigation/SKILL.md) |
+| `reverse-engineer-anything` | Decompiling, inspecting, or reverse engineering external binaries, packages, or web bundles | [`reverse-engineer-anything`](file:///home/snehan/.gemini/config/skills/reverse-engineer-anything/SKILL.md)    |
 
 ## 6. Phase discipline
 
 Follow the roadmap and dependencies in `PROJECT_PLAN.md`.
+
 - Implement only the approved phase and task.
 - Do not jump ahead or add workflows to make dashboards look complete.
 - Do not treat a UI or mock as an implemented feature.
@@ -127,12 +133,14 @@ Follow the roadmap and dependencies in `PROJECT_PLAN.md`.
 Security is a system-wide requirement, not later polish.
 
 **Authentication**
+
 - Enforce authentication server-side for protected operations.
 - Validate identity claims and session state; protect renewal, expiry, and revocation.
 - Never trust client-supplied identity, role, institution, or scope.
 - Never log credentials, tokens, secrets, or sensitive provider payloads.
 
 **Authorization**
+
 - Apply planned RBAC, ABAC, scope-, purpose-, field-, and assignment-based controls as applicable.
 - Default deny; authorize every protected server operation.
 - Derive access from validated identity and membership/permission data.
@@ -141,6 +149,7 @@ Security is a system-wide requirement, not later polish.
 - Frontend guards are usability controls, not security boundaries.
 
 **Tenant isolation and PostgreSQL RLS**
+
 - Derive tenant context from validated server-side authorization.
 - Use the approved secure transaction wrapper for tenant-sensitive queries.
 - Prevent tenant context leakage across pooled connections and transactions.
@@ -150,6 +159,7 @@ Security is a system-wide requirement, not later polish.
 - Test isolation through the actual database connection/query path, not only middleware.
 
 **Sensitive data and audit**
+
 - Minimize collection, exposure, retention, and copies of student data.
 - Follow the identity-vault design and purpose-bound access requirements.
 - Mask sensitive values in logs, UI, responses, and exports.
@@ -172,6 +182,7 @@ For tenant-sensitive changes, test missing authentication, unauthorized access, 
 ## 9. Database and backend
 
 **Database**
+
 - Consult [`.agents/skills/supabase-postgres-best-practices/SKILL.md`](.agents/skills/supabase-postgres-best-practices/SKILL.md) before writing or altering tables, columns, indexes, and RLS policies.
 - Consult [`.agents/skills/prisma-client-api/SKILL.md`](.agents/skills/prisma-client-api/SKILL.md), [`.agents/skills/prisma-cli/SKILL.md`](.agents/skills/prisma-cli/SKILL.md), and [`.agents/skills/prisma-postgres/SKILL.md`](.agents/skills/prisma-postgres/SKILL.md) for Prisma client queries, transactions, migrations, and connection settings.
 - Use Prisma migrations for schema changes; review SQL for sensitive/destructive operations.
@@ -184,6 +195,7 @@ For tenant-sensitive changes, test missing authentication, unauthorized access, 
 - Do not use `db push` instead of committed migrations in shared or production-oriented workflows.
 
 **Backend**
+
 - Consult [`.agents/skills/bullmq-specialist/SKILL.md`](.agents/skills/bullmq-specialist/SKILL.md) and [`.agents/skills/redis-core/SKILL.md`](.agents/skills/redis-core/SKILL.md) for background workers, queue design, Redis data types, and key conventions.
 - Consult [`.agents/skills/fastapi/SKILL.md`](.agents/skills/fastapi/SKILL.md) and [`.agents/skills/fastapi-templates/SKILL.md`](.agents/skills/fastapi-templates/SKILL.md) when building or modifying Document AI Python services.
 - Keep routes thin; separate validation, authorization, application services, domain logic, and persistence.
@@ -218,6 +230,7 @@ Do not assume a version or practice is “latest.”
 - Consult [`.agents/skills/find-skills/SKILL.md`](.agents/skills/find-skills/SKILL.md) to discover agent skills when new capabilities or frameworks are required.
 
 Before dependency changes:
+
 1. Inspect manifests, lockfile, runtime, and peer constraints.
 2. Check official docs, release notes, migration guides, and compatibility.
 3. Prefer stable supported releases; avoid unrelated upgrades.
@@ -230,6 +243,7 @@ Avoid adding dependencies when existing capabilities adequately solve the proble
 ## 12. Testing and definition of done
 
 Discover actual repository scripts before running commands. Run applicable:
+
 - Formatting, lint, typecheck, unit/integration tests, and build.
 - Migration validation and security/tenant-isolation tests.
 - E2E or manual workflow checks where relevant.
@@ -241,6 +255,7 @@ A task is done only when approved requirements and scope are respected, relevant
 ## 13. Documentation and repository hygiene
 
 Keep durable knowledge in:
+
 - `PROJECT_PLAN.md`: master scope, architecture, roadmap.
 - `docs/`: detailed specifications.
 - `prompts/`: task prompts.
@@ -262,13 +277,16 @@ For blockers, state the exact issue, impact, safe work possible, and required de
 Use concise bullets under exactly these headings:
 
 ### What I did
+
 - What changed and why.
 
 ### Test
+
 - Exact commands and outcomes.
 - Manual checks performed or steps for the user.
 
 ### Needs your attention
+
 - Decisions, blockers, limitations, or user actions.
 - Say “None” only when genuinely none.
 

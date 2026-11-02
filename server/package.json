@@ -10,15 +10,18 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma db push"
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate:dev": "prisma migrate dev"
   },
   "dependencies": {
     "@aire/api-contracts": "workspace:*",
     "@aire/authorization": "workspace:*",
     "@aire/shared-types": "workspace:*",
     "@aire/validation": "workspace:*",
+    "@better-auth/prisma-adapter": "^1.7.15",
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
+    "better-auth": "^1.7.15",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
