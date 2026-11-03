@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UploadCloud, ArrowRight, RefreshCw, Search } from "lucide-react";
+import {
+  UploadCloud,
+  ArrowRight,
+  RefreshCw,
+  Search,
+  AlertTriangle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -11,6 +17,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { EmptyState } from "@/components/feedback/EmptyState";
 import { LoadingState } from "@/components/feedback/LoadingState";
 import { ErrorState } from "@/components/feedback/ErrorState";
@@ -54,6 +61,24 @@ export const SubmissionsHistoryPage: React.FC = () => {
       b.status.toLowerCase().includes(q)
     );
   });
+
+  if (!activeInstitution) {
+    return (
+      <div className="space-y-6">
+        <Alert variant="warning" role="alert">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle className="font-semibold">
+            Institutional Context Required
+          </AlertTitle>
+          <AlertDescription className="text-xs">
+            No active institution is associated with your session. Please select
+            an authorized institution from the tenant switcher in the header to
+            view historical submissions.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

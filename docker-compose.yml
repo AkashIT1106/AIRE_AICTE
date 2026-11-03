@@ -42,7 +42,7 @@ services:
       - aire-network
 
   minio:
-    image: minio/minio:RELEASE.2024-11-07T00-52-28Z
+    image: alpine/minio:RELEASE.2025-10-15T17-29-55Z
     container_name: aire-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"

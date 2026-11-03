@@ -51,7 +51,7 @@ else
 fi
 
 # Step 4: Build and test in parallel
-echo -e "\n${BOLD}[4/4] Building packages/apps and running test suites in parallel...${NC}"
+echo -e "\n${BOLD}[4/5] Building packages/apps and running test suites in parallel...${NC}"
 pnpm run build &
 PID_BUILD=$!
 
@@ -65,6 +65,10 @@ if [ $FAILED -ne 0 ]; then
   echo -e "\n${RED}Build or test execution failed.${NC}" >&2
   exit 1
 fi
+
+# Step 5: UX4G automated browser validation
+echo -e "\n${BOLD}[5/5] Running automated UX4G browser verification (Playwright / Chromium)...${NC}"
+pnpm run test:ux4g
 
 END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))

@@ -7,6 +7,40 @@ import { QuarantineTriagePage } from "./QuarantineTriagePage";
 import { SubmissionsApi } from "@/lib/api";
 import { SubmissionBatch } from "@aire/api-contracts";
 
+vi.mock("@/context/AuthContext", () => ({
+  useAuth: () => ({
+    user: { id: "user-1", email: "admin@dit.ac.in", name: "Admin" },
+    isAuthenticated: true,
+    isLoading: false,
+    error: null,
+    memberships: [
+      {
+        institutionId: "6c847216-26de-4d10-9ea8-c5e0edd160f0",
+        institution: {
+          id: "6c847216-26de-4d10-9ea8-c5e0edd160f0",
+          name: "Delhi Institute of Technology",
+          code: "INST-101",
+        },
+        role: "INSTITUTION_ADMIN",
+      },
+    ],
+    activeInstitution: {
+      id: "6c847216-26de-4d10-9ea8-c5e0edd160f0",
+      name: "Delhi Institute of Technology",
+      code: "INST-101",
+      status: "APPROVED",
+    },
+    platformRoles: ["INSTITUTION_ADMIN"],
+    permissions: [],
+    setActiveInstitutionId: vi.fn(),
+    can: () => true,
+    evaluate: () => ({ allowed: true }),
+    login: vi.fn(),
+    logout: vi.fn(),
+    refreshAuth: vi.fn(),
+  }),
+}));
+
 vi.mock("@/lib/api", () => {
   const mockBatch: SubmissionBatch = {
     id: "batch-101",

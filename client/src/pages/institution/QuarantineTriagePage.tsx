@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -41,12 +41,10 @@ import { ErrorState } from "@/components/feedback/ErrorState";
 import { SubmissionsApi, ApiException } from "@/lib/api";
 import { SubmissionBatch, QuarantineRecord } from "@aire/api-contracts";
 import { useAuth } from "@/context/AuthContext";
-import { DEMO_INSTITUTION_ID } from "./InstitutionDashboard";
 
 export const QuarantineTriagePage: React.FC = () => {
   const { batchId } = useParams<{ batchId: string }>();
   const { activeInstitution } = useAuth();
-  const effectiveInstitutionId = activeInstitution?.id || DEMO_INSTITUTION_ID;
 
   const [batch, setBatch] = useState<SubmissionBatch | null>(null);
   const [loading, setLoading] = useState(true);
@@ -65,15 +63,17 @@ export const QuarantineTriagePage: React.FC = () => {
   const [isRemediating, setIsRemediating] = useState(false);
   const [remediationError, setRemediationError] = useState<string | null>(null);
 
-  const fetchBatch = async () => {
-    if (!batchId) return;
+  const institutionId = activeInstitution?.id;
+
+  const fetchBatch = useCallback(async () => {
+    if (!batchId || !institutionId) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
-      const data = await SubmissionsApi.getBatch(
-        effectiveInstitutionId,
-        batchId,
-      );
+      const data = await SubmissionsApi.getBatch(institutionId, batchId);
       setBatch(data);
       if (data.quarantineCount === 0) {
         setActiveTab("staged");
@@ -83,11 +83,29 @@ export const QuarantineTriagePage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [batchId, institutionId]);
 
   useEffect(() => {
     fetchBatch();
-  }, [batchId]);
+  }, [fetchBatch]);
+
+  if (!activeInstitution) {
+    return (
+      <div className="space-y-6 max-w-7xl mx-auto">
+        <Alert variant="warning" role="alert">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle className="font-semibold">
+            Institutional Context Required
+          </AlertTitle>
+          <AlertDescription className="text-xs">
+            Active institution context is required to inspect and remediate
+            quarantined records. Please select your institution from the tenant
+            switcher in the header.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   const openRemediationModal = (row: QuarantineRecord) => {
     setSelectedQuarantineRow(row);
@@ -134,7 +152,7 @@ export const QuarantineTriagePage: React.FC = () => {
 
     try {
       const updatedBatch = await SubmissionsApi.remediateRow(
-        effectiveInstitutionId,
+        institutionId!,
         batchId,
         selectedQuarantineRow.rowId,
         {

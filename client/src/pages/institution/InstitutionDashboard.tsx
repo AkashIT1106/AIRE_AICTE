@@ -27,37 +27,58 @@ import { SubmissionsApi, ApiException } from "@/lib/api";
 import { SubmissionBatch } from "@aire/api-contracts";
 import { useAuth } from "@/context/AuthContext";
 
-// Fallback institution ID for deterministic tests & dev seeding
-export const DEMO_INSTITUTION_ID = "6c847216-26de-4d10-9ea8-c5e0edd160f0";
-
 export const InstitutionDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { activeInstitution } = useAuth();
-  const effectiveInstitutionId = activeInstitution?.id || DEMO_INSTITUTION_ID;
-  const institutionName =
-    activeInstitution?.name || "Delhi Institute of Technology";
-  const institutionCode = activeInstitution?.code || "INST-101";
 
   const [batches, setBatches] = useState<SubmissionBatch[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ApiException | null>(null);
 
+  const institutionId = activeInstitution?.id;
+
   const fetchBatches = useCallback(async () => {
+    if (!institutionId) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
-      const data = await SubmissionsApi.listBatches(effectiveInstitutionId);
+      const data = await SubmissionsApi.listBatches(institutionId);
       setBatches(data);
     } catch (err: any) {
       setError(err);
     } finally {
       setLoading(false);
     }
-  }, [effectiveInstitutionId]);
+  }, [institutionId]);
 
   useEffect(() => {
     fetchBatches();
   }, [fetchBatches]);
+
+  // Safe fallback if active institution context is not present
+  if (!activeInstitution) {
+    return (
+      <div className="space-y-6">
+        <Alert variant="warning" role="alert">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle className="font-semibold">
+            Institutional Context Required
+          </AlertTitle>
+          <AlertDescription className="text-xs">
+            No active institution is associated with your session. Please select
+            an authorized institution from the tenant switcher in the header to
+            view admission cohorts and reporting.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  const institutionName = activeInstitution.name;
+  const institutionCode = activeInstitution.code;
 
   // Compute aggregate metrics from real loaded batches
   const totalStudents = batches.reduce((acc, b) => acc + b.totalCount, 0);

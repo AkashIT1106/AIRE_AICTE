@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   Sparkles,
   Download,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +30,6 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { FormField } from "@/components/forms/FormField";
 import { SubmissionsApi, ApiException } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
-import { DEMO_INSTITUTION_ID } from "./InstitutionDashboard";
 
 // Sample dataset strictly for test environments and sandbox triage simulation
 export const DEMO_SAMPLE_RECORDS = [
@@ -80,7 +80,6 @@ export const DEMO_SAMPLE_RECORDS = [
 export const BatchUploadPage: React.FC = () => {
   const navigate = useNavigate();
   const { activeInstitution } = useAuth();
-  const institutionId = activeInstitution?.id || DEMO_INSTITUTION_ID;
 
   const [academicYear, setAcademicYear] = useState("2026-27");
   const [programme, setProgramme] = useState(
@@ -99,6 +98,26 @@ export const BatchUploadPage: React.FC = () => {
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  if (!activeInstitution) {
+    return (
+      <div className="space-y-6 max-w-4xl mx-auto">
+        <Alert variant="warning" role="alert">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle className="font-semibold">
+            Institutional Context Required
+          </AlertTitle>
+          <AlertDescription className="text-xs">
+            An authorized institutional context is required to upload admission
+            batches. Please select your institution from the tenant switcher in
+            the header before uploading.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  const institutionId = activeInstitution.id;
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

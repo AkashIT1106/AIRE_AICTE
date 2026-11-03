@@ -197,7 +197,7 @@ export const LoginPage: React.FC = () => {
                   Email address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-4 w-4 text-[var(--text-muted)]" />
+                  <Mail className="absolute left-3 top-3.5 sm:top-2.5 h-4 w-4 text-[var(--text-muted)]" />
                   <Input
                     id="email"
                     type="email"
@@ -206,7 +206,7 @@ export const LoginPage: React.FC = () => {
                     placeholder="name@institution.edu"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-9 h-9 text-xs"
+                    className="pl-9 min-h-[44px] sm:min-h-[36px] h-11 sm:h-9 text-xs"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -217,7 +217,7 @@ export const LoginPage: React.FC = () => {
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-2.5 h-4 w-4 text-[var(--text-muted)]" />
+                  <Lock className="absolute left-3 top-3.5 sm:top-2.5 h-4 w-4 text-[var(--text-muted)]" />
                   <Input
                     id="password"
                     type="password"
@@ -226,7 +226,7 @@ export const LoginPage: React.FC = () => {
                     placeholder="Enter password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-9 h-9 text-xs"
+                    className="pl-9 min-h-[44px] sm:min-h-[36px] h-11 sm:h-9 text-xs"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -235,7 +235,7 @@ export const LoginPage: React.FC = () => {
               <Button
                 type="submit"
                 variant="default"
-                className="w-full h-9 gap-2 mt-2 text-xs font-semibold"
+                className="w-full min-h-[44px] sm:min-h-[36px] h-11 sm:h-9 gap-2 mt-2 text-xs font-semibold"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

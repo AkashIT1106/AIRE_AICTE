@@ -217,7 +217,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-[var(--text-inverted)] hover:bg-white/10 border border-white/20 h-8 px-2.5 text-xs font-medium max-w-[220px]"
+                  className="text-[var(--text-inverted)] hover:bg-white/10 border border-white/20 min-h-[44px] sm:min-h-[36px] h-11 sm:h-9 px-3 text-xs font-medium max-w-[220px] focus-aire"
                 >
                   <Building2 className="mr-1.5 h-3.5 w-3.5 text-[var(--brand-teal)] shrink-0" />
                   <span className="truncate">
@@ -240,7 +240,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                       key={m.institutionId}
                       onClick={() => setActiveInstitutionId(m.institutionId)}
                       className={cn(
-                        "text-xs flex items-center justify-between cursor-pointer",
+                        "text-xs flex items-center justify-between cursor-pointer min-h-[44px] sm:min-h-[36px] px-3 py-2",
                         isSelected && "bg-[var(--brand-subtle)] font-semibold",
                       )}
                     >
@@ -269,7 +269,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-[var(--text-inverted)] hover:bg-white/10 border border-white/20 h-8 px-2.5 text-xs font-medium gap-1.5"
+                  className="text-[var(--text-inverted)] hover:bg-white/10 border border-white/20 min-h-[44px] sm:min-h-[36px] h-11 sm:h-9 px-3 text-xs font-medium gap-1.5 focus-aire"
                 >
                   <div className="h-5 w-5 rounded-full bg-[var(--brand-primary)] border border-white/30 flex items-center justify-center text-[10px] font-bold text-white uppercase">
                     {userDisplayName.charAt(0)}
@@ -299,7 +299,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={handleSignOut}
-                  className="text-xs text-[var(--state-danger-text)] focus:text-[var(--state-danger-text)] cursor-pointer"
+                  className="text-xs text-[var(--state-danger-text)] focus:text-[var(--state-danger-text)] cursor-pointer min-h-[44px] sm:min-h-[36px] px-3 py-2"
                 >
                   <LogOut className="mr-2 h-3.5 w-3.5" />
                   <span>Sign Out</span>
@@ -311,7 +311,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-[var(--text-inverted)] hover:bg-white/10 border border-white/20 h-8 px-3 text-xs"
+                className="text-[var(--text-inverted)] hover:bg-white/10 border border-white/20 min-h-[44px] sm:min-h-[36px] h-11 sm:h-9 px-3.5 text-xs focus-aire"
               >
                 <UserIcon className="mr-1.5 h-3.5 w-3.5" />
                 <span>Sign In</span>
@@ -387,7 +387,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                   onClick={() => setMobileMenuOpen(false)}
                   title={sidebarCollapsed ? item.name : undefined}
                   className={cn(
-                    "flex items-center px-3 py-2 text-xs font-medium rounded transition-colors group focus-aire",
+                    "flex items-center px-3 py-2 text-xs font-medium rounded transition-colors group focus-aire min-h-[44px] md:min-h-[36px]",
                     sidebarCollapsed
                       ? "md:justify-center md:px-2"
                       : "justify-start",
