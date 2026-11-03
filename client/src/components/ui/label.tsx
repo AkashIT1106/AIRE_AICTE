@@ -4,25 +4,46 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const labelVariants = cva(
-  "text-sm font-medium leading-none text-[var(--text-primary)] peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none",
+  "text-sm font-medium leading-none text-txt-primary peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none",
+  {
+    variants: {
+      error: {
+        true: "text-state-danger-text",
+      },
+    },
+  },
 );
+
+export interface LabelProps
+  extends
+    React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>,
+    VariantProps<typeof labelVariants> {
+  required?: boolean;
+  optional?: boolean;
+  error?: boolean;
+}
 
 const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
-    VariantProps<typeof labelVariants> & {
-      required?: boolean;
-    }
->(({ className, required, children, ...props }, ref) => (
+  LabelProps
+>(({ className, required, optional, error, children, ...props }, ref) => (
   <LabelPrimitive.Root
     ref={ref}
-    className={cn(labelVariants(), className)}
+    className={cn(labelVariants({ error }), className)}
     {...props}
   >
     {children}
     {required && (
-      <span className="text-[var(--state-danger-icon)] ml-1" aria-hidden="true">
+      <span className="text-state-danger-icon ml-1" aria-hidden="true">
         *
+      </span>
+    )}
+    {optional && !required && (
+      <span
+        className="text-txt-muted text-xs font-normal ml-1"
+        aria-hidden="true"
+      >
+        (optional)
       </span>
     )}
   </LabelPrimitive.Root>

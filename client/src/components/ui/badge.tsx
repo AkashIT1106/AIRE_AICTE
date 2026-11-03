@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
@@ -7,25 +8,27 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-primary-hover)]",
+        default: "bg-brand-primary text-txt-inverted hover:bg-brand-hover",
         secondary:
-          "bg-[var(--surface-card-subdued)] text-[var(--text-secondary)] border border-[var(--border-default)]",
-        outline:
-          "border border-[var(--border-strong)] text-[var(--text-primary)]",
+          "bg-surface-card-subdued text-txt-secondary border border-line-default",
+        outline: "border border-line-strong text-txt-primary",
         success:
-          "bg-[var(--state-success-bg)] text-[var(--state-success-text)] border border-[var(--state-success-border)]",
+          "bg-state-success-bg text-state-success-text border border-state-success-border",
         warning:
-          "bg-[var(--state-warning-bg)] text-[var(--state-warning-text)] border border-[var(--state-warning-border)]",
+          "bg-state-warning-bg text-state-warning-text border border-state-warning-border",
         danger:
-          "bg-[var(--state-danger-bg)] text-[var(--state-danger-text)] border border-[var(--state-danger-border)]",
-        info: "bg-[var(--state-info-bg)] text-[var(--state-info-text)] border border-[var(--state-info-border)]",
+          "bg-state-danger-bg text-state-danger-text border border-state-danger-border",
+        info: "bg-state-info-bg text-state-info-text border border-state-info-border",
         masked:
-          "bg-[var(--masked-data-bg)] text-[var(--masked-data-text)] border border-[var(--masked-data-border)] font-mono tracking-wider",
+          "bg-masked-bg text-masked-text border border-masked-border font-mono tracking-wider",
       },
       size: {
         default: "text-xs px-2 py-0.5",
         sm: "text-[11px] px-1.5 py-0.2",
+        lg: "text-sm px-2.5 py-1",
+      },
+      interactive: {
+        true: "cursor-pointer hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-1",
       },
     },
     defaultVariants: {
@@ -38,14 +41,69 @@ const badgeVariants = cva(
 export interface BadgeProps
   extends
     React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {
+  onDismiss?: () => void;
+  dismissible?: boolean;
+}
 
-function Badge({ className, variant, size, ...props }: BadgeProps) {
+function Badge({
+  className,
+  variant,
+  size,
+  interactive,
+  onDismiss,
+  dismissible,
+  children,
+  onClick,
+  onKeyDown,
+  ...props
+}: BadgeProps) {
+  const isInteractive = Boolean(interactive || onClick);
+  const showDismiss = Boolean(onDismiss || dismissible);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown?.(e);
+    if (
+      !e.defaultPrevented &&
+      isInteractive &&
+      (e.key === "Enter" || e.key === " ") &&
+      e.target === e.currentTarget
+    ) {
+      e.preventDefault();
+      onClick?.(e as unknown as React.MouseEvent<HTMLDivElement>);
+    }
+  };
+
   return (
     <div
-      className={cn(badgeVariants({ variant, size }), className)}
+      role={isInteractive ? "button" : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      className={cn(
+        badgeVariants({ variant, size, interactive: isInteractive }),
+        className,
+      )}
       {...props}
-    />
+    >
+      <span>{children}</span>
+      {showDismiss && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDismiss?.();
+          }}
+          onKeyDown={(e) => {
+            e.stopPropagation();
+          }}
+          className="ml-1 -mr-0.5 inline-flex h-3.5 w-3.5 items-center justify-center rounded-full hover:bg-black/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus-ring"
+          aria-label="Remove badge"
+        >
+          <X className="h-3 w-3 stroke-[2.5]" aria-hidden="true" />
+        </button>
+      )}
+    </div>
   );
 }
 

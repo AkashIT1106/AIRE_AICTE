@@ -1,19 +1,57 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded border border-[var(--border-default)] bg-[var(--surface-card)] text-[var(--text-primary)] shadow-sm",
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  interactive?: boolean;
+  subdued?: boolean;
+}
+
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  (
+    {
       className,
-    )}
-    {...props}
-  />
-));
+      interactive = false,
+      subdued = false,
+      onClick,
+      onKeyDown,
+      ...props
+    },
+    ref,
+  ) => {
+    const isInteractive = Boolean(interactive || onClick);
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyDown?.(e);
+      if (
+        !e.defaultPrevented &&
+        isInteractive &&
+        (e.key === "Enter" || e.key === " ") &&
+        e.target === e.currentTarget
+      ) {
+        e.preventDefault();
+        onClick?.(e as unknown as React.MouseEvent<HTMLDivElement>);
+      }
+    };
+
+    return (
+      <div
+        ref={ref}
+        tabIndex={isInteractive ? 0 : undefined}
+        role={isInteractive ? "button" : undefined}
+        onClick={onClick}
+        onKeyDown={handleKeyDown}
+        className={cn(
+          "rounded border border-line-default text-txt-primary shadow-sm transition-all",
+          subdued ? "bg-surface-card-subdued" : "bg-surface-card",
+          isInteractive &&
+            "cursor-pointer hover:border-line-interactive hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2",
+          className,
+        )}
+        {...props}
+      />
+    );
+  },
+);
 Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<
@@ -35,7 +73,7 @@ const CardTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none tracking-tight text-[var(--text-primary)]",
+      "text-lg font-semibold leading-none tracking-tight text-txt-primary",
       className,
     )}
     {...props}
@@ -49,7 +87,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-[var(--text-secondary)]", className)}
+    className={cn("text-sm text-txt-secondary", className)}
     {...props}
   />
 ));
@@ -70,7 +108,7 @@ const CardFooter = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "flex items-center p-6 pt-0 border-t border-[var(--border-subtle)] mt-4",
+      "flex items-center p-6 pt-0 border-t border-line-subtle mt-4",
       className,
     )}
     {...props}

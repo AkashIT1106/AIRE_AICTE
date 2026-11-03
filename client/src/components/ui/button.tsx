@@ -5,21 +5,21 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none",
+  "inline-flex items-center justify-center whitespace-nowrap rounded font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card disabled:pointer-events-none disabled:opacity-50 select-none",
   {
     variants: {
       variant: {
         default:
-          "bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-primary-hover)] active:bg-[var(--brand-primary-active)] focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-[var(--surface-card)]",
+          "bg-brand-primary text-txt-inverted hover:bg-brand-hover active:bg-brand-active shadow-sm",
         secondary:
-          "bg-[var(--surface-card-subdued)] text-[var(--text-primary)] hover:bg-[var(--border-default)] border border-[var(--border-default)] focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-[var(--surface-card)]",
+          "bg-surface-card-subdued text-txt-primary hover:bg-line-default border border-line-default shadow-sm",
         outline:
-          "border border-[var(--border-default)] bg-[var(--surface-card)] text-[var(--text-primary)] hover:bg-[var(--surface-card-subdued)] focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-[var(--surface-card)]",
+          "border border-line-default bg-surface-card text-txt-primary hover:bg-surface-card-subdued shadow-sm",
         destructive:
-          "bg-[var(--state-danger-icon)] text-white hover:bg-[var(--state-danger-text)] focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-[var(--surface-card)]",
+          "bg-state-danger-icon text-txt-inverted hover:bg-state-danger-text shadow-sm",
         ghost:
-          "text-[var(--text-secondary)] hover:bg-[var(--surface-card-subdued)] hover:text-[var(--text-primary)] focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-[var(--surface-card)]",
-        link: "text-[var(--text-link)] underline-offset-4 hover:underline p-0 h-auto font-normal focus-visible:ring-[var(--focus-ring)]",
+          "text-txt-secondary hover:bg-surface-card-subdued hover:text-txt-primary",
+        link: "text-txt-link underline-offset-4 hover:underline p-0 h-auto font-normal focus-visible:ring-offset-0",
       },
       size: {
         default: "h-9 px-4 py-2 text-sm",
@@ -52,16 +52,35 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       asChild = false,
       loading = false,
       disabled,
+      onClick,
       children,
       ...props
     },
     ref,
   ) => {
+    const isEffectivelyDisabled = disabled || loading;
+
+    // Anti-double-submission click handler wrapper
+    const handleClick = React.useCallback(
+      (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (isEffectivelyDisabled) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        onClick?.(e);
+      },
+      [isEffectivelyDisabled, onClick],
+    );
+
     if (asChild) {
       return (
         <Slot
           className={cn(buttonVariants({ variant, size, className }))}
           ref={ref}
+          aria-busy={loading ? "true" : undefined}
+          aria-disabled={isEffectivelyDisabled ? "true" : undefined}
+          onClick={handleClick}
           {...props}
         >
           {children}
@@ -73,11 +92,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        disabled={disabled || loading}
+        disabled={isEffectivelyDisabled}
+        aria-busy={loading ? "true" : undefined}
+        onClick={handleClick}
         {...props}
       >
         {loading && (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+          <Loader2
+            className="mr-2 h-4 w-4 animate-spin shrink-0"
+            aria-hidden="true"
+          />
         )}
         {children}
       </button>
