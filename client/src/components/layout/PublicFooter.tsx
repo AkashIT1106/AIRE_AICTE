@@ -50,10 +50,7 @@ export const PublicFooter: React.FC = () => {
             </h3>
             <ul className="space-y-2 text-xs">
               <li>
-                <a
-                  href="#about"
-                  className="hover:text-white transition-colors"
-                >
+                <a href="#about" className="hover:text-white transition-colors">
                   About AIRE
                 </a>
               </li>
@@ -110,10 +107,7 @@ export const PublicFooter: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a
-                  href="#norms"
-                  className="hover:text-white transition-colors"
-                >
+                <a href="#norms" className="hover:text-white transition-colors">
                   AICTE Approval Norms
                 </a>
               </li>
@@ -143,10 +137,7 @@ export const PublicFooter: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a
-                  href="#terms"
-                  className="hover:text-white transition-colors"
-                >
+                <a href="#terms" className="hover:text-white transition-colors">
                   Terms of Use
                 </a>
               </li>
@@ -181,7 +172,10 @@ export const PublicFooter: React.FC = () => {
           </div>
 
           {/* National Tricolor accent strip */}
-          <div className="flex h-1.5 w-24 rounded-full overflow-hidden" aria-hidden="true">
+          <div
+            className="flex h-1.5 w-24 rounded-full overflow-hidden"
+            aria-hidden="true"
+          >
             <div className="bg-[#FF9933] w-1/3 h-full" />
             <div className="bg-[#FFFFFF] w-1/3 h-full" />
             <div className="bg-[#128807] w-1/3 h-full" />

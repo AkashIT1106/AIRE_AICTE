@@ -157,7 +157,9 @@ export const PublicHeader: React.FC = () => {
               type="button"
               onClick={toggleDarkMode}
               className="p-1 rounded text-white/70 hover:text-white transition-colors flex items-center gap-1"
-              title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              title={
+                isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"
+              }
               aria-label={
                 isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"
               }
@@ -270,18 +272,14 @@ export const PublicHeader: React.FC = () => {
         <div className="flex items-center space-x-3">
           {isAuthenticated ? (
             <Link to={getDashboardPath()}>
-              <Button
-                className="bg-[#245B75] hover:bg-[#1C4666] text-white text-sm font-medium px-4 py-2 rounded shadow-sm inline-flex items-center gap-1.5"
-              >
+              <Button className="bg-[#245B75] hover:bg-[#1C4666] text-white text-sm font-medium px-4 py-2 rounded shadow-sm inline-flex items-center gap-1.5">
                 <LayoutDashboard className="w-4 h-4" />
                 <span>Go to Workspace</span>
               </Button>
             </Link>
           ) : (
             <Link to="/login">
-              <Button
-                className="bg-[#245B75] hover:bg-[#1C4666] text-white text-sm font-medium px-4 py-2 rounded shadow-sm inline-flex items-center gap-1.5"
-              >
+              <Button className="bg-[#245B75] hover:bg-[#1C4666] text-white text-sm font-medium px-4 py-2 rounded shadow-sm inline-flex items-center gap-1.5">
                 <LogIn className="w-4 h-4" />
                 <span>Sign in to AIRE</span>
               </Button>

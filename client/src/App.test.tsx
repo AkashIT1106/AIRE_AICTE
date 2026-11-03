@@ -16,8 +16,12 @@ describe("Client Root Application — Production Architecture & Standalone Authe
 
     // UX4G Statutory Identity & Accessibility
     expect(screen.getAllByText(/भारत सरकार/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Government of India/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/An AICTE Digital Initiative/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Government of India/i).length).toBeGreaterThan(
+      0,
+    );
+    expect(
+      screen.getByText(/An AICTE Digital Initiative/i),
+    ).toBeInTheDocument();
 
     // Persona portals
     expect(

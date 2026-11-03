@@ -1,11 +1,11 @@
 # Task Prompt: AIRE Public Landing Page at `/`
 
-| Metadata  | Value                                                                                         |
-| --------- | --------------------------------------------------------------------------------------------- |
-| Status    | `COMPLETED`                                                                                   |
-| Date      | 3 November 2026                                                                               |
+| Metadata  | Value                                                                                        |
+| --------- | -------------------------------------------------------------------------------------------- |
+| Status    | `COMPLETED`                                                                                  |
+| Date      | 3 November 2026                                                                              |
 | Scope     | Public Landing Page at `/`, UX4G utility header, role pathways, verification stepper, footer |
-| Non-goals | Modifying auth backend, database models, RLS policies, or operational workflow pages          |
+| Non-goals | Modifying auth backend, database models, RLS policies, or operational workflow pages         |
 
 ## Goal
 

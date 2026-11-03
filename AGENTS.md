@@ -313,3 +313,19 @@ Distinguish `PASS`, `FAIL`, `NOT RUN`, and `BLOCKED`. Be precise about implement
 ## Final engineering principle
 
 **AIRE is an evidence-driven, privacy-preserving regulatory platform.** Protect correctness, traceability, privacy, authorization, and accountability. Build the smallest complete, testable, securely isolated workflow first; expand only when its acceptance criteria are demonstrated.
+
+# AIRE UI/UX governance
+
+These instructions apply to every task that creates, changes or reviews AIRE frontend UI, UX, styles, design tokens, components or navigation.
+
+1. Before a UI task, inspect the relevant existing implementation and read `docs/design/01-DESIGN-GOVERNANCE.md` through `docs/design/06-A11Y-AND-QUALITY-GATES.md`. Read `docs/design/07-AGENT-INSTRUCTIONS.md` for the detailed implementation protocol.
+2. Treat the repository's actual architecture, approved domain model, API contracts, RBAC and existing passing tests as constraints. Do not assume a framework, router, styling system or package version from examples in design docs.
+3. Follow UX4G Design System 3.0 as the primary government-service design reference, GIGW 3.0 for applicable government quality/accessibility guidance, NNG for usability evaluation, and Apple HIG for interaction refinement. Verify current official documentation when a decision depends on current guidance. Record source URL, version/date when available, and the exact decision influenced.
+4. Use the approved AIRE tokens and shared components. Do not introduce arbitrary colours, gradients, glow, glassmorphism, random radii, decorative illustrations, new icon libraries or unapproved visual variants.
+5. Design from user role, permission scope, real task, data meaning and workflow state. Do not invent counts, deadlines, approval states, regulatory rules or successful outcomes.
+6. Preserve business logic, RBAC, routes, API contracts, validation rules and database behaviour during visual-only tasks.
+7. For complex screens, produce an implementation brief and wireframe/structure before coding. Implement only the approved scope.
+8. Include loading, empty, error, partial, success and permission-denied states where applicable. Make error recovery and focus behaviour explicit.
+9. Verify responsive behaviour, keyboard use, focus visibility, semantic structure, contrast and screen-reader announcements on critical flows. Target WCAG 2.1 AA as the baseline specified by UX4G/GIGW references, without claiming certification absent formal assessment.
+10. At completion, report changed files, components reused/added, routes and roles affected, tests actually run, viewport/accessibility checks performed, failures and remaining manual checks. Never claim an unrun check passed.
+11. Request approval before broad refactors, dependency changes, route changes, RBAC changes, API/schema changes, migrations, destructive commands or modifications outside the approved scope.

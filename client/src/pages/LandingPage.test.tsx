@@ -30,7 +30,9 @@ describe("LandingPage Component — Public Institutional Portal at /", () => {
     renderLandingPage();
 
     expect(screen.getAllByText(/भारत सरकार/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Government of India/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Government of India/i).length).toBeGreaterThan(
+      0,
+    );
     expect(screen.getAllByText(/AICTE/i).length).toBeGreaterThan(0);
     expect(
       screen.getByRole("link", { name: /Skip to main content/i }),
@@ -82,7 +84,9 @@ describe("LandingPage Component — Public Institutional Portal at /", () => {
       }),
     ).toBeInTheDocument();
 
-    expect(screen.getByText(/An AICTE Digital Initiative/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/An AICTE Digital Initiative/i),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /How AIRE Works/i }),
     ).toBeInTheDocument();
@@ -156,7 +160,9 @@ describe("LandingPage Component — Public Institutional Portal at /", () => {
     expect(screen.getByText(/Accurate & Compliant/i)).toBeInTheDocument();
     expect(screen.getByText(/Detects Data Issues/i)).toBeInTheDocument();
     expect(screen.getByText(/Streamlined Workflow/i)).toBeInTheDocument();
-    expect(screen.getByText(/Transparency & Traceability/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Transparency & Traceability/i),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Role-based Access/i)).toBeInTheDocument();
 
     // Pre-footer banner
