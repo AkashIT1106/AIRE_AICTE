@@ -1,0 +1,16 @@
+# AIRE Component Inventory & Implementation Status
+
+| Component Name | File Path | UX4G Foundation / Pattern | Status | Key Features |
+|---|---|---|---|---|
+| `AireUtilityHeader` | `client/src/components/aire/AireUtilityHeader.tsx` | UX4G Institutional Top Bar | `IMPLEMENTED` | Skip to content, font scaling (A- / A / A+), dark mode/contrast toggle, language switch, institutional disclaimer. |
+| `AireNavbar` | `client/src/components/aire/AireNavbar.tsx` | `ux4g-navbar` | `IMPLEMENTED` | AIRE wordmark mark, primary navigation links, mobile hamburger drawer, Institution Portal CTA button. |
+| `AireHero` | `client/src/components/aire/AireHero.tsx` | Editorial Hero (Aadhaar-inspired) | `IMPLEMENTED` | Clear institutional headline, supporting copy, primary CTA ("Institution Portal"), secondary CTA ("Understand AIRE"), deterministic verification graphic. |
+| `ServiceCard` | `client/src/components/aire/ServiceCard.tsx` | `ux4g-card` | `IMPLEMENTED` | Categorized service cards (Intake, Reconciliation, Verification, Guidance) with icons, badges, descriptions, and action links. |
+| `ProcessStep` | `client/src/components/aire/ProcessStep.tsx` | `ux4g-stepper` | `IMPLEMENTED` | Sequential 4-stage admission reconciliation process with step indicators, titles, descriptions, and verification artifacts. |
+| `SectionHeading` | `client/src/components/aire/SectionHeading.tsx` | UX4G Typography Hierarchy | `IMPLEMENTED` | Monotonic heading wrapper with subtitle, category pill, and centered/left alignment options. |
+| `Accordion` | `client/src/components/aire/Accordion.tsx` | `ux4g-accordion` | `IMPLEMENTED` | Fully accessible accordion component with keyboard navigation, ARIA attributes, and smooth collapse/expand states for FAQ. |
+| `AirePreFooterCta` | `client/src/components/aire/AirePreFooterCta.tsx` | High-Contrast Institutional Banner | `IMPLEMENTED` | Action banner with portal access and documentation shortcuts. |
+| `Button` | `client/src/components/aire/Button.tsx` | `ux4g-btn-*` | `IMPLEMENTED` | Reusable button wrapper enforcing UX4G button classes, sizes (`sm`, `md`, `lg`), and variants (`primary`, `outline`, `text`). |
+| `Badge` | `client/src/components/aire/Badge.tsx` | `ux4g-tag-*` | `IMPLEMENTED` | Status pill badges supporting `primary`, `success`, `warning`, and `neutral` color semantics. |
+| `Container` | `client/src/components/aire/Container.tsx` | `ux4g-container` | `IMPLEMENTED` | Responsive layout container maintaining max-width (1280px) and responsive horizontal padding. |
+| `AireFooter` | `client/src/components/aire/AireFooter.tsx` | `ux4g-footer-*` | `IMPLEMENTED` | Multi-column footer covering navigation, statutory notices, security compliance, helpdesk contacts, and standard public sector disclaimers. |
