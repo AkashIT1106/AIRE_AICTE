@@ -65,18 +65,19 @@ export const Button: React.FC<ButtonProps> = ({
       "ux4g-btn-tonal-primary bg-brand-50 text-brand-primary hover:bg-brand-100 border border-transparent",
     "text-primary":
       "ux4g-btn-text-primary text-brand-primary hover:bg-brand-50 border-0 bg-transparent",
-    text:
-      "ux4g-btn-text-primary text-brand-primary hover:bg-brand-50 border-0 bg-transparent",
+    text: "ux4g-btn-text-primary text-brand-primary hover:bg-brand-50 border-0 bg-transparent",
     danger:
       "ux4g-btn-danger bg-state-error text-neutral-0 hover:opacity-90 border border-transparent",
   };
 
-  const selectedVariantClass = variantClassMap[variant] || variantClassMap.primary;
+  const selectedVariantClass =
+    variantClassMap[variant] || variantClassMap.primary;
 
   const baseClasses =
     "inline-flex items-center justify-center gap-2 font-medium rounded-control transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary disabled:opacity-50 disabled:cursor-not-allowed select-none";
 
-  const combinedClasses = `${baseClasses} ${selectedVariantClass} ${normalizedSize} ${className}`.trim();
+  const combinedClasses =
+    `${baseClasses} ${selectedVariantClass} ${normalizedSize} ${className}`.trim();
 
   if (asAnchor && href) {
     return (
@@ -86,7 +87,12 @@ export const Button: React.FC<ButtonProps> = ({
         role="button"
         aria-disabled={disabled}
       >
-        {loading && <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-1" aria-hidden="true" />}
+        {loading && (
+          <span
+            className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-1"
+            aria-hidden="true"
+          />
+        )}
         {icon && <span aria-hidden="true">{icon}</span>}
         {children}
       </a>
@@ -100,7 +106,12 @@ export const Button: React.FC<ButtonProps> = ({
       aria-busy={loading}
       {...props}
     >
-      {loading && <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-1" aria-hidden="true" />}
+      {loading && (
+        <span
+          className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-1"
+          aria-hidden="true"
+        />
+      )}
       {icon && <span aria-hidden="true">{icon}</span>}
       {children}
     </button>

@@ -51,7 +51,10 @@ export const VisualFoundationPreview: React.FC = () => {
               AIRE Visual Foundation & Design Token Preview
             </h1>
             <p className="text-sm text-neutral-300 mt-1 max-w-2xl leading-relaxed">
-              Mandatory frontend governance specification verification: semantic token cascade, UX4G 3.0 component abstractions, original editorial SVG vectors, restrained glassmorphism, and WCAG 2.1/2.2 AA accessibility guardrails.
+              Mandatory frontend governance specification verification: semantic
+              token cascade, UX4G 3.0 component abstractions, original editorial
+              SVG vectors, restrained glassmorphism, and WCAG 2.1/2.2 AA
+              accessibility guardrails.
             </p>
           </div>
 
@@ -71,11 +74,18 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 1: BREADCRUMBS & CONTEXT */}
         <section aria-labelledby="section-nav" className="space-y-4">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-nav" className="text-lg font-semibold text-brand-950">
+            <h2
+              id="section-nav"
+              className="text-lg font-semibold text-brand-950"
+            >
               1. Institutional Navigation & Breadcrumbs
             </h2>
             <p className="text-xs text-neutral-600">
-              Documented UX4G 3.0 breadcrumb divider pattern (<code className="text-brand-primary">ux4g-breadcrumb ux4g-breadcrumb-divider</code>) with explicit current page state.
+              Documented UX4G 3.0 breadcrumb divider pattern (
+              <code className="text-brand-primary">
+                ux4g-breadcrumb ux4g-breadcrumb-divider
+              </code>
+              ) with explicit current page state.
             </p>
           </div>
 
@@ -85,7 +95,10 @@ export const VisualFoundationPreview: React.FC = () => {
                 { label: "Government of India", href: "#" },
                 { label: "Technical Education Regulatory Portal", href: "#" },
                 { label: "Institution Roster Review", href: "#" },
-                { label: "Batch 2026-IN-094 Discrepancy Triage", current: true },
+                {
+                  label: "Batch 2026-IN-094 Discrepancy Triage",
+                  current: true,
+                },
               ]}
             />
           </div>
@@ -94,11 +107,18 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 2: COLOR PALETTE SPECIFICATION */}
         <section aria-labelledby="section-palette" className="space-y-6">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-palette" className="text-lg font-semibold text-brand-950">
+            <h2
+              id="section-palette"
+              className="text-lg font-semibold text-brand-950"
+            >
               2. Semantic AIRE Colour System & UX4G Cascade (design.md §4)
             </h2>
             <p className="text-xs text-neutral-600">
-              Calculated WCAG relative-luminance contrast guardrails: normal text &gt;= 4.5:1, large text &gt;= 3:1, non-text controls &gt;= 3:1. Primary interaction led by action blue (<code className="text-brand-primary">#24536F</code>) rather than default UX4G purple.
+              Calculated WCAG relative-luminance contrast guardrails: normal
+              text &gt;= 4.5:1, large text &gt;= 3:1, non-text controls &gt;=
+              3:1. Primary interaction led by action blue (
+              <code className="text-brand-primary">#24536F</code>) rather than
+              default UX4G purple.
             </p>
           </div>
 
@@ -109,19 +129,61 @@ export const VisualFoundationPreview: React.FC = () => {
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               {[
-                { token: "aire-brand-950", hex: "#142C3D", role: "Deep ink navy", contrast: "14.4:1 on white" },
-                { token: "aire-brand-900", hex: "#19384E", role: "Institutional navy", contrast: "11.2:1 on white" },
-                { token: "aire-brand-800", hex: "#24536F", role: "Primary action blue", contrast: "8.26:1 on white" },
-                { token: "aire-brand-700", hex: "#2B6685", role: "Supporting blue", contrast: "6.3:1 on white" },
-                { token: "aire-teal-800", hex: "#075E58", role: "Deep teal accent", contrast: "7.63:1 on white" },
-                { token: "aire-brass-800", hex: "#8B4F16", role: "Muted warm accent", contrast: "6.51:1 on white" },
+                {
+                  token: "aire-brand-950",
+                  hex: "#142C3D",
+                  role: "Deep ink navy",
+                  contrast: "14.4:1 on white",
+                },
+                {
+                  token: "aire-brand-900",
+                  hex: "#19384E",
+                  role: "Institutional navy",
+                  contrast: "11.2:1 on white",
+                },
+                {
+                  token: "aire-brand-800",
+                  hex: "#24536F",
+                  role: "Primary action blue",
+                  contrast: "8.26:1 on white",
+                },
+                {
+                  token: "aire-brand-700",
+                  hex: "#2B6685",
+                  role: "Supporting blue",
+                  contrast: "6.3:1 on white",
+                },
+                {
+                  token: "aire-teal-800",
+                  hex: "#075E58",
+                  role: "Deep teal accent",
+                  contrast: "7.63:1 on white",
+                },
+                {
+                  token: "aire-brass-800",
+                  hex: "#8B4F16",
+                  role: "Muted warm accent",
+                  contrast: "6.51:1 on white",
+                },
               ].map((c) => (
-                <div key={c.token} className="bg-neutral-0 rounded-card border border-neutral-200 overflow-hidden shadow-xs">
-                  <div className="h-16 w-full" style={{ backgroundColor: c.hex }} />
+                <div
+                  key={c.token}
+                  className="bg-neutral-0 rounded-card border border-neutral-200 overflow-hidden shadow-xs"
+                >
+                  <div
+                    className="h-16 w-full"
+                    style={{ backgroundColor: c.hex }}
+                  />
                   <div className="p-3 text-xs">
-                    <p className="font-semibold text-neutral-800 m-0">{c.token}</p>
-                    <p className="font-mono text-neutral-600 text-[11px] mt-0.5">{c.hex}</p>
-                    <p className="text-neutral-600 text-[10px] mt-1">{c.role}</p>
+                    <p className="font-semibold text-neutral-800 m-0">
+                      {c.token}
+                    </p>
+                    <p className="font-mono text-neutral-600 text-[11px] mt-0.5">
+                      {c.hex}
+                    </p>
+                    <p className="text-neutral-600 text-[10px] mt-1">
+                      {c.role}
+                    </p>
                     <span className="inline-block mt-1.5 text-[9px] font-mono text-state-success bg-state-success-bg px-1.5 py-0.5 rounded">
                       {c.contrast}
                     </span>
@@ -138,18 +200,50 @@ export const VisualFoundationPreview: React.FC = () => {
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
               {[
-                { token: "aire-neutral-0", hex: "#FFFFFF", role: "Content Surface (White)" },
-                { token: "aire-neutral-50", hex: "#F5F7F7", role: "Canvas Public Background" },
-                { token: "aire-neutral-100", hex: "#EEF3F3", role: "Subdued Inset & Table Header" },
-                { token: "aire-neutral-200", hex: "#D8E0E3", role: "Default Component Border" },
-                { token: "aire-neutral-800", hex: "#1D2935", role: "Primary Text (13.7:1)" },
+                {
+                  token: "aire-neutral-0",
+                  hex: "#FFFFFF",
+                  role: "Content Surface (White)",
+                },
+                {
+                  token: "aire-neutral-50",
+                  hex: "#F5F7F7",
+                  role: "Canvas Public Background",
+                },
+                {
+                  token: "aire-neutral-100",
+                  hex: "#EEF3F3",
+                  role: "Subdued Inset & Table Header",
+                },
+                {
+                  token: "aire-neutral-200",
+                  hex: "#D8E0E3",
+                  role: "Default Component Border",
+                },
+                {
+                  token: "aire-neutral-800",
+                  hex: "#1D2935",
+                  role: "Primary Text (13.7:1)",
+                },
               ].map((c) => (
-                <div key={c.token} className="bg-neutral-0 rounded-card border border-neutral-200 overflow-hidden shadow-xs">
-                  <div className="h-12 w-full border-b border-neutral-150" style={{ backgroundColor: c.hex }} />
+                <div
+                  key={c.token}
+                  className="bg-neutral-0 rounded-card border border-neutral-200 overflow-hidden shadow-xs"
+                >
+                  <div
+                    className="h-12 w-full border-b border-neutral-150"
+                    style={{ backgroundColor: c.hex }}
+                  />
                   <div className="p-2.5 text-xs">
-                    <p className="font-semibold text-neutral-800 m-0">{c.token}</p>
-                    <p className="font-mono text-neutral-600 text-[11px]">{c.hex}</p>
-                    <p className="text-neutral-600 text-[10px] mt-0.5">{c.role}</p>
+                    <p className="font-semibold text-neutral-800 m-0">
+                      {c.token}
+                    </p>
+                    <p className="font-mono text-neutral-600 text-[11px]">
+                      {c.hex}
+                    </p>
+                    <p className="text-neutral-600 text-[10px] mt-0.5">
+                      {c.role}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -163,11 +257,46 @@ export const VisualFoundationPreview: React.FC = () => {
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
               {[
-                { name: "Success", text: "#176B45", bg: "#E7F2EC", border: "#B7DEC8", ratio: "5.68:1", desc: "Completed / Sealed" },
-                { name: "Warning", text: "#8A4D0A", bg: "#F8F0E5", border: "#F2D8B3", ratio: "5.91:1", desc: "Quarantined / Non-blocking" },
-                { name: "Error", text: "#B42318", bg: "#FCEDEB", border: "#F9C3BE", ratio: "5.78:1", desc: "Quota Breach / Failure" },
-                { name: "Info", text: "#245B78", bg: "#EAF1F5", border: "#BDD5E1", ratio: "6.47:1", desc: "Guidance Notice" },
-                { name: "Pending", text: "#536474", bg: "#EEF3F3", border: "#D8E0E3", ratio: "6.10:1", desc: "Queued / Staged" },
+                {
+                  name: "Success",
+                  text: "#176B45",
+                  bg: "#E7F2EC",
+                  border: "#B7DEC8",
+                  ratio: "5.68:1",
+                  desc: "Completed / Sealed",
+                },
+                {
+                  name: "Warning",
+                  text: "#8A4D0A",
+                  bg: "#F8F0E5",
+                  border: "#F2D8B3",
+                  ratio: "5.91:1",
+                  desc: "Quarantined / Non-blocking",
+                },
+                {
+                  name: "Error",
+                  text: "#B42318",
+                  bg: "#FCEDEB",
+                  border: "#F9C3BE",
+                  ratio: "5.78:1",
+                  desc: "Quota Breach / Failure",
+                },
+                {
+                  name: "Info",
+                  text: "#245B78",
+                  bg: "#EAF1F5",
+                  border: "#BDD5E1",
+                  ratio: "6.47:1",
+                  desc: "Guidance Notice",
+                },
+                {
+                  name: "Pending",
+                  text: "#536474",
+                  bg: "#EEF3F3",
+                  border: "#D8E0E3",
+                  ratio: "6.10:1",
+                  desc: "Queued / Staged",
+                },
               ].map((s) => (
                 <div
                   key={s.name}
@@ -175,12 +304,20 @@ export const VisualFoundationPreview: React.FC = () => {
                   style={{ backgroundColor: s.bg, borderColor: s.border }}
                 >
                   <div>
-                    <span className="text-xs font-bold" style={{ color: s.text }}>
+                    <span
+                      className="text-xs font-bold"
+                      style={{ color: s.text }}
+                    >
                       {s.name}
                     </span>
-                    <p className="text-[11px] text-neutral-800 mt-1 leading-snug">{s.desc}</p>
+                    <p className="text-[11px] text-neutral-800 mt-1 leading-snug">
+                      {s.desc}
+                    </p>
                   </div>
-                  <div className="mt-3 pt-2 border-t border-black/5 flex items-center justify-between text-[10px] font-mono" style={{ color: s.text }}>
+                  <div
+                    className="mt-3 pt-2 border-t border-black/5 flex items-center justify-between text-[10px] font-mono"
+                    style={{ color: s.text }}
+                  >
                     <span>{s.text}</span>
                     <span>{s.ratio}</span>
                   </div>
@@ -193,54 +330,80 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 3: TYPOGRAPHY SCALE */}
         <section aria-labelledby="section-typography" className="space-y-4">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-typography" className="text-lg font-semibold text-brand-950">
-              3. Noto Sans Typographic Scale & Editorial Hierarchy (design.md §5)
+            <h2
+              id="section-typography"
+              className="text-lg font-semibold text-brand-950"
+            >
+              3. Noto Sans Typographic Scale & Editorial Hierarchy (design.md
+              §5)
             </h2>
             <p className="text-xs text-neutral-600">
-              Documented UX4G typography baseline: Noto Sans with system fallbacks. Line lengths calibrated for 55–75 characters per line on desktop. No 10–11px text used for important metadata.
+              Documented UX4G typography baseline: Noto Sans with system
+              fallbacks. Line lengths calibrated for 55–75 characters per line
+              on desktop. No 10–11px text used for important metadata.
             </p>
           </div>
 
           <div className="bg-neutral-0 rounded-card border border-neutral-200 p-6 space-y-6 shadow-xs">
             <div className="border-b border-neutral-150 pb-4">
-              <span className="text-xs font-mono text-neutral-600 block mb-1">Display (52px / 600) — Public Hero Only</span>
+              <span className="text-xs font-mono text-neutral-600 block mb-1">
+                Display (52px / 600) — Public Hero Only
+              </span>
               <p className="text-4xl sm:text-5xl font-semibold tracking-tight text-brand-950 leading-tight m-0">
                 Student records. Verified with confidence.
               </p>
             </div>
 
             <div className="border-b border-neutral-150 pb-4">
-              <span className="text-xs font-mono text-neutral-600 block mb-1">H1 Page Title (36px / 600)</span>
+              <span className="text-xs font-mono text-neutral-600 block mb-1">
+                H1 Page Title (36px / 600)
+              </span>
               <h1 className="text-3xl font-semibold text-brand-950 m-0">
                 Institutional Admission Reconciliation Dossier
               </h1>
             </div>
 
             <div className="border-b border-neutral-150 pb-4">
-              <span className="text-xs font-mono text-neutral-600 block mb-1">H2 Major Section (28px / 600)</span>
+              <span className="text-xs font-mono text-neutral-600 block mb-1">
+                H2 Major Section (28px / 600)
+              </span>
               <h2 className="text-2xl font-semibold text-brand-950 m-0">
                 Deterministic Policy Evaluation & Quota Scrutiny
               </h2>
             </div>
 
             <div className="border-b border-neutral-150 pb-4">
-              <span className="text-xs font-mono text-neutral-600 block mb-1">H3 Subsection (22px / 600)</span>
+              <span className="text-xs font-mono text-neutral-600 block mb-1">
+                H3 Subsection (22px / 600)
+              </span>
               <h3 className="text-xl font-semibold text-brand-950 m-0">
                 Quarantined Discrepancy Cohort Summary
               </h3>
             </div>
 
             <div className="border-b border-neutral-150 pb-4">
-              <span className="text-xs font-mono text-neutral-600 block mb-1">Lead Copy Body-LG (18px / 1.6 / 400)</span>
+              <span className="text-xs font-mono text-neutral-600 block mb-1">
+                Lead Copy Body-LG (18px / 1.6 / 400)
+              </span>
               <p className="text-lg text-neutral-600 leading-relaxed max-w-3xl m-0">
-                AIRE operates as an authoritative multi-tenant verification engine for technical institutions. Student intake records are reconciled against sanctioned statutory quotas using reproducible deterministic rules with zero plaintext PII exposure.
+                AIRE operates as an authoritative multi-tenant verification
+                engine for technical institutions. Student intake records are
+                reconciled against sanctioned statutory quotas using
+                reproducible deterministic rules with zero plaintext PII
+                exposure.
               </p>
             </div>
 
             <div>
-              <span className="text-xs font-mono text-neutral-600 block mb-1">Body Text (16px / 1.6 / 400)</span>
+              <span className="text-xs font-mono text-neutral-600 block mb-1">
+                Body Text (16px / 1.6 / 400)
+              </span>
               <p className="text-base text-neutral-800 leading-relaxed max-w-3xl m-0">
-                Every admission roster submitted by an institution passes through pre-flight schema staging, deterministic multi-pass rule evaluation, and cryptographic hashing before a statutory seal is committed. Quarantined records require formal human remediation by designated authorities.
+                Every admission roster submitted by an institution passes
+                through pre-flight schema staging, deterministic multi-pass rule
+                evaluation, and cryptographic hashing before a statutory seal is
+                committed. Quarantined records require formal human remediation
+                by designated authorities.
               </p>
             </div>
           </div>
@@ -249,11 +412,25 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 4: BUTTON MATRIX */}
         <section aria-labelledby="section-buttons" className="space-y-4">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-buttons" className="text-lg font-semibold text-brand-950">
-              4. UX4G 3.0 Button Abstraction (<code className="text-brand-primary">AireButton</code>)
+            <h2
+              id="section-buttons"
+              className="text-lg font-semibold text-brand-950"
+            >
+              4. UX4G 3.0 Button Abstraction (
+              <code className="text-brand-primary">AireButton</code>)
             </h2>
             <p className="text-xs text-neutral-600">
-              Documented UX4G 3.0 classes (<code className="text-brand-primary">ux4g-btn-primary</code>, <code className="text-brand-primary">ux4g-btn-outline-primary</code>, <code className="text-brand-primary">ux4g-btn-tonal-primary</code>, <code className="text-brand-primary">ux4g-btn-s</code>, <code className="text-brand-primary">ux4g-btn-m</code>). All standard buttons enforce &gt;= 44px minimum height for WCAG 2.2 AA touch target compliance.
+              Documented UX4G 3.0 classes (
+              <code className="text-brand-primary">ux4g-btn-primary</code>,{" "}
+              <code className="text-brand-primary">
+                ux4g-btn-outline-primary
+              </code>
+              ,{" "}
+              <code className="text-brand-primary">ux4g-btn-tonal-primary</code>
+              , <code className="text-brand-primary">ux4g-btn-s</code>,{" "}
+              <code className="text-brand-primary">ux4g-btn-m</code>). All
+              standard buttons enforce &gt;= 44px minimum height for WCAG 2.2 AA
+              touch target compliance.
             </p>
           </div>
 
@@ -265,7 +442,9 @@ export const VisualFoundationPreview: React.FC = () => {
               </h3>
               <div className="flex flex-wrap items-center gap-3">
                 <AireButton variant="primary">Primary Action</AireButton>
-                <AireButton variant="outline-primary">Outline Primary</AireButton>
+                <AireButton variant="outline-primary">
+                  Outline Primary
+                </AireButton>
                 <AireButton variant="secondary">Outline Neutral</AireButton>
                 <AireButton variant="tonal-primary">Tonal Primary</AireButton>
                 <AireButton variant="text-primary">Text Primary</AireButton>
@@ -279,9 +458,15 @@ export const VisualFoundationPreview: React.FC = () => {
                 Size Scale (Documented UX4G s, m, l)
               </h3>
               <div className="flex flex-wrap items-center gap-3">
-                <AireButton size="sm" variant="secondary">Small (36px min-h)</AireButton>
-                <AireButton size="md" variant="primary">Medium Default (44px min-h)</AireButton>
-                <AireButton size="lg" variant="primary">Large Hero (48px min-h)</AireButton>
+                <AireButton size="sm" variant="secondary">
+                  Small (36px min-h)
+                </AireButton>
+                <AireButton size="md" variant="primary">
+                  Medium Default (44px min-h)
+                </AireButton>
+                <AireButton size="lg" variant="primary">
+                  Large Hero (48px min-h)
+                </AireButton>
               </div>
             </div>
 
@@ -327,11 +512,21 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 5: FORM FIELDS & INPUT CONTROLS */}
         <section aria-labelledby="section-forms" className="space-y-4">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-forms" className="text-lg font-semibold text-brand-950">
-              5. Accessible Form Controls (<code className="text-brand-primary">AireInput</code>)
+            <h2
+              id="section-forms"
+              className="text-lg font-semibold text-brand-950"
+            >
+              5. Accessible Form Controls (
+              <code className="text-brand-primary">AireInput</code>)
             </h2>
             <p className="text-xs text-neutral-600">
-              Adheres to UX4G 3.0 form field conventions (<code className="text-brand-primary">ux4g-input-container</code>, <code className="text-brand-primary">ux4g-input-helper</code>). Inputs maintain explicit label association, accessible error announcements (<code className="text-brand-primary">role="alert"</code>), and focus visibility.
+              Adheres to UX4G 3.0 form field conventions (
+              <code className="text-brand-primary">ux4g-input-container</code>,{" "}
+              <code className="text-brand-primary">ux4g-input-helper</code>).
+              Inputs maintain explicit label association, accessible error
+              announcements (
+              <code className="text-brand-primary">role="alert"</code>), and
+              focus visibility.
             </p>
           </div>
 
@@ -362,7 +557,11 @@ export const VisualFoundationPreview: React.FC = () => {
                 required
                 startIcon={<Lock className="w-4 h-4" />}
                 placeholder="••••••••••••"
-                errorMessage={hasError ? "Security passphrase is required for dual-auth signing" : undefined}
+                errorMessage={
+                  hasError
+                    ? "Security passphrase is required for dual-auth signing"
+                    : undefined
+                }
                 helperText="Encrypted locally before cryptographic digest generation"
               />
 
@@ -375,7 +574,14 @@ export const VisualFoundationPreview: React.FC = () => {
                   Toggle Error State Demonstration
                 </AireButton>
                 <p className="text-[11px] text-neutral-600">
-                  Current state: <strong className={hasError ? "text-state-error" : "text-state-success"}>{hasError ? "Validation Error" : "Normal"}</strong>
+                  Current state:{" "}
+                  <strong
+                    className={
+                      hasError ? "text-state-error" : "text-state-success"
+                    }
+                  >
+                    {hasError ? "Validation Error" : "Normal"}
+                  </strong>
                 </p>
               </div>
             </div>
@@ -385,34 +591,42 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 6: ALERTS & SYSTEM FEEDBACK */}
         <section aria-labelledby="section-alerts" className="space-y-4">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-alerts" className="text-lg font-semibold text-brand-950">
-              6. Contextual Alerts & System Notices (<code className="text-brand-primary">AireAlert</code>)
+            <h2
+              id="section-alerts"
+              className="text-lg font-semibold text-brand-950"
+            >
+              6. Contextual Alerts & System Notices (
+              <code className="text-brand-primary">AireAlert</code>)
             </h2>
             <p className="text-xs text-neutral-600">
-              Adheres to UX4G 3.0 alert patterns (<code className="text-brand-primary">ux4g-alert ux4g-alert-info/success/warning/error</code>). High-contrast backgrounds meet WCAG 2.1 AA against canvas. Includes screen-reader announcements.
+              Adheres to UX4G 3.0 alert patterns (
+              <code className="text-brand-primary">
+                ux4g-alert ux4g-alert-info/success/warning/error
+              </code>
+              ). High-contrast backgrounds meet WCAG 2.1 AA against canvas.
+              Includes screen-reader announcements.
             </p>
           </div>
 
           <div className="space-y-3 max-w-4xl">
-            <AireAlert
-              variant="info"
-              title="Statutory Admission Cycle Active"
-            >
-              Academic Year 2026–27 intake reconciliation window is open. Roster uploads must be submitted before October 31, 23:59 IST.
+            <AireAlert variant="info" title="Statutory Admission Cycle Active">
+              Academic Year 2026–27 intake reconciliation window is open. Roster
+              uploads must be submitted before October 31, 23:59 IST.
             </AireAlert>
 
-            <AireAlert
-              variant="success"
-              title="Batch Integrity Verified"
-            >
-              Roster #2026-B1 cryptographic Merkle digest computed: <code className="font-mono text-xs">4f9b...8e11</code>. Zero quota violations detected.
+            <AireAlert variant="success" title="Batch Integrity Verified">
+              Roster #2026-B1 cryptographic Merkle digest computed:{" "}
+              <code className="font-mono text-xs">4f9b...8e11</code>. Zero quota
+              violations detected.
             </AireAlert>
 
             <AireAlert
               variant="warning"
               title="Supernumerary Quota Nearing Threshold"
             >
-              Institution has utilized 92% of sanctioned TFW (Tuition Fee Waiver) seats. Additional admissions will trigger an automatic quarantine.
+              Institution has utilized 92% of sanctioned TFW (Tuition Fee
+              Waiver) seats. Additional admissions will trigger an automatic
+              quarantine.
             </AireAlert>
 
             {!alertDismissed ? (
@@ -422,12 +636,18 @@ export const VisualFoundationPreview: React.FC = () => {
                 dismissible
                 onDismiss={() => setAlertDismissed(true)}
               >
-                Computer Science & Engineering intake of 124 students exceeds AICTE approved limit of 120. Statutory seal locked until remediated.
+                Computer Science & Engineering intake of 124 students exceeds
+                AICTE approved limit of 120. Statutory seal locked until
+                remediated.
               </AireAlert>
             ) : (
               <div className="p-3 bg-neutral-100 rounded-card text-xs text-neutral-600 flex items-center justify-between">
                 <span>Alert was dismissed by user.</span>
-                <AireButton variant="text-primary" size="sm" onClick={() => setAlertDismissed(false)}>
+                <AireButton
+                  variant="text-primary"
+                  size="sm"
+                  onClick={() => setAlertDismissed(false)}
+                >
                   Restore Alert
                 </AireButton>
               </div>
@@ -438,11 +658,19 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 7: INSTITUTIONAL ADMISSION STATUS INDICATORS */}
         <section aria-labelledby="section-status" className="space-y-4">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-status" className="text-lg font-semibold text-brand-950">
-              7. Institutional Admission Lifecycle Statuses (<code className="text-brand-primary">AireStatusIndicator</code>)
+            <h2
+              id="section-status"
+              className="text-lg font-semibold text-brand-950"
+            >
+              7. Institutional Admission Lifecycle Statuses (
+              <code className="text-brand-primary">AireStatusIndicator</code>)
             </h2>
             <p className="text-xs text-neutral-600">
-              Mandatory domain compliance (design.md §1.1 & §4.4): every status explicitly distinguishes Uploaded, Ingested, Staged, Quarantined, Sealed, Reconciled, and Approved. State is <strong>never communicated by colour alone</strong>; each has a clear text label and distinct icon.
+              Mandatory domain compliance (design.md §1.1 & §4.4): every status
+              explicitly distinguishes Uploaded, Ingested, Staged, Quarantined,
+              Sealed, Reconciled, and Approved. State is{" "}
+              <strong>never communicated by colour alone</strong>; each has a
+              clear text label and distinct icon.
             </p>
           </div>
 
@@ -457,19 +685,31 @@ export const VisualFoundationPreview: React.FC = () => {
                 "RECONCILED",
                 "APPROVED",
               ].map((status) => (
-                <div key={status} className="p-3.5 rounded-card border border-neutral-200 bg-neutral-50/50 flex flex-col gap-2">
+                <div
+                  key={status}
+                  className="p-3.5 rounded-card border border-neutral-200 bg-neutral-50/50 flex flex-col gap-2"
+                >
                   <div className="flex items-center justify-between">
                     <AireStatusIndicator status={status as any} />
-                    <span className="text-[10px] font-mono text-neutral-600">STATE</span>
+                    <span className="text-[10px] font-mono text-neutral-600">
+                      STATE
+                    </span>
                   </div>
                   <p className="text-xs text-neutral-600 leading-snug m-0">
-                    {status === "UPLOADED" && "Intake file received; raw payload held in secure staging."}
-                    {status === "INGESTED" && "Schema normalized; mapped into institutional schema."}
-                    {status === "STAGED" && "Held in tenant partition; queued for deterministic engine."}
-                    {status === "QUARANTINED" && "Quota breach or invalid APAAR id detected. Remediation needed."}
-                    {status === "SEALED" && "Statutory seal committed by Registrar with SHA-256 digest."}
-                    {status === "RECONCILED" && "Zero discrepancy verified against approved intake limits."}
-                    {status === "APPROVED" && "Council Regulatory Authority formal endorsement complete."}
+                    {status === "UPLOADED" &&
+                      "Intake file received; raw payload held in secure staging."}
+                    {status === "INGESTED" &&
+                      "Schema normalized; mapped into institutional schema."}
+                    {status === "STAGED" &&
+                      "Held in tenant partition; queued for deterministic engine."}
+                    {status === "QUARANTINED" &&
+                      "Quota breach or invalid APAAR id detected. Remediation needed."}
+                    {status === "SEALED" &&
+                      "Statutory seal committed by Registrar with SHA-256 digest."}
+                    {status === "RECONCILED" &&
+                      "Zero discrepancy verified against approved intake limits."}
+                    {status === "APPROVED" &&
+                      "Council Regulatory Authority formal endorsement complete."}
                   </p>
                 </div>
               ))}
@@ -480,11 +720,18 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 8: CARDS & CONTROLLED GLASSMORPHISM */}
         <section aria-labelledby="section-cards" className="space-y-4">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-cards" className="text-lg font-semibold text-brand-950">
+            <h2
+              id="section-cards"
+              className="text-lg font-semibold text-brand-950"
+            >
               8. Card Abstraction & Restrained Glassmorphism (design.md §7)
             </h2>
             <p className="text-xs text-neutral-600">
-              <strong>Anti-Slop Hard Rule:</strong> The default AIRE card is a solid white surface with a neutral border—not a floating glass panel. Glassmorphism is demonstrated here only as a <em>restrained illustrative accent layer</em> with &gt;= 92% opacity, 12px blur, and solid fallback.
+              <strong>Anti-Slop Hard Rule:</strong> The default AIRE card is a
+              solid white surface with a neutral border—not a floating glass
+              panel. Glassmorphism is demonstrated here only as a{" "}
+              <em>restrained illustrative accent layer</em> with &gt;= 92%
+              opacity, 12px blur, and solid fallback.
             </p>
           </div>
 
@@ -493,10 +740,16 @@ export const VisualFoundationPreview: React.FC = () => {
             <AireCard variant="solid">
               <AireCardHeader>
                 <AireCardTitle>Default Institutional Card</AireCardTitle>
-                <AireBadge variant="neutral" size="sm">Solid Surface</AireBadge>
+                <AireBadge variant="neutral" size="sm">
+                  Solid Surface
+                </AireBadge>
               </AireCardHeader>
               <AireCardBody>
-                Standard production container for forms, tables, and workflows. Neutral white canvas (<code className="text-xs">#FFFFFF</code>) with a crisp 1px neutral-200 border (<code className="text-xs">#D8E0E3</code>) and zero decorative glow.
+                Standard production container for forms, tables, and workflows.
+                Neutral white canvas (<code className="text-xs">#FFFFFF</code>)
+                with a crisp 1px neutral-200 border (
+                <code className="text-xs">#D8E0E3</code>) and zero decorative
+                glow.
               </AireCardBody>
               <AireCardFooter>
                 <span>Default AIRE Geometry</span>
@@ -508,14 +761,21 @@ export const VisualFoundationPreview: React.FC = () => {
             <AireCard variant="outline">
               <AireCardHeader>
                 <AireCardTitle>Structural Outline Card</AireCardTitle>
-                <AireBadge variant="brand" size="sm">Secondary</AireBadge>
+                <AireBadge variant="brand" size="sm">
+                  Secondary
+                </AireBadge>
               </AireCardHeader>
               <AireCardBody>
-                Used for secondary grouping or inset workbench zones. Transparent background with structural boundary, allowing page canvas (<code className="text-xs">#F5F7F7</code>) to show through cleanly.
+                Used for secondary grouping or inset workbench zones.
+                Transparent background with structural boundary, allowing page
+                canvas (<code className="text-xs">#F5F7F7</code>) to show
+                through cleanly.
               </AireCardBody>
               <AireCardFooter>
                 <span>Secondary Container</span>
-                <span className="font-mono text-neutral-600">Zero Elevation</span>
+                <span className="font-mono text-neutral-600">
+                  Zero Elevation
+                </span>
               </AireCardFooter>
             </AireCard>
 
@@ -527,14 +787,24 @@ export const VisualFoundationPreview: React.FC = () => {
                     <Sparkles className="w-4 h-4 text-teal-800" />
                     Restrained Glass Layer
                   </AireCardTitle>
-                  <AireBadge variant="teal" size="sm">Illustrative Only</AireBadge>
+                  <AireBadge variant="teal" size="sm">
+                    Illustrative Only
+                  </AireBadge>
                 </AireCardHeader>
                 <AireCardBody>
-                  Complies strictly with <strong>design.md §7</strong>: near-opaque surface (92% opacity), 12px blur, crisp neutral border, readable contrast, and solid-surface fallback when unsupported. Never applied globally to standard forms or tables.
+                  Complies strictly with <strong>design.md §7</strong>:
+                  near-opaque surface (92% opacity), 12px blur, crisp neutral
+                  border, readable contrast, and solid-surface fallback when
+                  unsupported. Never applied globally to standard forms or
+                  tables.
                 </AireCardBody>
                 <AireCardFooter>
-                  <span className="text-teal-800 font-semibold">92% Opacity / 12px Blur</span>
-                  <span className="font-mono text-neutral-600">No Neon Glow</span>
+                  <span className="text-teal-800 font-semibold">
+                    92% Opacity / 12px Blur
+                  </span>
+                  <span className="font-mono text-neutral-600">
+                    No Neon Glow
+                  </span>
                 </AireCardFooter>
               </AireCard>
             </div>
@@ -544,11 +814,21 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 9: ACCORDION PATTERN */}
         <section aria-labelledby="section-accordion" className="space-y-4">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-accordion" className="text-lg font-semibold text-brand-950">
-              9. Accessible Accordion Pattern (<code className="text-brand-primary">AireAccordion</code>)
+            <h2
+              id="section-accordion"
+              className="text-lg font-semibold text-brand-950"
+            >
+              9. Accessible Accordion Pattern (
+              <code className="text-brand-primary">AireAccordion</code>)
             </h2>
             <p className="text-xs text-neutral-600">
-              Official UX4G 3.0 accordion classes (<code className="text-brand-primary">ux4g-accordion ux4g-accordion-bordered ux4g-accordion-arrow-right</code>) with keyboard operability, ARIA expanded state, and clear statutory content.
+              Official UX4G 3.0 accordion classes (
+              <code className="text-brand-primary">
+                ux4g-accordion ux4g-accordion-bordered
+                ux4g-accordion-arrow-right
+              </code>
+              ) with keyboard operability, ARIA expanded state, and clear
+              statutory content.
             </p>
           </div>
 
@@ -557,13 +837,17 @@ export const VisualFoundationPreview: React.FC = () => {
               items={[
                 {
                   id: "acc-1",
-                  question: "What is the distinction between Schema Staging and Regulatory Approval?",
-                  answer: "Schema Staging verifies syntactic file integrity, column mapping, and field validity upon initial CSV upload. Regulatory Approval is a separate, statutory milestone granted only after deterministic reconciliation against AICTE sanctioned intake limits with dual authority sign-off.",
+                  question:
+                    "What is the distinction between Schema Staging and Regulatory Approval?",
+                  answer:
+                    "Schema Staging verifies syntactic file integrity, column mapping, and field validity upon initial CSV upload. Regulatory Approval is a separate, statutory milestone granted only after deterministic reconciliation against AICTE sanctioned intake limits with dual authority sign-off.",
                 },
                 {
                   id: "acc-2",
-                  question: "How does AIRE safeguard student PII and enforce Data Minimization?",
-                  answer: "AIRE utilizes a dedicated Identity Vault where sensitive student attributes (such as Aadhaar or direct personal contact data) are transformed into irreversible cryptographic tokens. The admission reconciliation ledger operates exclusively on tokenized identifiers, preventing plaintext PII leakage across institutional boundaries.",
+                  question:
+                    "How does AIRE safeguard student PII and enforce Data Minimization?",
+                  answer:
+                    "AIRE utilizes a dedicated Identity Vault where sensitive student attributes (such as Aadhaar or direct personal contact data) are transformed into irreversible cryptographic tokens. The admission reconciliation ledger operates exclusively on tokenized identifiers, preventing plaintext PII leakage across institutional boundaries.",
                 },
               ]}
             />
@@ -573,11 +857,18 @@ export const VisualFoundationPreview: React.FC = () => {
         {/* SECTION 10: ORIGINAL EDITORIAL SVG VECTOR ARTWORK */}
         <section aria-labelledby="section-artwork" className="space-y-6">
           <div className="border-b border-neutral-200 pb-2">
-            <h2 id="section-artwork" className="text-lg font-semibold text-brand-950">
-              10. Original Editorial SVG Artwork (design.md §8 & Anti-Slop Policy)
+            <h2
+              id="section-artwork"
+              className="text-lg font-semibold text-brand-950"
+            >
+              10. Original Editorial SVG Artwork (design.md §8 & Anti-Slop
+              Policy)
             </h2>
             <p className="text-xs text-neutral-600">
-              <strong>Strict Anti-AI-Slop Governance:</strong> No generic 3D floating cubes, random purple blobs, fabricated SaaS dashboards, or stock illustration people. Pure, mathematically authored SVG vectors using AIRE tokens.
+              <strong>Strict Anti-AI-Slop Governance:</strong> No generic 3D
+              floating cubes, random purple blobs, fabricated SaaS dashboards,
+              or stock illustration people. Pure, mathematically authored SVG
+              vectors using AIRE tokens.
             </p>
           </div>
 
@@ -590,10 +881,13 @@ export const VisualFoundationPreview: React.FC = () => {
                     Scene A: Institutional Admission Ledger Pipeline
                   </h3>
                   <p className="text-xs text-neutral-600 mt-0.5">
-                    Layered ledger sheets, verification node, and restrained glassmorphic evidence badge.
+                    Layered ledger sheets, verification node, and restrained
+                    glassmorphic evidence badge.
                   </p>
                 </div>
-                <AireBadge variant="brand" size="sm">Hero Scene</AireBadge>
+                <AireBadge variant="brand" size="sm">
+                  Hero Scene
+                </AireBadge>
               </div>
 
               <div className="bg-neutral-50 p-4 rounded-card border border-neutral-200 overflow-hidden">
@@ -601,7 +895,12 @@ export const VisualFoundationPreview: React.FC = () => {
               </div>
 
               <p className="text-xs text-neutral-600 leading-relaxed pt-2">
-                Features structured tabular rows (<code className="font-mono text-xs">VALID</code>, <code className="font-mono text-xs">TRIAGE</code>, <code className="font-mono text-xs">QUEUED</code>), connected verification gateway, and live Merkle root digest without fictitious statistics.
+                Features structured tabular rows (
+                <code className="font-mono text-xs">VALID</code>,{" "}
+                <code className="font-mono text-xs">TRIAGE</code>,{" "}
+                <code className="font-mono text-xs">QUEUED</code>), connected
+                verification gateway, and live Merkle root digest without
+                fictitious statistics.
               </p>
             </div>
 
@@ -613,10 +912,13 @@ export const VisualFoundationPreview: React.FC = () => {
                     Scene B: Security & Multi-Tenant Architecture
                   </h3>
                   <p className="text-xs text-neutral-600 mt-0.5">
-                    PostgreSQL Forced RLS, Identity Vault, and append-only tamper-evident audit ledger.
+                    PostgreSQL Forced RLS, Identity Vault, and append-only
+                    tamper-evident audit ledger.
                   </p>
                 </div>
-                <AireBadge variant="teal" size="sm">Architecture</AireBadge>
+                <AireBadge variant="teal" size="sm">
+                  Architecture
+                </AireBadge>
               </div>
 
               <div className="bg-neutral-50 p-4 rounded-card border border-neutral-200 overflow-hidden">
@@ -624,7 +926,11 @@ export const VisualFoundationPreview: React.FC = () => {
               </div>
 
               <p className="text-xs text-neutral-600 leading-relaxed pt-2">
-                Demonstrates institutional tenant isolation (<code className="font-mono text-xs">TENANT: 1-10928</code> vs <code className="font-mono text-xs">TENANT: 1-84912</code>), PII tokenization vault, and chronological append-only audit trail nodes.
+                Demonstrates institutional tenant isolation (
+                <code className="font-mono text-xs">TENANT: 1-10928</code> vs{" "}
+                <code className="font-mono text-xs">TENANT: 1-84912</code>), PII
+                tokenization vault, and chronological append-only audit trail
+                nodes.
               </p>
             </div>
           </div>
@@ -634,10 +940,14 @@ export const VisualFoundationPreview: React.FC = () => {
       {/* Statutory Footer Indicator */}
       <footer className="max-w-7xl mx-auto px-6 sm:px-12 mt-16 pt-6 border-t border-neutral-200 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-600 gap-4">
         <p className="m-0">
-          AIRE Platform • Design System Foundation • Compliant with UX4G 3.0 & WCAG 2.1/2.2 Level AA
+          AIRE Platform • Design System Foundation • Compliant with UX4G 3.0 &
+          WCAG 2.1/2.2 Level AA
         </p>
         <div className="flex items-center gap-4">
-          <a href="/" className="text-brand-primary hover:underline font-medium">
+          <a
+            href="/"
+            className="text-brand-primary hover:underline font-medium"
+          >
             View Public Portal
           </a>
           <span>•</span>

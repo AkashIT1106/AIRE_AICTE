@@ -40,7 +40,10 @@ export const AireUtilityHeader: React.FC = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex items-center gap-1.5 font-semibold text-neutral-800">
               {/* Subtle Tricolor Accent Indicator */}
-              <div className="flex flex-col w-2 h-3.5 rounded-sm overflow-hidden shrink-0" aria-hidden="true">
+              <div
+                className="flex flex-col w-2 h-3.5 rounded-sm overflow-hidden shrink-0"
+                aria-hidden="true"
+              >
                 <span className="h-1/3 bg-[#FF9933] w-full" />
                 <span className="h-1/3 bg-white w-full border-y border-gray-200" />
                 <span className="h-1/3 bg-[#138808] w-full" />

@@ -52,7 +52,10 @@ export const ProcessStep: React.FC<ProcessStepProps> = ({
             Verification Output:
           </span>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white border border-[#CBD5E1] text-[11px] font-mono font-semibold text-[#0F172A]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" aria-hidden="true" />
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+              aria-hidden="true"
+            />
             {artifact}
           </div>
         </div>

@@ -14,7 +14,10 @@ export const AirePreFooterCta: React.FC = () => {
       <Container className="relative flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
         <div className="space-y-3 max-w-2xl">
           <div className="inline-flex items-center gap-2 bg-[#1E293B] px-3 py-1 rounded text-xs font-semibold text-[#94A3B8] border border-[#334155]">
-            <span className="w-2 h-2 rounded-full bg-[#10B981]" aria-hidden="true" />
+            <span
+              className="w-2 h-2 rounded-full bg-[#10B981]"
+              aria-hidden="true"
+            />
             <span>AICTE Institutional Workspace</span>
           </div>
 
@@ -23,9 +26,9 @@ export const AirePreFooterCta: React.FC = () => {
           </h2>
 
           <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed">
-            Log in to the institutional workspace to stage admission batches, run
-            pre-flight diagnostic checks, and generate verifiable audit seals ahead
-            of regulatory submission deadlines.
+            Log in to the institutional workspace to stage admission batches,
+            run pre-flight diagnostic checks, and generate verifiable audit
+            seals ahead of regulatory submission deadlines.
           </p>
         </div>
 

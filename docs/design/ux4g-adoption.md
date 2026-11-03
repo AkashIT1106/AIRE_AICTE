@@ -1,11 +1,11 @@
 # UX4G Adoption & Implementation Mapping for AIRE
 
-| Metadata | Value |
-|---|---|
-| Document | `docs/design/ux4g-adoption.md` |
-| Design Authority | UX4G (User Experience for Government) Design System v3.0 / v3.3.2 |
-| Framework Stack | React 18, TypeScript, Tailwind CSS, `ux4g-web-components` (npm v3.0.2) |
-| Target Page | AIRE Institutional Public Landing Page (`/`) |
+| Metadata         | Value                                                                  |
+| ---------------- | ---------------------------------------------------------------------- |
+| Document         | `docs/design/ux4g-adoption.md`                                         |
+| Design Authority | UX4G (User Experience for Government) Design System v3.0 / v3.3.2      |
+| Framework Stack  | React 18, TypeScript, Tailwind CSS, `ux4g-web-components` (npm v3.0.2) |
+| Target Page      | AIRE Institutional Public Landing Page (`/`)                           |
 
 ---
 
@@ -40,16 +40,16 @@ client/src/components/aire/* (AIRE Reusable Component Layer)
 
 ### Direct Reusability Assessment
 
-| UX4G Component / Asset | Direct Reusability in React | Adaptation Strategy in AIRE |
-|---|---|---|
-| **Typography Scale** | Direct via CSS classes (`ux4g-heading-xl`, `ux4g-body-m`, etc.) | Used directly in AIRE layout and text wrappers. |
-| **Grid & Containers** | Direct via CSS classes (`ux4g-container`, `ux4g-grid-*`) | Augmented with responsive Tailwind layout for precise spacing control. |
-| **Buttons** | Direct via `ux4g-btn-primary`, `ux4g-btn-outline-primary`, `ux4g-btn-m/lg` | Wrapped in `<AireButton>` to enforce standard types and accessible button semantics. |
-| **Cards** | Direct via `ux4g-card` styling | Wrapped in `<ServiceCard>` with institutional layout, icons, and status tags. |
-| **Accordion** | Direct styling + accessible React state control | Implemented as `<AireAccordion>` with controlled keyboard navigation and ARIA attributes for robust cross-browser reliability. |
-| **Badges & Tags** | Direct via `ux4g-tag-*` and `ux4g-badge-*` | Wrapped in `<AireBadge>` supporting status variations (verified, pending, advisory). |
-| **Header & Navbar** | Direct via `ux4g-navbar-*` | Encapsulated in `<AireNavbar>` and `<AireUtilityHeader>` with mobile drawer support. |
-| **Footer** | Direct via `ux4g-footer-*` | Encapsulated in `<AireFooter>` with structured institutional columns and statutory notices. |
+| UX4G Component / Asset | Direct Reusability in React                                                | Adaptation Strategy in AIRE                                                                                                    |
+| ---------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Typography Scale**   | Direct via CSS classes (`ux4g-heading-xl`, `ux4g-body-m`, etc.)            | Used directly in AIRE layout and text wrappers.                                                                                |
+| **Grid & Containers**  | Direct via CSS classes (`ux4g-container`, `ux4g-grid-*`)                   | Augmented with responsive Tailwind layout for precise spacing control.                                                         |
+| **Buttons**            | Direct via `ux4g-btn-primary`, `ux4g-btn-outline-primary`, `ux4g-btn-m/lg` | Wrapped in `<AireButton>` to enforce standard types and accessible button semantics.                                           |
+| **Cards**              | Direct via `ux4g-card` styling                                             | Wrapped in `<ServiceCard>` with institutional layout, icons, and status tags.                                                  |
+| **Accordion**          | Direct styling + accessible React state control                            | Implemented as `<AireAccordion>` with controlled keyboard navigation and ARIA attributes for robust cross-browser reliability. |
+| **Badges & Tags**      | Direct via `ux4g-tag-*` and `ux4g-badge-*`                                 | Wrapped in `<AireBadge>` supporting status variations (verified, pending, advisory).                                           |
+| **Header & Navbar**    | Direct via `ux4g-navbar-*`                                                 | Encapsulated in `<AireNavbar>` and `<AireUtilityHeader>` with mobile drawer support.                                           |
+| **Footer**             | Direct via `ux4g-footer-*`                                                 | Encapsulated in `<AireFooter>` with structured institutional columns and statutory notices.                                    |
 
 ---
 

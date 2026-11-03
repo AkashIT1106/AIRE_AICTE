@@ -68,7 +68,9 @@ export const Accordion: React.FC<AccordionProps> = ({
                 }`}
               >
                 <span className="ux4g-accordion__button-content flex-grow pr-4">
-                  <span className="ux4g-accordion__title text-base">{item.question}</span>
+                  <span className="ux4g-accordion__title text-base">
+                    {item.question}
+                  </span>
                 </span>
                 <span
                   className={`inline-block transition-transform duration-200 text-neutral-600 ${

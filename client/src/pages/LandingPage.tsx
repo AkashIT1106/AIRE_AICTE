@@ -20,7 +20,11 @@ export const LandingPage: React.FC = () => {
       <AireNavbar />
 
       {/* 3. Main Content Landmark */}
-      <main id="main-content" className="flex-grow focus:outline-none" tabIndex={-1}>
+      <main
+        id="main-content"
+        className="flex-grow focus:outline-none"
+        tabIndex={-1}
+      >
         {/* A. Editorial Hero with custom high-craft SVG vector illustration */}
         <AireHero />
 

@@ -7,7 +7,8 @@ export const AireFaq: React.FC = () => {
   const faqItems = [
     {
       id: "faq-what-is-aire",
-      question: "What is the AIRE platform and what role does it serve for institutions?",
+      question:
+        "What is the AIRE platform and what role does it serve for institutions?",
       answer:
         "AIRE (Admission Reconciliation & Evidence Platform) is an authoritative digital service developed under the All India Council for Technical Education (AICTE). It provides technical institutions with a deterministic, self-service environment to reconcile student admission rosters against statutory rules, program codes, and sanctioned seat caps ahead of regulatory deadlines.",
     },
@@ -25,7 +26,8 @@ export const AireFaq: React.FC = () => {
     },
     {
       id: "faq-discrepancies",
-      question: "How does the platform handle records with anomalies or discrepancies?",
+      question:
+        "How does the platform handle records with anomalies or discrepancies?",
       answer:
         "Records flagged with potential quota or eligibility discrepancies are never automatically rejected or cancelled. Instead, they are routed to an isolated Quarantine Triage queue within the institution's private workspace, allowing nodal officers a structured opportunity to clarify data with supporting documentation.",
     },
@@ -37,14 +39,18 @@ export const AireFaq: React.FC = () => {
     },
     {
       id: "faq-decisions",
-      question: "Does AIRE make automated policy determinations or student cancellations?",
+      question:
+        "Does AIRE make automated policy determinations or student cancellations?",
       answer:
         "No. AIRE provides deterministic mathematical calculations and diagnostic evidence. All regulatory policy interpretations, quota exemptions, and final admission verdicts remain exclusively with authorized institutional and regulatory officials.",
     },
   ];
 
   return (
-    <section id="faq" className="py-16 sm:py-24 bg-[#FAFBFD] border-b border-[#E2E8F0]">
+    <section
+      id="faq"
+      className="py-16 sm:py-24 bg-[#FAFBFD] border-b border-[#E2E8F0]"
+    >
       <Container>
         <SectionHeading
           badge="Frequently Asked Questions"
@@ -61,7 +67,8 @@ export const AireFaq: React.FC = () => {
               Have additional technical or regulatory questions?
             </h4>
             <p className="text-sm text-[#475569] mb-4">
-              Institutional nodal officers can reach out to the AICTE technical guidance desk for batch preparation assistance.
+              Institutional nodal officers can reach out to the AICTE technical
+              guidance desk for batch preparation assistance.
             </p>
             <a
               href="#footer"

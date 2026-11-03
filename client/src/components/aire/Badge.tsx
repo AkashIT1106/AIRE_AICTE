@@ -41,27 +41,28 @@ export const Badge: React.FC<BadgeProps> = ({
       "ux4g-tag-outline-error bg-state-error-bg text-state-error border border-state-error-border",
     danger:
       "ux4g-tag-outline-error bg-state-error-bg text-state-error border border-state-error-border",
-    info:
-      "ux4g-tag-text-info bg-state-info-bg text-state-info border border-state-info-border",
+    info: "ux4g-tag-text-info bg-state-info-bg text-state-info border border-state-info-border",
     neutral:
       "ux4g-tag-tonal-neutral bg-state-pending-bg text-state-pending border border-state-pending-border",
     pending:
       "ux4g-tag-tonal-neutral bg-state-pending-bg text-state-pending border border-state-pending-border",
-    teal:
-      "bg-teal-50 text-teal-800 border border-[#B8E2DC]",
-    brass:
-      "bg-brass-50 text-brass-800 border border-[#F0DCBE]",
-    lavender:
-      "bg-brand-50 text-brand-primary border border-brand-100", // mapped to brand-50 per design.md §4.3
+    teal: "bg-teal-50 text-teal-800 border border-[#B8E2DC]",
+    brass: "bg-brass-50 text-brass-800 border border-[#F0DCBE]",
+    lavender: "bg-brand-50 text-brand-primary border border-brand-100", // mapped to brand-50 per design.md §4.3
   };
 
-  const sizeClasses = size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs";
+  const sizeClasses =
+    size === "sm" ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs";
 
   return (
     <span
       className={`inline-flex items-center gap-1.5 font-medium rounded-full tracking-wide select-none ${sizeClasses} ${variantStyles[variant] || variantStyles.primary} ${className}`}
     >
-      {icon && <span aria-hidden="true" className="inline-flex shrink-0">{icon}</span>}
+      {icon && (
+        <span aria-hidden="true" className="inline-flex shrink-0">
+          {icon}
+        </span>
+      )}
       <span>{children}</span>
     </span>
   );

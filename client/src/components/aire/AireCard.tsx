@@ -43,11 +43,9 @@ export const AireCardHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   );
 };
 
-export const AireCardTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({
-  children,
-  className = "",
-  ...props
-}) => {
+export const AireCardTitle: React.FC<
+  React.HTMLAttributes<HTMLHeadingElement>
+> = ({ children, className = "", ...props }) => {
   return (
     <h3
       className={`ux4g-card-title text-base font-semibold text-neutral-800 m-0 ${className}`}
@@ -64,7 +62,10 @@ export const AireCardBody: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   ...props
 }) => {
   return (
-    <div className={`ux4g-card-body p-5 text-sm text-neutral-600 leading-relaxed ${className}`} {...props}>
+    <div
+      className={`ux4g-card-body p-5 text-sm text-neutral-600 leading-relaxed ${className}`}
+      {...props}
+    >
       {children}
     </div>
   );

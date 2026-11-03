@@ -25,7 +25,8 @@ export const AireServices: React.FC = () => {
       id: "intake",
       category: "Module 01",
       title: "Batch Roster Ingestion & Schema Staging",
-      subtitle: "Secure institutional workspace for multi-batch admission dataset staging",
+      subtitle:
+        "Secure institutional workspace for multi-batch admission dataset staging",
       description:
         "Authorized institutional officers upload structured admission records (CSV or XLSX) into a sandboxed, tenant-isolated staging environment. Every uploaded file undergoes cryptographic checksum generation and strict schema header verification before ingestion.",
       regulatoryRole:
@@ -48,7 +49,8 @@ export const AireServices: React.FC = () => {
       id: "quota",
       category: "Module 02",
       title: "Deterministic Quota & Seat Ceiling Engine",
-      subtitle: "Computational verification against approved institutional intake limits",
+      subtitle:
+        "Computational verification against approved institutional intake limits",
       description:
         "An automated deterministic rule engine evaluates admission rosters directly against sanctioned seat capacities, program codes, and statutory quotas (General, Reserved, Supernumerary). Evaluations are mathematically pure and reproducible.",
       regulatoryRole:
@@ -71,7 +73,8 @@ export const AireServices: React.FC = () => {
       id: "quarantine",
       category: "Module 03",
       title: "Discrepancy Quarantine & Triage Queue",
-      subtitle: "Isolated administrative holding area for non-punitive discrepancy resolution",
+      subtitle:
+        "Isolated administrative holding area for non-punitive discrepancy resolution",
       description:
         "Student records flagged with potential eligibility ambiguities or quota anomalies are isolated in a private quarantine queue. Institutions are granted a designated procedural window to submit supporting documentation without facing premature rejection.",
       regulatoryRole:
@@ -94,7 +97,8 @@ export const AireServices: React.FC = () => {
       id: "evidence",
       category: "Module 04",
       title: "Tamper-Evident Evidence & Audit Certification",
-      subtitle: "Cryptographic ledger seals and compliance packages for accreditation bodies",
+      subtitle:
+        "Cryptographic ledger seals and compliance packages for accreditation bodies",
       description:
         "Once admission rosters pass all deterministic checks and nodal officer sign-offs, the system generates an immutable verification seal. The batch ledger includes full provenance, nodal officer attribution, and downloadable audit evidence packages.",
       regulatoryRole:
@@ -115,10 +119,14 @@ export const AireServices: React.FC = () => {
     },
   ];
 
-  const currentService = services.find((s) => s.id === activeTab) || services[0];
+  const currentService =
+    services.find((s) => s.id === activeTab) || services[0];
 
   return (
-    <section id="services" className="py-16 sm:py-24 bg-white border-b border-[#E2E8F0]">
+    <section
+      id="services"
+      className="py-16 sm:py-24 bg-white border-b border-[#E2E8F0]"
+    >
       <Container>
         <SectionHeading
           badge="Platform Architecture"
@@ -174,7 +182,10 @@ export const AireServices: React.FC = () => {
                 </span>
               </div>
               <span className="text-xs text-[#059669] font-semibold flex items-center gap-1.5 bg-[#ECFDF5] px-2.5 py-1 rounded border border-[#A7F3D0]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" aria-hidden="true" />
+                <span
+                  className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+                  aria-hidden="true"
+                />
                 Statutory Specification
               </span>
             </div>
@@ -194,7 +205,9 @@ export const AireServices: React.FC = () => {
 
               {/* Regulatory Role Callout Box */}
               <div className="p-4 rounded-xl bg-[#EFF6FF] border border-[#BFDBFE] text-xs text-[#1E3A8A]">
-                <span className="font-bold block mb-1">Regulatory Mandate & Purpose:</span>
+                <span className="font-bold block mb-1">
+                  Regulatory Mandate & Purpose:
+                </span>
                 <span>{currentService.regulatoryRole}</span>
               </div>
 
@@ -202,13 +215,21 @@ export const AireServices: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3">
                 <div className="p-4 rounded-xl bg-white border border-[#E2E8F0]">
                   <h4 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider mb-2.5 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#2563EB]" aria-hidden="true" />
+                    <span
+                      className="w-2 h-2 rounded-full bg-[#2563EB]"
+                      aria-hidden="true"
+                    />
                     Required Inputs
                   </h4>
                   <ul className="space-y-1.5 text-xs text-[#475569]">
                     {currentService.inputs.map((inp, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <span className="text-[#2563EB] font-bold" aria-hidden="true">&bull;</span>
+                        <span
+                          className="text-[#2563EB] font-bold"
+                          aria-hidden="true"
+                        >
+                          &bull;
+                        </span>
                         <span>{inp}</span>
                       </li>
                     ))}
@@ -217,13 +238,21 @@ export const AireServices: React.FC = () => {
 
                 <div className="p-4 rounded-xl bg-white border border-[#E2E8F0]">
                   <h4 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider mb-2.5 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#059669]" aria-hidden="true" />
+                    <span
+                      className="w-2 h-2 rounded-full bg-[#059669]"
+                      aria-hidden="true"
+                    />
                     Verifiable Outputs
                   </h4>
                   <ul className="space-y-1.5 text-xs text-[#475569]">
                     {currentService.outputs.map((outp, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <span className="text-[#059669] font-bold" aria-hidden="true">&bull;</span>
+                        <span
+                          className="text-[#059669] font-bold"
+                          aria-hidden="true"
+                        >
+                          &bull;
+                        </span>
                         <span>{outp}</span>
                       </li>
                     ))}
@@ -296,8 +325,8 @@ export const AireServices: React.FC = () => {
                 Statutory Rule Authority
               </span>
               <p>
-                Rule sets are governed by the AICTE Approval Process Handbook (APH)
-                and approved state quota allocation guidelines.
+                Rule sets are governed by the AICTE Approval Process Handbook
+                (APH) and approved state quota allocation guidelines.
               </p>
             </div>
           </div>

@@ -41,16 +41,16 @@ The interface must communicate:
 
 Use references for specific purposes; do not copy their visual identities wholesale.
 
-| Authority/reference | What AIRE adopts | What AIRE must not copy blindly |
-|---|---|---|
-| UX4G Design System 3.0 | Indian government-service foundations, documented components, patterns, responsive and accessibility guidance, content design | Default brand colour as AIRE's complete identity; every component regardless of task; unverified package/API details |
-| GIGW 3.0 | Government website/app quality, usability, user-centricity, accessibility, cybersecurity and lifecycle considerations | Any claim of GIGW/STQC certification without the relevant evaluation and authorisation |
-| UIDAI's redesigned public site | Service-oriented entry points, useful section rhythm, clear help/resources, strong institutional communication | UIDAI branding, logos, exact layouts, content, metrics, or Aadhaar-specific service patterns that do not apply to AIRE |
-| iGOT Karmayogi | Large-portal information organisation, content grouping, audience pathways, distinct content bands | Its learning-platform dashboard, statistics, course cards, or visual motifs where irrelevant |
-| GOV.UK Design System | Functional colour roles, restrained use of colour, consistent interaction conventions, plain-language service content | UK-specific branding and patterns that do not fit Indian institutional workflows |
-| USWDS | Role-based token approach, accessible colour decisions, reusable tokens and component consistency | US federal branding or its exact palette |
-| Material Design guidance | Semantic colour roles, state consistency, adaptable component behaviour | Material's visual style as a mandatory AIRE aesthetic |
-| Nielsen Norman Group research | Usability heuristics, hierarchy, recognition over recall, feedback, error prevention, user testing | Treating heuristics as a substitute for testing actual AIRE users |
+| Authority/reference            | What AIRE adopts                                                                                                              | What AIRE must not copy blindly                                                                                        |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| UX4G Design System 3.0         | Indian government-service foundations, documented components, patterns, responsive and accessibility guidance, content design | Default brand colour as AIRE's complete identity; every component regardless of task; unverified package/API details   |
+| GIGW 3.0                       | Government website/app quality, usability, user-centricity, accessibility, cybersecurity and lifecycle considerations         | Any claim of GIGW/STQC certification without the relevant evaluation and authorisation                                 |
+| UIDAI's redesigned public site | Service-oriented entry points, useful section rhythm, clear help/resources, strong institutional communication                | UIDAI branding, logos, exact layouts, content, metrics, or Aadhaar-specific service patterns that do not apply to AIRE |
+| iGOT Karmayogi                 | Large-portal information organisation, content grouping, audience pathways, distinct content bands                            | Its learning-platform dashboard, statistics, course cards, or visual motifs where irrelevant                           |
+| GOV.UK Design System           | Functional colour roles, restrained use of colour, consistent interaction conventions, plain-language service content         | UK-specific branding and patterns that do not fit Indian institutional workflows                                       |
+| USWDS                          | Role-based token approach, accessible colour decisions, reusable tokens and component consistency                             | US federal branding or its exact palette                                                                               |
+| Material Design guidance       | Semantic colour roles, state consistency, adaptable component behaviour                                                       | Material's visual style as a mandatory AIRE aesthetic                                                                  |
+| Nielsen Norman Group research  | Usability heuristics, hierarchy, recognition over recall, feedback, error prevention, user testing                            | Treating heuristics as a substitute for testing actual AIRE users                                                      |
 
 ### 2.1 Reference priority when guidance differs
 
@@ -102,15 +102,15 @@ The palette below is the proposed AIRE brand palette. It is deliberately distinc
 
 ### 4.1 Core brand palette
 
-| Token | Hex | Role | Usage |
-|---|---|---|---|
-| `aire-brand-950` | `#142C3D` | Deep ink navy | Main dark surfaces, footer, strong headings on light surfaces, illustration outlines |
-| `aire-brand-900` | `#19384E` | Institutional navy | Header treatments, dark section surfaces, active navigation backgrounds when appropriate |
-| `aire-brand-800` | `#24536F` | Primary action blue | Primary buttons, important links, selected controls, focus-related brand accents |
-| `aire-brand-700` | `#2B6685` | Supporting blue | Secondary emphasis, selected illustration details, links where contrast is verified |
-| `aire-teal-800` | `#075E58` | Deep teal | Secondary accent, selected positive/verification emphasis, illustration details |
-| `aire-teal-700` | `#08736A` | Teal | Supporting icon/accent use; not a universal success colour |
-| `aire-brass-800` | `#8B4F16` | Muted warm accent | Small editorial highlights, limited warm emphasis, selected decorative vector details |
+| Token            | Hex       | Role                | Usage                                                                                    |
+| ---------------- | --------- | ------------------- | ---------------------------------------------------------------------------------------- |
+| `aire-brand-950` | `#142C3D` | Deep ink navy       | Main dark surfaces, footer, strong headings on light surfaces, illustration outlines     |
+| `aire-brand-900` | `#19384E` | Institutional navy  | Header treatments, dark section surfaces, active navigation backgrounds when appropriate |
+| `aire-brand-800` | `#24536F` | Primary action blue | Primary buttons, important links, selected controls, focus-related brand accents         |
+| `aire-brand-700` | `#2B6685` | Supporting blue     | Secondary emphasis, selected illustration details, links where contrast is verified      |
+| `aire-teal-800`  | `#075E58` | Deep teal           | Secondary accent, selected positive/verification emphasis, illustration details          |
+| `aire-teal-700`  | `#08736A` | Teal                | Supporting icon/accent use; not a universal success colour                               |
+| `aire-brass-800` | `#8B4F16` | Muted warm accent   | Small editorial highlights, limited warm emphasis, selected decorative vector details    |
 
 **Primary interaction colour:** `aire-brand-800` (`#24536F`).  
 **Deep institutional colour:** `aire-brand-950` (`#142C3D`).  
@@ -121,26 +121,26 @@ Do not use all four colours with equal prominence. The brand should be recognise
 
 ### 4.2 Neutral and surface palette
 
-| Token | Hex | Role | Usage |
-|---|---|---|---|
-| `aire-neutral-0` | `#FFFFFF` | White | Main content surface, cards, forms |
-| `aire-neutral-25` | `#FBFCFC` | Soft white | Optional subtle section transition |
-| `aire-neutral-50` | `#F5F7F7` | Page canvas | Default public page and workspace background |
-| `aire-neutral-100` | `#EEF3F3` | Subdued surface | Alternate section, inset panel, table header |
-| `aire-neutral-150` | `#E7ECEE` | Divider | Section separators and subtle rules |
-| `aire-neutral-200` | `#D8E0E3` | Default border | Inputs, cards where a boundary is needed, tables |
-| `aire-neutral-300` | `#AAB7BE` | Strong border | Selected/structural boundaries; use sparingly |
-| `aire-neutral-600` | `#536474` | Secondary text | Supporting text, metadata, helper copy |
-| `aire-neutral-800` | `#1D2935` | Primary text | Body copy and headings |
+| Token              | Hex       | Role            | Usage                                            |
+| ------------------ | --------- | --------------- | ------------------------------------------------ |
+| `aire-neutral-0`   | `#FFFFFF` | White           | Main content surface, cards, forms               |
+| `aire-neutral-25`  | `#FBFCFC` | Soft white      | Optional subtle section transition               |
+| `aire-neutral-50`  | `#F5F7F7` | Page canvas     | Default public page and workspace background     |
+| `aire-neutral-100` | `#EEF3F3` | Subdued surface | Alternate section, inset panel, table header     |
+| `aire-neutral-150` | `#E7ECEE` | Divider         | Section separators and subtle rules              |
+| `aire-neutral-200` | `#D8E0E3` | Default border  | Inputs, cards where a boundary is needed, tables |
+| `aire-neutral-300` | `#AAB7BE` | Strong border   | Selected/structural boundaries; use sparingly    |
+| `aire-neutral-600` | `#536474` | Secondary text  | Supporting text, metadata, helper copy           |
+| `aire-neutral-800` | `#1D2935` | Primary text    | Body copy and headings                           |
 
 ### 4.3 Tinted surfaces
 
-| Token | Hex | Usage |
-|---|---|---|
-| `aire-blue-50` | `#EAF1F5` | Informational panel, selected navigation, illustration backing |
-| `aire-teal-50` | `#E7F2EF` | Positive/verification-related subdued surfaces |
-| `aire-warm-50` | `#F6EFE4` | Occasional warm editorial surface |
-| `aire-lilac-50` | `#F1EFF8` | Optional low-frequency resource/secondary surface only |
+| Token           | Hex       | Usage                                                          |
+| --------------- | --------- | -------------------------------------------------------------- |
+| `aire-blue-50`  | `#EAF1F5` | Informational panel, selected navigation, illustration backing |
+| `aire-teal-50`  | `#E7F2EF` | Positive/verification-related subdued surfaces                 |
+| `aire-warm-50`  | `#F6EFE4` | Occasional warm editorial surface                              |
+| `aire-lilac-50` | `#F1EFF8` | Optional low-frequency resource/secondary surface only         |
 
 Lilac is optional and must remain a minor supporting surface. It must not turn AIRE into a purple-first brand.
 
@@ -148,13 +148,13 @@ Lilac is optional and must remain a minor supporting surface. It must not turn A
 
 Status colours are functional and must not be repurposed as decorative brand colours.
 
-| Semantic token | Foreground | Subdued background | Meaning |
-|---|---|---|---|
-| `state-success` | `#176B45` | `#E7F2EC` | Completed, passed, verified when confirmed by system |
-| `state-warning` | `#8A4D0A` | `#F8F0E5` | Attention required, nearing deadline, non-blocking issue |
-| `state-error` | `#B42318` | `#FCEDEB` | Failed, rejected, blocking validation error |
-| `state-info` | `#245B78` | `#EAF1F5` | Informational guidance or neutral system notice |
-| `state-pending` | `#536474` | `#EEF3F3` | Waiting, not yet processed, or not yet decided |
+| Semantic token  | Foreground | Subdued background | Meaning                                                  |
+| --------------- | ---------- | ------------------ | -------------------------------------------------------- |
+| `state-success` | `#176B45`  | `#E7F2EC`          | Completed, passed, verified when confirmed by system     |
+| `state-warning` | `#8A4D0A`  | `#F8F0E5`          | Attention required, nearing deadline, non-blocking issue |
+| `state-error`   | `#B42318`  | `#FCEDEB`          | Failed, rejected, blocking validation error              |
+| `state-info`    | `#245B78`  | `#EAF1F5`          | Informational guidance or neutral system notice          |
+| `state-pending` | `#536474`  | `#EEF3F3`          | Waiting, not yet processed, or not yet decided           |
 
 Every state must also include a text label and, where useful, a shape/icon cue. Never communicate state by colour alone. “Validated” must not mean “AICTE approved”; status names must follow AIRE's domain dictionary.
 
@@ -162,18 +162,18 @@ Every state must also include a text label and, where useful, a shape/icon cue. 
 
 The following foreground/background combinations have been calculated using the WCAG relative-luminance contrast formula. Values are for the specified solid colours, not translucent overlays.
 
-| Foreground | Background | Approx. contrast | Use |
-|---|---|---:|---|
-| `#24536F` | `#FFFFFF` | 8.26:1 | Primary button/link text on white where used as foreground |
-| `#075E58` | `#FFFFFF` | 7.63:1 | Teal text/icon on white |
-| `#8B4F16` | `#FFFFFF` | 6.51:1 | Brass text/icon on white |
-| `#142C3D` | `#FFFFFF` | 14.41:1 | Navy text on white |
-| `#1D2935` | `#F5F7F7` | 13.75:1 | Main text on canvas |
-| `#536474` | `#FFFFFF` | 6.10:1 | Secondary text on white |
-| `#176B45` | `#E7F2EC` | 5.68:1 | Success text on success surface |
-| `#8A4D0A` | `#F8F0E5` | 5.91:1 | Warning text on warning surface |
-| `#B42318` | `#FCEDEB` | 5.78:1 | Error text on error surface |
-| `#245B78` | `#EAF1F5` | 6.47:1 | Info text on info surface |
+| Foreground | Background | Approx. contrast | Use                                                        |
+| ---------- | ---------- | ---------------: | ---------------------------------------------------------- |
+| `#24536F`  | `#FFFFFF`  |           8.26:1 | Primary button/link text on white where used as foreground |
+| `#075E58`  | `#FFFFFF`  |           7.63:1 | Teal text/icon on white                                    |
+| `#8B4F16`  | `#FFFFFF`  |           6.51:1 | Brass text/icon on white                                   |
+| `#142C3D`  | `#FFFFFF`  |          14.41:1 | Navy text on white                                         |
+| `#1D2935`  | `#F5F7F7`  |          13.75:1 | Main text on canvas                                        |
+| `#536474`  | `#FFFFFF`  |           6.10:1 | Secondary text on white                                    |
+| `#176B45`  | `#E7F2EC`  |           5.68:1 | Success text on success surface                            |
+| `#8A4D0A`  | `#F8F0E5`  |           5.91:1 | Warning text on warning surface                            |
+| `#B42318`  | `#FCEDEB`  |           5.78:1 | Error text on error surface                                |
+| `#245B78`  | `#EAF1F5`  |           6.47:1 | Info text on info surface                                  |
 
 These values do not automatically certify a complete component. Test actual text, icon, border, focus, hover, disabled, selected, and translucent states. Normal text should meet at least 4.5:1; large text at least 3:1. Non-text controls and meaningful graphical boundaries must meet the applicable WCAG contrast requirements.
 
@@ -210,18 +210,18 @@ Use a system sans-serif fallback stack. Avoid loading several competing font fam
 
 ### 5.2 Type scale
 
-| Token | Desktop | Mobile | Weight | Line-height | Usage |
-|---|---:|---:|---:|---:|---|
-| `display` | 52px | 38px | 600 | 1.08–1.15 | Public hero only |
-| `h1` | 36px | 30px | 600 | 1.15 | Page title |
-| `h2` | 28px | 24px | 600 | 1.2 | Major section |
-| `h3` | 22px | 20px | 600 | 1.25 | Subsection |
-| `h4` | 18px | 18px | 600 | 1.35 | Panel heading |
-| `body-lg` | 18px | 17px | 400 | 1.6 | Lead paragraph |
-| `body` | 16px | 16px | 400 | 1.55–1.65 | Main copy |
-| `body-sm` | 14px | 14px | 400 | 1.5 | Supporting copy |
-| `label` | 14px | 14px | 500–600 | 1.4 | Form labels |
-| `meta` | 12px | 12px minimum | 400–500 | 1.45 | Metadata only |
+| Token     | Desktop |       Mobile |  Weight | Line-height | Usage            |
+| --------- | ------: | -----------: | ------: | ----------: | ---------------- |
+| `display` |    52px |         38px |     600 |   1.08–1.15 | Public hero only |
+| `h1`      |    36px |         30px |     600 |        1.15 | Page title       |
+| `h2`      |    28px |         24px |     600 |         1.2 | Major section    |
+| `h3`      |    22px |         20px |     600 |        1.25 | Subsection       |
+| `h4`      |    18px |         18px |     600 |        1.35 | Panel heading    |
+| `body-lg` |    18px |         17px |     400 |         1.6 | Lead paragraph   |
+| `body`    |    16px |         16px |     400 |   1.55–1.65 | Main copy        |
+| `body-sm` |    14px |         14px |     400 |         1.5 | Supporting copy  |
+| `label`   |    14px |         14px | 500–600 |         1.4 | Form labels      |
+| `meta`    |    12px | 12px minimum | 400–500 |        1.45 | Metadata only    |
 
 Do not use 10–11px text for important content, navigation, table values, status labels, or helper text. Dense enterprise data may use 13–14px only when legibility is confirmed at actual device sizes and zoom.
 
@@ -400,6 +400,7 @@ The public landing page is a service-oriented institutional portal. It is not a 
 Create a task-oriented section inspired by UIDAI's service discovery, but use only real AIRE destinations.
 
 Recommended entries:
+
 - Institution portal.
 - Admission batch submission.
 - Record verification guidance.
@@ -424,6 +425,7 @@ Use a connected horizontal step/process composition on desktop and a vertical ti
 Use a two-column editorial layout rather than another four-card grid.
 
 Possible content themes:
+
 - Institution-scoped access.
 - Purpose-bound access and data minimisation.
 - Traceable actions and evidence.
@@ -434,6 +436,7 @@ Only describe controls that actually exist. Label planned capabilities as planne
 ### 9.7 About AIRE
 
 Use an editorial section with:
+
 - A clear section heading.
 - One concise description of the platform's purpose.
 - A small set of key objectives in a structured side panel.
@@ -524,6 +527,7 @@ Expose stable AIRE-owned component APIs for components used by product screens (
 ### 11.3 States
 
 Every interactive component must specify applicable:
+
 - Default.
 - Hover.
 - Focus-visible.
@@ -679,23 +683,23 @@ Use semantic, vendor-neutral roles as the public token contract. Example CSS cus
 
 ```css
 :root {
-  --aire-color-brand-primary: #24536F;
-  --aire-color-brand-primary-hover: #193F55;
-  --aire-color-brand-deep: #142C3D;
-  --aire-color-accent-teal: #075E58;
-  --aire-color-accent-warm: #8B4F16;
+  --aire-color-brand-primary: #24536f;
+  --aire-color-brand-primary-hover: #193f55;
+  --aire-color-brand-deep: #142c3d;
+  --aire-color-accent-teal: #075e58;
+  --aire-color-accent-warm: #8b4f16;
 
-  --aire-color-text-primary: #1D2935;
+  --aire-color-text-primary: #1d2935;
   --aire-color-text-secondary: #536474;
-  --aire-color-surface-page: #F5F7F7;
-  --aire-color-surface-default: #FFFFFF;
-  --aire-color-surface-subtle: #EEF3F3;
-  --aire-color-border-default: #D8E0E3;
+  --aire-color-surface-page: #f5f7f7;
+  --aire-color-surface-default: #ffffff;
+  --aire-color-surface-subtle: #eef3f3;
+  --aire-color-border-default: #d8e0e3;
 
-  --aire-color-state-success: #176B45;
-  --aire-color-state-warning: #8A4D0A;
-  --aire-color-state-error: #B42318;
-  --aire-color-state-info: #245B78;
+  --aire-color-state-success: #176b45;
+  --aire-color-state-warning: #8a4d0a;
+  --aire-color-state-error: #b42318;
+  --aire-color-state-info: #245b78;
 
   --aire-space-1: 4px;
   --aire-space-2: 8px;

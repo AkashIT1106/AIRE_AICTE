@@ -1,11 +1,11 @@
 # AIRE Responsive Patterns & Navigation Rules
 
-| Viewport Category | Screen Width (px) | Grid Columns | Margin | Spacing Behavior |
-|---|---|---|---|---|
-| **Mobile** | 320px – 767px | 1 Column | 16px | Stacked vertical flow, collapsed mobile hamburger menu drawer, 44px min tap targets, card padding 16px. |
-| **Tablet** | 768px – 1023px | 2 Columns | 24px | 2-column service card grid, stacked hero with adjusted typography, compact process stepper. |
-| **Laptop** | 1024px – 1439px | 3 Columns | 32px | Full horizontal navigation bar, 3-column service grid, side-by-side hero layout, 4-step horizontal stepper. |
-| **Desktop XL** | $\ge 1440px$ | 3/4 Columns | Auto (Max 1280px) | Centered container, maximum readable line lengths, optimal whitespace balance. |
+| Viewport Category | Screen Width (px) | Grid Columns | Margin            | Spacing Behavior                                                                                            |
+| ----------------- | ----------------- | ------------ | ----------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Mobile**        | 320px – 767px     | 1 Column     | 16px              | Stacked vertical flow, collapsed mobile hamburger menu drawer, 44px min tap targets, card padding 16px.     |
+| **Tablet**        | 768px – 1023px    | 2 Columns    | 24px              | 2-column service card grid, stacked hero with adjusted typography, compact process stepper.                 |
+| **Laptop**        | 1024px – 1439px   | 3 Columns    | 32px              | Full horizontal navigation bar, 3-column service grid, side-by-side hero layout, 4-step horizontal stepper. |
+| **Desktop XL**    | $\ge 1440px$      | 3/4 Columns  | Auto (Max 1280px) | Centered container, maximum readable line lengths, optimal whitespace balance.                              |
 
 ---
 

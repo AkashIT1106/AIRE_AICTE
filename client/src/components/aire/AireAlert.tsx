@@ -1,5 +1,11 @@
 import React from "react";
-import { AlertCircle, CheckCircle2, AlertTriangle, Info, X } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  AlertTriangle,
+  Info,
+  X,
+} from "lucide-react";
 
 export interface AlertProps {
   variant?: "info" | "success" | "warning" | "error" | "danger";
@@ -58,9 +64,14 @@ export const AireAlert: React.FC<AlertProps> = ({
       role="alert"
       className={`ux4g-alert ${ux4gClass} ${bgClass} ${borderClass} border rounded-card p-4 flex items-start gap-3 transition-colors ${className}`}
     >
-      <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${textClass}`} aria-hidden="true" />
+      <Icon
+        className={`w-5 h-5 shrink-0 mt-0.5 ${textClass}`}
+        aria-hidden="true"
+      />
       <div className="flex-grow text-sm">
-        {title && <h4 className={`font-semibold mb-1 ${textClass}`}>{title}</h4>}
+        {title && (
+          <h4 className={`font-semibold mb-1 ${textClass}`}>{title}</h4>
+        )}
         <div className="text-neutral-800 leading-relaxed">{children}</div>
       </div>
       {dismissible && (

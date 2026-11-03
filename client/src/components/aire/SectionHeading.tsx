@@ -29,7 +29,10 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         <div className="mb-3">
           {badgeVariant === "institutional" ? (
             <span className="inline-flex items-center gap-1.5 text-xs font-bold tracking-wider uppercase text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] px-3 py-1 rounded">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]" aria-hidden="true" />
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-[#2563EB]"
+                aria-hidden="true"
+              />
               {badge}
             </span>
           ) : badgeVariant === "neutral" ? (

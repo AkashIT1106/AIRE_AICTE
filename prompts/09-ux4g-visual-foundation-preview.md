@@ -1,16 +1,18 @@
 # Prompt 09: AIRE UX4G 3.0 Visual Foundation & Design Token Implementation
 
-| Field | Value |
-|---|---|
-| **Task** | Establish AIRE Design Token Source, UX4G 3.0 Component Abstraction Layer, and Visual Foundation Preview |
-| **Status** | APPROVED (Direct User Authorization: "Use /antislop during the project (1), proceed") |
-| **Document Authority** | `design.md` (v1.0), `AGENTS.md`, `docs/00-governance/source-of-truth-policy.md` |
-| **Skills Consulted** | `antislop`, `ux4g-design`, `shadcn`, `vercel-react-best-practices`, `zod`, `typescript-advanced-types` |
+| Field                  | Value                                                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Task**               | Establish AIRE Design Token Source, UX4G 3.0 Component Abstraction Layer, and Visual Foundation Preview |
+| **Status**             | APPROVED (Direct User Authorization: "Use /antislop during the project (1), proceed")                   |
+| **Document Authority** | `design.md` (v1.0), `AGENTS.md`, `docs/00-governance/source-of-truth-policy.md`                         |
+| **Skills Consulted**   | `antislop`, `ux4g-design`, `shadcn`, `vercel-react-best-practices`, `zod`, `typescript-advanced-types`  |
 
 ---
 
 ## 1. Goal
+
 Execute the 10 tasks requested by the user under `design.md` governance:
+
 1. Verify `design.md` against official UX4G 3.0 documentation (`ux4g-web-components@3.0.2`).
 2. Identify conflicts between UX4G baseline and AIRE-specific customisation.
 3. Verify proposed UX4G components and theming integration against documented APIs.
@@ -25,6 +27,7 @@ Execute the 10 tasks requested by the user under `design.md` governance:
 ---
 
 ## 2. Inspected Sources & Codebase State
+
 - `design.md`: Master visual and UX contract v1.0.
 - `node_modules/ux4g-web-components`: Official UX4G 3.0.2 package containing `styles/ux4g.css` and runtime.
 - `client/src/index.css`: Root styling, currently containing outdated `--ux4g-color-primary-600: #1d4ed8` overrides.
@@ -35,6 +38,7 @@ Execute the 10 tasks requested by the user under `design.md` governance:
 ---
 
 ## 3. Assumptions & Scope Boundaries
+
 - Scope is strictly the visual foundation, design tokens, component abstractions, and preview page as specified.
 - No backend endpoints, databases, or remaining workspaces (Institution/AICTE/Student/Auditor) are modified before approval.
 - Pure SVG vector art authored directly without external generative image models or raster placeholders.
@@ -42,6 +46,7 @@ Execute the 10 tasks requested by the user under `design.md` governance:
 ---
 
 ## 4. Verification & Quality Gates
+
 - Automated token contrast check: WCAG 2.1 AA ($\ge 4.5:1$ normal text, $\ge 3:1$ UI controls).
 - Typecheck: `pnpm --filter @aire/client typecheck`.
 - Tests: `pnpm --filter @aire/client test`.

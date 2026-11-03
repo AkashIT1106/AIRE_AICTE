@@ -18,10 +18,17 @@ export const AireHero: React.FC = () => {
           <div className="lg:col-span-7 space-y-6 text-left">
             {/* National Initiative Context Banner */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#F1F5F9] border border-[#CBD5E1] text-xs font-semibold text-[#1E293B]">
-              <span className="w-2 h-2 rounded-full bg-[#2563EB]" aria-hidden="true" />
+              <span
+                className="w-2 h-2 rounded-full bg-[#2563EB]"
+                aria-hidden="true"
+              />
               <span>All India Council for Technical Education</span>
-              <span className="text-[#94A3B8]" aria-hidden="true">|</span>
-              <span className="text-[#475569] font-medium">Statutory Evidence Infrastructure</span>
+              <span className="text-[#94A3B8]" aria-hidden="true">
+                |
+              </span>
+              <span className="text-[#475569] font-medium">
+                Statutory Evidence Infrastructure
+              </span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-[46px] xl:text-[50px] font-extrabold text-[#0F172A] tracking-tight leading-[1.14]">

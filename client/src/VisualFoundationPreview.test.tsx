@@ -17,7 +17,9 @@ import {
 describe("VisualFoundationPreview & UX4G Component Abstraction Suite", () => {
   it("renders the preview header and governance badges", () => {
     render(<VisualFoundationPreview />);
-    expect(screen.getByText("AIRE Visual Foundation & Design Token Preview")).toBeDefined();
+    expect(
+      screen.getByText("AIRE Visual Foundation & Design Token Preview"),
+    ).toBeDefined();
     expect(screen.getByText("design.md v1.0 Authority")).toBeDefined();
     expect(screen.getByText("UX4G 3.0.2 Confirmed")).toBeDefined();
     expect(screen.getByText("Anti-Slop Active (During)")).toBeDefined();
@@ -33,9 +35,13 @@ describe("VisualFoundationPreview & UX4G Component Abstraction Suite", () => {
         ]}
       />,
     );
-    expect(screen.getByRole("navigation", { name: "Breadcrumb" })).toBeDefined();
+    expect(
+      screen.getByRole("navigation", { name: "Breadcrumb" }),
+    ).toBeDefined();
     expect(screen.getByText("Batch 01")).toBeDefined();
-    expect(screen.getByText("Batch 01").getAttribute("aria-current")).toBe("page");
+    expect(screen.getByText("Batch 01").getAttribute("aria-current")).toBe(
+      "page",
+    );
   });
 
   it("renders buttons with accessible height, disabled state, and loading feedback", () => {

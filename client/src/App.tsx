@@ -5,14 +5,20 @@ import { VisualFoundationPreview } from "./pages/VisualFoundationPreview";
 export function App() {
   const [currentPath, setCurrentPath] = useState(() => {
     if (typeof window !== "undefined") {
-      return window.location.pathname + window.location.search + window.location.hash;
+      return (
+        window.location.pathname + window.location.search + window.location.hash
+      );
     }
     return "/";
   });
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPath(window.location.pathname + window.location.search + window.location.hash);
+      setCurrentPath(
+        window.location.pathname +
+          window.location.search +
+          window.location.hash,
+      );
     };
 
     window.addEventListener("popstate", handlePopState);

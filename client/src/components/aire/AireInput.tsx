@@ -39,14 +39,20 @@ export const AireInput: React.FC<InputProps> = ({
   };
 
   const stateClassMap = {
-    default: "ux4g-input-default border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary",
-    error: "ux4g-input-error border-state-error text-neutral-800 focus:border-state-error focus:ring-1 focus:ring-state-error",
-    success: "ux4g-input-success border-state-success focus:border-state-success focus:ring-1 focus:ring-state-success",
-    warning: "ux4g-input-warning border-state-warning focus:border-state-warning focus:ring-1 focus:ring-state-warning",
+    default:
+      "ux4g-input-default border-neutral-200 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary",
+    error:
+      "ux4g-input-error border-state-error text-neutral-800 focus:border-state-error focus:ring-1 focus:ring-state-error",
+    success:
+      "ux4g-input-success border-state-success focus:border-state-success focus:ring-1 focus:ring-state-success",
+    warning:
+      "ux4g-input-warning border-state-warning focus:border-state-warning focus:ring-1 focus:ring-state-warning",
   };
 
   return (
-    <div className={`ux4g-input-container flex flex-col gap-1.5 w-full ${className}`}>
+    <div
+      className={`ux4g-input-container flex flex-col gap-1.5 w-full ${className}`}
+    >
       {label && (
         <label
           htmlFor={inputId}
@@ -92,11 +98,18 @@ export const AireInput: React.FC<InputProps> = ({
       </div>
 
       {errorMessage ? (
-        <span id={errorId} role="alert" className="text-xs font-medium text-state-error">
+        <span
+          id={errorId}
+          role="alert"
+          className="text-xs font-medium text-state-error"
+        >
           {errorMessage}
         </span>
       ) : helperText ? (
-        <span id={helperId} className="ux4g-input-helper text-xs text-neutral-600">
+        <span
+          id={helperId}
+          className="ux4g-input-helper text-xs text-neutral-600"
+        >
           {helperText}
         </span>
       ) : null}

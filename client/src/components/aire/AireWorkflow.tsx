@@ -41,7 +41,10 @@ export const AireWorkflow: React.FC = () => {
   ];
 
   return (
-    <section id="how-it-works" className="py-16 sm:py-24 bg-white border-b border-[#E2E8F0]">
+    <section
+      id="how-it-works"
+      className="py-16 sm:py-24 bg-white border-b border-[#E2E8F0]"
+    >
       <Container>
         <SectionHeading
           badge="Procedural Architecture"
@@ -71,8 +74,9 @@ export const AireWorkflow: React.FC = () => {
               Preparing your institution's batch admission datasets?
             </h4>
             <p className="text-sm text-[#475569] max-w-2xl">
-              Download the official AICTE Student Record Data Specification (CSV/XLSX schema)
-              and review standard field validations prior to upload.
+              Download the official AICTE Student Record Data Specification
+              (CSV/XLSX schema) and review standard field validations prior to
+              upload.
             </p>
           </div>
           <a

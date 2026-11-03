@@ -5,7 +5,10 @@ import { AireSecurityIllustration } from "./AireSecurityIllustration";
 
 export const AireResponsibleManagement: React.FC = () => {
   return (
-    <section id="governance" className="py-16 sm:py-24 bg-[#FAFBFD] border-b border-[#E2E8F0]">
+    <section
+      id="governance"
+      className="py-16 sm:py-24 bg-[#FAFBFD] border-b border-[#E2E8F0]"
+    >
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
           {/* Left Column: Editorial Governance Narrative */}
@@ -29,9 +32,10 @@ export const AireResponsibleManagement: React.FC = () => {
                     Database Multi-Tenant Isolation (Forced RLS)
                   </h4>
                   <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                    PostgreSQL Row-Level Security ensures that queries are cryptographically
-                    scoped to the authenticated institution's tenant ID. Cross-tenant data
-                    leakage is structurally blocked at the database engine level.
+                    PostgreSQL Row-Level Security ensures that queries are
+                    cryptographically scoped to the authenticated institution's
+                    tenant ID. Cross-tenant data leakage is structurally blocked
+                    at the database engine level.
                   </p>
                 </div>
               </div>
@@ -46,9 +50,10 @@ export const AireResponsibleManagement: React.FC = () => {
                     Purpose-Bound Identity Vault & PII Minimization
                   </h4>
                   <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                    Student demographic data and national identifiers are segregated into a
-                    dedicated Identity Vault. Sensitive fields are masked across standard
-                    interfaces and excluded from application system logs.
+                    Student demographic data and national identifiers are
+                    segregated into a dedicated Identity Vault. Sensitive fields
+                    are masked across standard interfaces and excluded from
+                    application system logs.
                   </p>
                 </div>
               </div>
@@ -63,9 +68,9 @@ export const AireResponsibleManagement: React.FC = () => {
                     Tamper-Evident Append-Only Audit Trail
                   </h4>
                   <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                    Every batch submission, status change, and discrepancy triage creates an
-                    immutable ledger event signed with SHA-256 batch hashes, actor IDs,
-                    and correlation timestamps.
+                    Every batch submission, status change, and discrepancy
+                    triage creates an immutable ledger event signed with SHA-256
+                    batch hashes, actor IDs, and correlation timestamps.
                   </p>
                 </div>
               </div>
@@ -80,9 +85,10 @@ export const AireResponsibleManagement: React.FC = () => {
                     Human Authority Over Regulatory Decisions
                   </h4>
                   <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                    Computational routines calculate deterministic arithmetic; they never
-                    execute automated student cancellations. Sovereign policy rulings and
-                    final decisions remain strictly with authorized human officials.
+                    Computational routines calculate deterministic arithmetic;
+                    they never execute automated student cancellations.
+                    Sovereign policy rulings and final decisions remain strictly
+                    with authorized human officials.
                   </p>
                 </div>
               </div>
