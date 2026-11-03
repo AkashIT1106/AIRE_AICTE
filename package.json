@@ -9,6 +9,7 @@
   },
   "packageManager": "pnpm@12.4.2",
   "scripts": {
+    "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "test:ux4g": "python3 infrastructure/scripts/ux4g-browser-check.py",

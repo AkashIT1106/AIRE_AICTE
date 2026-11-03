@@ -126,6 +126,7 @@ export function syncTokensToCss() {
   const brandPrimaryHover = resolved["color.semantic.action.primary-hover"];
   const brandPrimaryActive = resolved["color.semantic.action.primary-active"];
   const brandSubtle = resolved["color.semantic.action.primary-subtle"];
+  const brandTeal = resolved["color.semantic.accent.teal"];
 
   const stateSuccessBg = resolved["color.semantic.status.success.bg"];
   const stateSuccessBorder = resolved["color.semantic.status.success.border"];
@@ -213,7 +214,12 @@ export function syncTokensToCss() {
     --brand-primary-hover: ${brandPrimaryHover};
     --brand-primary-active: ${brandPrimaryActive};
     --brand-subtle: ${brandSubtle};
-    --brand-teal: ${focusRing};
+    --brand-teal: ${brandTeal};
+
+    /* Stacking */
+    --z-header: 40;
+    --z-overlay: 50;
+    --z-toast: 60;
 
     /* Semantic Status */
     --state-success-bg: ${stateSuccessBg};
@@ -314,6 +320,52 @@ export function syncTokensToCss() {
 .focus-aire:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+@layer base {
+  button:not(:disabled),
+  a[href],
+  [role="button"]:not([aria-disabled="true"]),
+  summary,
+  label[for],
+  select,
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+
+  :disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 70;
+  border-radius: 4px;
+  background: var(--brand-primary);
+  color: var(--text-inverted);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 `;
 

@@ -18,6 +18,11 @@ export const auth = betterAuth({
   }),
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
+  trustedOrigins: [
+    env.CORS_ORIGIN,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+  ],
   emailAndPassword: {
     enabled: true,
   },

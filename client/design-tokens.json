@@ -594,11 +594,18 @@
           "$description": "Destructive button hover state"
         }
       },
+      "accent": {
+        "teal": {
+          "$type": "color",
+          "$value": "{color.primitive.brand.teal.700}",
+          "$description": "Teal accent for focus, selected borders, and secondary emphasis (#0F766E)"
+        }
+      },
       "focus": {
         "ring": {
           "$type": "color",
           "$value": "{color.primitive.brand.action}",
-          "$description": "Focus ring indicator stroke meeting WCAG 2.2 AA (5.5:1 on white)"
+          "$description": "Focus ring indicator stroke meeting WCAG 2.2 AA (5.5:1 on white). Meets WCAG 2.2 non-text contrast on white and canvas."
         },
         "offset": {
           "$type": "color",
@@ -1056,6 +1063,40 @@
         "$type": "dimension",
         "$value": "2px",
         "$description": "Focus ring offset gap"
+      }
+    },
+    "icon": {
+      "sm": {
+        "$type": "dimension",
+        "$value": "16px",
+        "$description": "Inline icon size inside buttons and badges"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": "20px",
+        "$description": "Default standalone icon size"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": "24px",
+        "$description": "Section and empty-state icon size"
+      }
+    },
+    "z-index": {
+      "header": {
+        "$type": "number",
+        "$value": 40,
+        "$description": "Sticky application header"
+      },
+      "overlay": {
+        "$type": "number",
+        "$value": 50,
+        "$description": "Dialog, drawer, and dropdown overlay"
+      },
+      "toast": {
+        "$type": "number",
+        "$value": 60,
+        "$description": "Toast viewport above overlays"
       }
     },
     "elevation": {
