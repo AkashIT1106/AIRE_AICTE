@@ -4,60 +4,118 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
   CheckCircle2,
-  AlertTriangle,
   AlertOctagon,
   Info,
-  Lock,
   Layers,
   Sparkles,
-  Download,
   ShieldCheck,
-  Eye,
-  RotateCcw,
+  Fingerprint,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+
+// UI Primitives (Layer B)
 import {
+  Button,
+  ButtonGroup,
+  Input,
+  SearchInput,
+  Textarea,
+  Checkbox,
+  RadioGroup,
+  RadioGroupItem,
+  Switch,
+  Badge,
+  StatusIndicator,
+  Alert,
+  AlertTitle,
+  AlertDescription,
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
+  DialogDescription,
+  DialogFooter,
+  ConfirmationDialog,
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerFooter,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+  Progress,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  FileUpload,
+  ErrorSummary,
+  Stepper,
+  MetricCard,
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+  SelectContent,
+  SelectItem,
+  Label,
+  Separator,
+  toast,
+} from "@/components/ui";
+
 import { FormField } from "@/components/forms/FormField";
-import { EmptyState } from "@/components/feedback/EmptyState";
-import { ErrorState } from "@/components/feedback/ErrorState";
-import { LoadingState } from "@/components/feedback/LoadingState";
+
+// Workflow Components (Layer C)
+import {
+  BatchUploadPanel,
+  FileProcessingProgress,
+  UploadValidationSummary,
+  ValidationIssueSummary,
+  QuarantineIssueRow,
+  QuarantineTriageTable,
+  StudentRecordSummary,
+  QuotaCategoryIndicator,
+  DuplicateRecordComparisonPanel,
+  SubmissionStatusTimeline,
+  InstitutionStatusPanel,
+  AuditEventEntry,
+  AuditLogViewer,
+  RecordVerificationSummary,
+  MOCK_PROCESSING_STAGES,
+  MOCK_VALIDATION_SUMMARY,
+  MOCK_VALIDATION_ISSUES,
+  MOCK_QUARANTINE_RECORDS,
+  MOCK_STUDENT_RECORD,
+  MOCK_QUOTA_ALLOCATIONS,
+  MOCK_DUPLICATE_COMPARISON,
+  MOCK_SUBMISSION_TIMELINE,
+  MOCK_INSTITUTION_STATUS,
+  MOCK_AUDIT_EVENTS,
+  MOCK_RECORD_VERIFICATION,
+} from "@/components/workflow";
 
 const demoFormSchema = z.object({
   institutionCode: z
@@ -73,12 +131,27 @@ const demoFormSchema = z.object({
 type DemoFormValues = z.infer<typeof demoFormSchema>;
 
 export const DesignSystemShowcase: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<
+    "foundations" | "primitives" | "workflows"
+  >("foundations");
   const [btnLoading, setBtnLoading] = useState(false);
   const [switchState, setSwitchState] = useState(false);
+  const [radioSelection, setRadioSelection] = useState("all-india");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [densityMode, setDensityMode] = useState<"compact" | "standard">(
     "compact",
   );
+  const [stepperStep, setStepperStep] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
+  const [progressVal] = useState(65);
+  const [currentPage, setCurrentPage] = useState(2);
+
+  // Workflow mock state
+  const [simulatedProgress, setSimulatedProgress] = useState(68);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedWorkflowTab, setSelectedWorkflowTab] = useState("overview");
 
   const {
     register,
@@ -97,1034 +170,1486 @@ export const DesignSystemShowcase: React.FC = () => {
   });
 
   const onSubmit = (data: DemoFormValues) => {
-    alert(
-      `Form validated successfully via Zod:\n${JSON.stringify(data, null, 2)}`,
-    );
+    toast({
+      title: "Statutory Form Validated",
+      description: `Institution ${data.institutionCode} validated successfully with quota ${data.courseQuota}.`,
+      variant: "success",
+    });
+  };
+
+  const handleSimulateProcessing = () => {
+    setIsProcessing(true);
+    setSimulatedProgress(10);
+    const interval = setInterval(() => {
+      setSimulatedProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setIsProcessing(false);
+          toast({
+            title: "Reconciliation Complete",
+            description:
+              "500 student records parsed, hashed, and matched against sanctioned quotas.",
+            variant: "success",
+          });
+          return 100;
+        }
+        return prev + 15;
+      });
+    }, 400);
   };
 
   return (
-    <div className="space-y-12 pb-16">
-      {/* Platform Header & Token System Summary */}
-      <div className="border-b border-[var(--border-default)] pb-6">
-        <div className="flex items-center space-x-2 text-xs text-[var(--brand-teal)] font-semibold uppercase tracking-wider">
-          <Sparkles className="h-4 w-4" />
-          <span>Stage 3.5 Institutional UX & Visual Design System</span>
-        </div>
-        <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] mt-1.5">
-          AIRE Canonical Design Tokens & Foundations
-        </h1>
-        <p className="text-sm text-[var(--text-secondary)] mt-1.5 max-w-3xl leading-relaxed">
-          Grounded in HCI research, public-sector design standards (USWDS,
-          GOV.UK), and WCAG 2.2 Level AA accessibility. Driven strictly from{" "}
-          <code className="text-xs bg-[var(--surface-card-subdued)] px-1.5 py-0.5 rounded border border-[var(--border-default)] font-mono">
-            client/design-tokens.json
-          </code>{" "}
-          (DTCG 2025.10 specification).
-        </p>
-
-        {/* Governance & Compliance Strip */}
-        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-[var(--text-muted)]">
-          <span className="flex items-center gap-1.5 bg-[var(--surface-card)] border border-[var(--border-default)] px-2.5 py-1 rounded">
-            <ShieldCheck className="h-3.5 w-3.5 text-[var(--brand-teal)]" />
-            <span>Institutional Navy: #173B57</span>
-          </span>
-          <span className="flex items-center gap-1.5 bg-[var(--surface-card)] border border-[var(--border-default)] px-2.5 py-1 rounded">
-            <CheckCircle2 className="h-3.5 w-3.5 text-[var(--state-success-icon)]" />
-            <span>WCAG 2.2 AA Contrast Verified</span>
-          </span>
-          <span className="flex items-center gap-1.5 bg-[var(--surface-card)] border border-[var(--border-default)] px-2.5 py-1 rounded">
-            <Layers className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
-            <span>DTCG 2025.10 Token Format</span>
-          </span>
-        </div>
-      </div>
-
-      {/* 1. Primitive Foundations */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)] flex items-center gap-2">
-            <Layers className="h-5 w-5 text-[var(--brand-primary)]" />
-            <span>1. Primitive Token Scales</span>
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            Raw color values defined in{" "}
-            <code className="font-mono">color.primitive.*</code>. Application
-            components consume semantic aliases exclusively.
+    <TooltipProvider>
+      <div className="space-y-8 pb-20">
+        {/* Platform Header & Token Governance Banner */}
+        <div className="border-b border-[var(--border-default)] pb-6">
+          <div className="flex items-center space-x-2 text-xs text-[var(--brand-teal)] font-semibold uppercase tracking-wider">
+            <Sparkles className="h-4 w-4" />
+            <span>
+              Statutory Design System — UX4G 3.0 & DTCG 2025.10 Conformance
+            </span>
+          </div>
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] mt-1.5">
+            AIRE Design System & Workflow Components
+          </h1>
+          <p className="text-sm text-[var(--text-secondary)] mt-1.5 max-w-3xl leading-relaxed">
+            Institutional component architecture designed for AICTE admission
+            reconciliation, statutory quota compliance, cryptographic evidence
+            verification, and quarantine triage. Verified against WCAG 2.2 Level
+            AA accessibility.
           </p>
+
+          {/* Compliance & Standards Tags */}
+          <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-[var(--text-muted)]">
+            <span className="flex items-center gap-1.5 bg-[var(--surface-card)] border border-[var(--border-default)] px-2.5 py-1 rounded">
+              <ShieldCheck className="h-3.5 w-3.5 text-[var(--brand-teal)]" />
+              <span>Institutional Navy: #183B56</span>
+            </span>
+            <span className="flex items-center gap-1.5 bg-[var(--surface-card)] border border-[var(--border-default)] px-2.5 py-1 rounded">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[var(--state-success-icon)]" />
+              <span>WCAG 2.2 AA Contrast Verified</span>
+            </span>
+            <span className="flex items-center gap-1.5 bg-[var(--surface-card)] border border-[var(--border-default)] px-2.5 py-1 rounded">
+              <Layers className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
+              <span>3-Layer Architecture: Tokens → Primitives → Workflows</span>
+            </span>
+            <span className="flex items-center gap-1.5 bg-[var(--surface-card)] border border-[var(--border-default)] px-2.5 py-1 rounded">
+              <Fingerprint className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
+              <span>Cryptographic Audit Proofs</span>
+            </span>
+          </div>
+
+          {/* Top-Level Section Tabs */}
+          <div className="mt-6">
+            <Tabs
+              value={activeTab}
+              onValueChange={(val) => setActiveTab(val as any)}
+              className="w-full"
+            >
+              <TabsList className="grid w-full max-w-xl grid-cols-3">
+                <TabsTrigger value="foundations" className="text-xs sm:text-sm">
+                  1. Foundations & Tokens
+                </TabsTrigger>
+                <TabsTrigger value="primitives" className="text-xs sm:text-sm">
+                  2. Layer B Primitives
+                </TabsTrigger>
+                <TabsTrigger value="workflows" className="text-xs sm:text-sm">
+                  3. Layer C AIRE Workflows
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
         </div>
 
-        {/* Brand Navy Scale */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold text-[var(--text-primary)]">
-            Brand Institutional Navy Scale (Anchor: #173B57)
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-            {[
-              {
-                name: "navy-950",
-                hex: "#0D2233",
-                bg: "#0D2233",
-                text: "#FFFFFF",
-              },
-              {
-                name: "navy-900",
-                hex: "#173B57",
-                bg: "#173B57",
-                text: "#FFFFFF",
-              },
-              {
-                name: "navy-800",
-                hex: "#1C4666",
-                bg: "#1C4666",
-                text: "#FFFFFF",
-              },
-              {
-                name: "navy-700",
-                hex: "#245880",
-                bg: "#245880",
-                text: "#FFFFFF",
-              },
-              {
-                name: "navy-100",
-                hex: "#E8F0F7",
-                bg: "#E8F0F7",
-                text: "#172B3A",
-              },
-              {
-                name: "navy-50",
-                hex: "#F2F6FA",
-                bg: "#F2F6FA",
-                text: "#172B3A",
-              },
-            ].map((swatch) => (
-              <div
-                key={swatch.name}
-                className="p-2.5 rounded border border-[var(--border-default)] bg-[var(--surface-card)]"
-              >
-                <div
-                  className="h-9 rounded mb-2 flex items-end justify-end p-1 shadow-inner"
-                  style={{ backgroundColor: swatch.bg }}
-                >
-                  <span
-                    className="text-[10px] font-mono px-1 rounded bg-black/30"
-                    style={{ color: swatch.text }}
-                  >
-                    {swatch.hex}
-                  </span>
-                </div>
-                <p className="text-xs font-semibold text-[var(--text-primary)]">
-                  {swatch.name}
+        {/* =========================================================================
+            TAB 1: FOUNDATIONS & TOKENS
+           ========================================================================= */}
+        {activeTab === "foundations" && (
+          <div className="space-y-12">
+            {/* 1. Primitive Token Scales */}
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                  <Layers className="h-5 w-5 text-[var(--brand-primary)]" />
+                  <span>1. Primitive Token Scales</span>
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  Raw palette values defined in{" "}
+                  <code className="font-mono">color.primitive.*</code>.
+                  Application components consume semantic aliases exclusively.
                 </p>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Teal Accent Scale */}
-        <div className="space-y-2 pt-2">
-          <p className="text-xs font-semibold text-[var(--text-primary)]">
-            Teal Accent & Focus Scale (Anchor: #0F766E)
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-            {[
-              {
-                name: "teal-950",
-                hex: "#073834",
-                bg: "#073834",
-                text: "#FFFFFF",
-              },
-              {
-                name: "teal-900",
-                hex: "#0A4F4A",
-                bg: "#0A4F4A",
-                text: "#FFFFFF",
-              },
-              {
-                name: "teal-800",
-                hex: "#0D635C",
-                bg: "#0D635C",
-                text: "#FFFFFF",
-              },
-              {
-                name: "teal-700",
-                hex: "#0F766E",
-                bg: "#0F766E",
-                text: "#FFFFFF",
-              },
-              {
-                name: "teal-100",
-                hex: "#CCFBF1",
-                bg: "#CCFBF1",
-                text: "#0A4F4A",
-              },
-              {
-                name: "teal-50",
-                hex: "#F0FDFA",
-                bg: "#F0FDFA",
-                text: "#0A4F4A",
-              },
-            ].map((swatch) => (
-              <div
-                key={swatch.name}
-                className="p-2.5 rounded border border-[var(--border-default)] bg-[var(--surface-card)]"
-              >
-                <div
-                  className="h-9 rounded mb-2 flex items-end justify-end p-1 shadow-inner"
-                  style={{ backgroundColor: swatch.bg }}
-                >
-                  <span
-                    className="text-[10px] font-mono px-1 rounded bg-black/30"
-                    style={{ color: swatch.text }}
-                  >
-                    {swatch.hex}
-                  </span>
-                </div>
-                <p className="text-xs font-semibold text-[var(--text-primary)]">
-                  {swatch.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Neutral Slate Scale */}
-        <div className="space-y-2 pt-2">
-          <p className="text-xs font-semibold text-[var(--text-primary)]">
-            Neutral Slate & Background Scale
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-            {[
-              {
-                name: "canvas",
-                hex: "#F5F7FA",
-                bg: "#F5F7FA",
-                text: "#172B3A",
-              },
-              {
-                name: "surface",
-                hex: "#FFFFFF",
-                bg: "#FFFFFF",
-                text: "#172B3A",
-              },
-              {
-                name: "slate-900",
-                hex: "#172B3A",
-                bg: "#172B3A",
-                text: "#FFFFFF",
-              },
-              {
-                name: "slate-600",
-                hex: "#526579",
-                bg: "#526579",
-                text: "#FFFFFF",
-              },
-              {
-                name: "slate-500",
-                hex: "#5A6E82",
-                bg: "#5A6E82",
-                text: "#FFFFFF",
-              },
-              {
-                name: "slate-200",
-                hex: "#CBD5E1",
-                bg: "#CBD5E1",
-                text: "#172B3A",
-              },
-            ].map((swatch) => (
-              <div
-                key={swatch.name}
-                className="p-2.5 rounded border border-[var(--border-default)] bg-[var(--surface-card)]"
-              >
-                <div
-                  className="h-9 rounded mb-2 flex items-end justify-end p-1 border border-black/10"
-                  style={{ backgroundColor: swatch.bg }}
-                >
-                  <span
-                    className="text-[10px] font-mono px-1 rounded bg-black/20"
-                    style={{ color: swatch.text }}
-                  >
-                    {swatch.hex}
-                  </span>
-                </div>
-                <p className="text-xs font-semibold text-[var(--text-primary)]">
-                  {swatch.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 2. Semantic Token Roles & WCAG Ratios */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-            2. Semantic Token Roles & Contrast Validation
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            Every semantic token is bound to CSS custom properties. Contrast
-            ratios are verified against WCAG 2.2 AA (4.5:1 text, 3:1 non-text).
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="p-3.5 rounded border border-[var(--border-default)] bg-[var(--surface-card)]">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-[var(--text-primary)]">
-                color.action.primary
-              </span>
-              <Badge variant="outline" size="sm" className="text-[10px]">
-                11.7:1 (AAA)
-              </Badge>
-            </div>
-            <div className="h-9 rounded bg-[var(--brand-primary)] text-[var(--text-inverted)] flex items-center justify-center text-xs font-medium mb-2">
-              Primary Action
-            </div>
-            <p className="text-[11px] text-[var(--text-muted)] font-mono">
-              var(--brand-primary) #173B57
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded border border-[var(--state-success-border)] bg-[var(--state-success-bg)]">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-[var(--state-success-text)]">
-                color.status.success
-              </span>
-              <Badge variant="success" size="sm" className="text-[10px]">
-                8.7:1 (AAA)
-              </Badge>
-            </div>
-            <div className="h-9 rounded border border-[var(--state-success-border)] bg-[var(--surface-card)] flex items-center justify-center gap-1.5 text-xs font-medium text-[var(--state-success-text)] mb-2">
-              <CheckCircle2 className="h-4 w-4 text-[var(--state-success-icon)]" />
-              <span>Compliant Run</span>
-            </div>
-            <p className="text-[11px] text-[var(--state-success-text)] font-mono">
-              Text #14532D on Bg #F0FDF4
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded border border-[var(--state-warning-border)] bg-[var(--state-warning-bg)]">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-[var(--state-warning-text)]">
-                color.status.warning
-              </span>
-              <Badge variant="warning" size="sm" className="text-[10px]">
-                8.8:1 (AAA)
-              </Badge>
-            </div>
-            <div className="h-9 rounded border border-[var(--state-warning-border)] bg-[var(--surface-card)] flex items-center justify-center gap-1.5 text-xs font-medium text-[var(--state-warning-text)] mb-2">
-              <AlertTriangle className="h-4 w-4 text-[var(--state-warning-icon)]" />
-              <span>Quarantine (14 Rows)</span>
-            </div>
-            <p className="text-[11px] text-[var(--state-warning-text)] font-mono">
-              Text #78350F on Bg #FFFBEB
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded border border-[var(--state-danger-border)] bg-[var(--state-danger-bg)]">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-[var(--state-danger-text)]">
-                color.status.error
-              </span>
-              <Badge variant="danger" size="sm" className="text-[10px]">
-                9.2:1 (AAA)
-              </Badge>
-            </div>
-            <div className="h-9 rounded border border-[var(--state-danger-border)] bg-[var(--surface-card)] flex items-center justify-center gap-1.5 text-xs font-medium text-[var(--state-danger-text)] mb-2">
-              <AlertOctagon className="h-4 w-4 text-[var(--state-danger-icon)]" />
-              <span>Show Cause Breach</span>
-            </div>
-            <p className="text-[11px] text-[var(--state-danger-text)] font-mono">
-              Text #7F1D1D on Bg #FEF2F2
-            </p>
-          </div>
-        </div>
-
-        {/* Secondary semantic row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
-          <div className="p-3.5 rounded border border-[var(--border-default)] bg-[var(--surface-card)]">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-[var(--text-primary)]">
-                color.focus.ring
-              </span>
-              <Badge variant="outline" size="sm" className="text-[10px]">
-                5.5:1 (AA)
-              </Badge>
-            </div>
-            <div className="h-9 rounded border-2 border-[var(--focus-ring)] bg-[var(--surface-card)] flex items-center justify-center text-xs font-medium text-[var(--text-primary)] mb-2">
-              Teal Focus Indicator
-            </div>
-            <p className="text-[11px] text-[var(--text-muted)] font-mono">
-              var(--focus-ring) #0F766E
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded border border-[var(--border-default)] bg-[var(--surface-card)]">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-[var(--text-primary)]">
-                color.semantic.text.primary
-              </span>
-              <Badge variant="outline" size="sm" className="text-[10px]">
-                14.5:1 (AAA)
-              </Badge>
-            </div>
-            <div className="h-9 rounded bg-[var(--surface-card-subdued)] flex items-center px-3 text-xs font-semibold text-[var(--text-primary)] mb-2">
-              Primary Body & Headings
-            </div>
-            <p className="text-[11px] text-[var(--text-muted)] font-mono">
-              var(--text-primary) #172B3A
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded border border-[var(--border-default)] bg-[var(--surface-card)]">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-[var(--text-primary)]">
-                color.semantic.text.muted
-              </span>
-              <Badge variant="outline" size="sm" className="text-[10px]">
-                5.3:1 (AA)
-              </Badge>
-            </div>
-            <div className="h-9 rounded bg-[var(--surface-card-subdued)] flex items-center px-3 text-xs font-medium text-[var(--text-muted)] mb-2">
-              Metadata & Timestamps
-            </div>
-            <p className="text-[11px] text-[var(--text-muted)] font-mono">
-              var(--text-muted) #5A6E82
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded border border-[var(--masked-data-border)] bg-[var(--masked-data-bg)]">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-[var(--masked-data-text)]">
-                color.semantic.masked
-              </span>
-              <Badge variant="masked" size="sm" className="text-[10px]">
-                7.5:1 (AAA)
-              </Badge>
-            </div>
-            <div className="h-9 rounded border border-[var(--masked-data-border)] bg-[var(--surface-card)] flex items-center justify-center gap-1.5 text-xs font-mono font-medium text-[var(--masked-data-text)] mb-2">
-              <Lock className="h-3.5 w-3.5 text-[var(--masked-data-icon)]" />
-              <span>••••-••••-8821</span>
-            </div>
-            <p className="text-[11px] text-[var(--masked-data-text)] font-mono">
-              Identity Vault Pseudonym
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Typography Hierarchy */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-            3. Typography Hierarchy & Tabular Numerals
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            Scale optimized for technical document clarity, legal citations, and
-            vertically aligned quota counts.
-          </p>
-        </div>
-
-        <div className="rounded border border-[var(--border-default)] bg-[var(--surface-card)] p-5 space-y-4">
-          <div className="border-b border-[var(--border-subtle)] pb-3">
-            <p className="text-xs font-mono text-[var(--text-muted)]">
-              font-size-2xl (24px / 700) &bull; Page Titles
-            </p>
-            <p className="text-2xl font-bold text-[var(--text-primary)]">
-              National Admission Reconciliation Ledger
-            </p>
-          </div>
-
-          <div className="border-b border-[var(--border-subtle)] pb-3">
-            <p className="text-xs font-mono text-[var(--text-muted)]">
-              font-size-xl (20px / 600) &bull; Section Headers
-            </p>
-            <p className="text-xl font-semibold text-[var(--text-primary)]">
-              Quarantine Remediation & Exception Scrutiny Queue
-            </p>
-          </div>
-
-          <div className="border-b border-[var(--border-subtle)] pb-3">
-            <p className="text-xs font-mono text-[var(--text-muted)]">
-              font-size-lg (18px / 600) &bull; Modal Titles & Card Headers
-            </p>
-            <p className="text-lg font-semibold text-[var(--text-primary)]">
-              Confirm Statutory Batch Seal & Merkle Digest Generation
-            </p>
-          </div>
-
-          <div className="border-b border-[var(--border-subtle)] pb-3">
-            <p className="text-xs font-mono text-[var(--text-muted)]">
-              font-size-base (14px / 400) &bull; Standard Body Copy
-            </p>
-            <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-              AIRE evaluates candidate records deterministically against AICTE
-              Approval Process Handbook (APH) quota ceilings and state
-              counseling authority rosters. Evaluators review evidence traces
-              prior to submitting Show Cause notices.
-            </p>
-          </div>
-
-          <div>
-            <p className="text-xs font-mono text-[var(--text-muted)]">
-              font-size-mono-sm (13px / Tabular) &bull; Numerical IDs & Digests
-            </p>
-            <div className="font-mono font-tabular text-xs text-[var(--text-primary)] bg-[var(--surface-card-subdued)] p-3 rounded border border-[var(--border-default)] space-y-1">
-              <p>
-                Roll No: 2026-CSE-001 &bull; APAAR: ••••-••••-1042 &bull; Quota:
-                60/60 &bull; Rank: 001,420
-              </p>
-              <p>
-                Digest: SHA256:
-                8f9b2d3e1a0c4f5b6e7d8c9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Spacing Scale */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-            4. Spacing & Geometric Scale (4px Base Grid)
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            Consistent spacing tokens from{" "}
-            <code className="font-mono">spacing.1</code> (4px) to{" "}
-            <code className="font-mono">spacing.12</code> (48px).
-          </p>
-        </div>
-
-        <div className="p-4 rounded border border-[var(--border-default)] bg-[var(--surface-card)]">
-          <div className="space-y-2">
-            {[
-              { token: "space-1", px: "4px" },
-              { token: "space-2", px: "8px" },
-              { token: "space-3", px: "12px" },
-              { token: "space-4", px: "16px" },
-              { token: "space-5", px: "20px" },
-              { token: "space-6", px: "24px" },
-              { token: "space-8", px: "32px" },
-              { token: "space-12", px: "48px" },
-            ].map((s) => (
-              <div key={s.token} className="flex items-center text-xs">
-                <span className="w-20 font-mono text-[var(--text-muted)]">
-                  {s.token}
-                </span>
-                <span className="w-16 font-mono font-tabular text-[var(--text-secondary)]">
-                  {s.px}
-                </span>
-                <div
-                  className="h-4 bg-[var(--brand-primary)] rounded-sm"
-                  style={{ width: s.px }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Buttons & Interactive States */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-            5. Buttons & Action Hierarchy
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            Strict hierarchy: single solid Navy button per view for primary
-            action, subdued outline for secondary, high-friction destructive for
-            irreversible steps.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <Button variant="default">Primary Action</Button>
-          <Button variant="secondary">Secondary Action</Button>
-          <Button variant="outline">Outline</Button>
-          <Button variant="destructive">Destructive / Show Cause</Button>
-          <Button variant="ghost">Ghost Trigger</Button>
-          <Button variant="link">Hyperlink Button</Button>
-          <Button
-            variant="default"
-            loading={btnLoading}
-            onClick={() => {
-              setBtnLoading(true);
-              setTimeout(() => setBtnLoading(false), 2000);
-            }}
-          >
-            {btnLoading ? "Processing..." : "Click to Test Loading"}
-          </Button>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 pt-2">
-          <Button size="sm">Small (32px)</Button>
-          <Button size="default">Default (36px)</Button>
-          <Button size="lg">Large (40px)</Button>
-          <Button size="icon" aria-label="Download Evidence">
-            <Download className="h-4 w-4" />
-          </Button>
-          <Button disabled>Disabled Action</Button>
-        </div>
-      </section>
-
-      {/* 6. Form Controls & Validation Engine */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-            6. Accessible Forms & Zod Validation Engine (DD-003)
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            Accessible labels, input error borders, aria-invalid attributes, and
-            error announcements.
-          </p>
-        </div>
-
-        <Card className="max-w-xl">
-          <CardHeader>
-            <CardTitle>Intake Quota Configuration</CardTitle>
-            <CardDescription>
-              Demonstrates React Hook Form integration with Zod schema
-              resolution, aria-invalid attributes, and accessible error
-              announcements.
-            </CardDescription>
-          </CardHeader>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <CardContent className="space-y-4">
-              <FormField
-                id="inst-code"
-                label="Institution Code"
-                required
-                error={errors.institutionCode?.message}
-                helperText="Permanent AICTE institution identifier"
-              >
-                <Input
-                  id="inst-code"
-                  {...register("institutionCode")}
-                  error={!!errors.institutionCode}
-                />
-              </FormField>
-
-              <FormField
-                id="course-quota"
-                label="Course Intake Quota"
-                required
-                error={errors.courseQuota?.message}
-                helperText="Approved seats from AICTE Approval Process Handbook"
-              >
-                <Input
-                  id="course-quota"
-                  type="number"
-                  {...register("courseQuota")}
-                  error={!!errors.courseQuota}
-                />
-              </FormField>
-
+              {/* Brand Navy Scale */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-[var(--text-primary)]">
-                  Affiliated University
-                </label>
-                <Select defaultValue="aktu">
-                  <SelectTrigger id="university-select">
-                    <SelectValue placeholder="Select university" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="aktu">
-                      Dr. A.P.J. Abdul Kalam Technical University
-                    </SelectItem>
-                    <SelectItem value="anna">
-                      Anna University, Chennai
-                    </SelectItem>
-                    <SelectItem value="vtu">
-                      Visvesvaraya Technological University
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <FormField
-                id="remarks"
-                label="Compliance Remarks (Optional)"
-                helperText="Notes regarding quota sanctions or council approval orders"
-              >
-                <Textarea
-                  id="remarks"
-                  placeholder="Enter remarks..."
-                  rows={2}
-                  {...register("submissionRemarks")}
-                />
-              </FormField>
-
-              <div className="flex items-center space-x-2 pt-2">
-                <Switch
-                  id="lateral-entry"
-                  checked={switchState}
-                  onCheckedChange={setSwitchState}
-                />
-                <label
-                  htmlFor="lateral-entry"
-                  className="text-sm font-medium text-[var(--text-primary)] cursor-pointer"
-                >
-                  Enable Lateral Entry Allocation (+10% Supernumerary)
-                </label>
-              </div>
-
-              <div className="space-y-1 pt-2">
-                <div className="flex items-start space-x-2">
-                  <Checkbox
-                    id="attestation"
-                    checked={watch("attestationAccepted")}
-                    onCheckedChange={(checked) =>
-                      setValue("attestationAccepted", Boolean(checked))
-                    }
-                  />
-                  <label
-                    htmlFor="attestation"
-                    className="text-xs text-[var(--text-secondary)] leading-relaxed cursor-pointer"
-                  >
-                    I solemnly attest that the quota and admission details
-                    comply with AICTE Regulations and statutory admission rules.
-                  </label>
+                <p className="text-xs font-semibold text-[var(--text-primary)]">
+                  Brand Institutional Navy Scale (Anchor: #183B56)
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                  {[
+                    {
+                      name: "navy-950",
+                      hex: "#0D2233",
+                      bg: "#0D2233",
+                      text: "#FFFFFF",
+                    },
+                    {
+                      name: "navy-900",
+                      hex: "#183B56",
+                      bg: "#183B56",
+                      text: "#FFFFFF",
+                    },
+                    {
+                      name: "navy-800",
+                      hex: "#1C4666",
+                      bg: "#1C4666",
+                      text: "#FFFFFF",
+                    },
+                    {
+                      name: "navy-700",
+                      hex: "#245B75",
+                      bg: "#245B75",
+                      text: "#FFFFFF",
+                    },
+                    {
+                      name: "navy-600",
+                      hex: "#356B85",
+                      bg: "#356B85",
+                      text: "#FFFFFF",
+                    },
+                    {
+                      name: "navy-50",
+                      hex: "#E8F0F7",
+                      bg: "#E8F0F7",
+                      text: "#183B56",
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.name}
+                      style={{ backgroundColor: item.bg, color: item.text }}
+                      className="p-3 rounded border border-[var(--border-subtle)] text-xs flex flex-col justify-between h-20 shadow-sm"
+                    >
+                      <span className="font-medium">{item.name}</span>
+                      <span className="font-mono text-[11px] opacity-90">
+                        {item.hex}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                {errors.attestationAccepted && (
-                  <p
-                    role="alert"
-                    className="text-xs text-[var(--state-danger-text)] font-medium"
-                  >
-                    {errors.attestationAccepted.message}
+              </div>
+
+              {/* Action Blue & Teal Accent */}
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-[var(--text-primary)]">
+                  Action Blue (#245B75) & Verification Teal Accent (#0F766E)
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    {
+                      name: "action-primary",
+                      hex: "#245B75",
+                      bg: "#245B75",
+                      text: "#FFFFFF",
+                    },
+                    {
+                      name: "action-hover",
+                      hex: "#1C4666",
+                      bg: "#1C4666",
+                      text: "#FFFFFF",
+                    },
+                    {
+                      name: "teal-accent",
+                      hex: "#0F766E",
+                      bg: "#0F766E",
+                      text: "#FFFFFF",
+                    },
+                    {
+                      name: "teal-subtle",
+                      hex: "#CCFBF1",
+                      bg: "#CCFBF1",
+                      text: "#0F766E",
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.name}
+                      style={{ backgroundColor: item.bg, color: item.text }}
+                      className="p-3 rounded border border-[var(--border-subtle)] text-xs flex flex-col justify-between h-20 shadow-sm"
+                    >
+                      <span className="font-medium">{item.name}</span>
+                      <span className="font-mono text-[11px] opacity-90">
+                        {item.hex}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Semantic Status Colors */}
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-[var(--text-primary)]">
+                  Status States (WCAG 2.2 AA Contrast Verified)
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  {[
+                    {
+                      label: "Success (Approved / Reconciled)",
+                      bg: "var(--state-success-bg)",
+                      border: "var(--state-success-border)",
+                      text: "var(--state-success-text)",
+                      desc: "Intake cleared, SHA-256 seal valid",
+                    },
+                    {
+                      label: "Warning (Quarantine Triage)",
+                      bg: "var(--state-warning-bg)",
+                      border: "var(--state-warning-border)",
+                      text: "var(--state-warning-text)",
+                      desc: "Quota capacity ≥ 90%, pending review",
+                    },
+                    {
+                      label: "Danger (Intake Breach / Fraud)",
+                      bg: "var(--state-danger-bg)",
+                      border: "var(--state-danger-border)",
+                      text: "var(--state-danger-text)",
+                      desc: "Over-admission > 100%, show cause",
+                    },
+                    {
+                      label: "Info (Guideline Callouts)",
+                      bg: "var(--state-info-bg)",
+                      border: "var(--state-info-border)",
+                      text: "var(--state-info-text)",
+                      desc: "AICTE Approval Process Handbook ref",
+                    },
+                  ].map((status) => (
+                    <div
+                      key={status.label}
+                      style={{
+                        backgroundColor: status.bg,
+                        borderColor: status.border,
+                        color: status.text,
+                      }}
+                      className="p-3.5 rounded border text-xs space-y-1 shadow-sm"
+                    >
+                      <p className="font-semibold">{status.label}</p>
+                      <p className="text-[11px] opacity-90">{status.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* 2. Typography Foundations */}
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                  2. Typography Scale & Tabular Numerals
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  Inter for textual clarity; JetBrains Mono with tabular numeral
+                  features for quotas, roll numbers, and hashes.
+                </p>
+              </div>
+
+              <div className="space-y-3 bg-[var(--surface-card)] p-4 rounded border border-[var(--border-default)]">
+                <div className="border-b border-[var(--border-subtle)] pb-2">
+                  <span className="text-xs font-mono text-[var(--text-muted)]">
+                    Display / H1 — 24px (font-bold)
+                  </span>
+                  <p className="text-2xl font-bold text-[var(--text-primary)] mt-1">
+                    AICTE Institutional Records & Verification Platform
                   </p>
-                )}
+                </div>
+                <div className="border-b border-[var(--border-subtle)] pb-2">
+                  <span className="text-xs font-mono text-[var(--text-muted)]">
+                    Headline / H2 — 18px (font-semibold)
+                  </span>
+                  <p className="text-lg font-semibold text-[var(--text-primary)] mt-1">
+                    Approved Sanctioned Intake vs Quarantined Admissions
+                  </p>
+                </div>
+                <div className="border-b border-[var(--border-subtle)] pb-2">
+                  <span className="text-xs font-mono text-[var(--text-muted)]">
+                    Section / H3 — 14px (font-semibold)
+                  </span>
+                  <p className="text-sm font-semibold text-[var(--text-primary)] mt-1">
+                    Academic Year 2026–2027 Ingestion Batch Manifest
+                  </p>
+                </div>
+                <div className="border-b border-[var(--border-subtle)] pb-2">
+                  <span className="text-xs font-mono text-[var(--text-muted)]">
+                    Body / Regular — 13px
+                  </span>
+                  <p className="text-[13px] text-[var(--text-primary)] mt-1 leading-relaxed">
+                    Student admission records ingested through state counseling
+                    portals are deterministically validated against sanctioned
+                    institution seat matrices.
+                  </p>
+                </div>
+                <div>
+                  <span className="text-xs font-mono text-[var(--text-muted)]">
+                    Tabular Numerals & Identifiers — JetBrains Mono
+                    (font-tabular)
+                  </span>
+                  <p className="text-xs font-mono font-tabular text-[var(--text-secondary)] mt-1">
+                    SHA-256 Digest:
+                    e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+                  </p>
+                  <p className="text-xs font-mono font-tabular text-[var(--text-primary)] mt-1">
+                    Roll #2026-CSE-101 | Quota Allocation: 120 / 120 (100.00%) |
+                    Latency: 142ms
+                  </p>
+                </div>
               </div>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setValue("courseQuota", 0)}
-              >
-                Set Invalid Quota (Test Error)
-              </Button>
-              <Button type="submit">Validate Submission</Button>
-            </CardFooter>
-          </form>
-        </Card>
-      </section>
+            </section>
 
-      {/* 7. Alerts & Notification Banners */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-            7. Alert Banners & Semantic Statuses
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            Never convey status by color alone; every banner pairs an SVG icon
-            with explicit textual status explanations.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Alert variant="info">
-            <Info className="h-4 w-4" />
-            <AlertTitle>Intake Calculation Notice</AlertTitle>
-            <AlertDescription>
-              Approved AICTE intake for AY 2026-27 is locked under Gazette
-              Notification AICTE/2026/04.
-            </AlertDescription>
-          </Alert>
-
-          <Alert variant="success">
-            <CheckCircle2 className="h-4 w-4" />
-            <AlertTitle>Cohort Reconciliation Complete</AlertTitle>
-            <AlertDescription>
-              All 1,200 admitted records matched against state counseling
-              authority records without discrepancies.
-            </AlertDescription>
-          </Alert>
-
-          <Alert variant="warning">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Freeze Window Expiring (48 Hours)</AlertTitle>
-            <AlertDescription>
-              12 quarantined student records remain unresolved. Mandatory cohort
-              sealing deadline: 15 Nov 2026.
-            </AlertDescription>
-          </Alert>
-
-          <Alert variant="destructive">
-            <AlertOctagon className="h-4 w-4" />
-            <AlertTitle>Show Cause Notice Issued</AlertTitle>
-            <AlertDescription>
-              Computer Science branch exceeds authorized intake by 8 seats.
-              Formal explanation required within 7 days.
-            </AlertDescription>
-          </Alert>
-        </div>
-      </section>
-
-      {/* 8. Status Badges */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-            8. Badges & Regulatory Outcomes
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            High-contrast badges with icons for clear recognition across dense
-            tables.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="default">Default Active</Badge>
-          <Badge variant="secondary">Draft Intake</Badge>
-          <Badge variant="outline">Unsealed</Badge>
-          <Badge variant="success">
-            <CheckCircle2 className="w-3 h-3 mr-1 text-[var(--state-success-icon)]" />
-            Compliant Run
-          </Badge>
-          <Badge variant="warning">
-            <AlertTriangle className="w-3 h-3 mr-1 text-[var(--state-warning-icon)]" />
-            Quarantine (14 Rows)
-          </Badge>
-          <Badge variant="danger">
-            <AlertOctagon className="w-3 h-3 mr-1 text-[var(--state-danger-icon)]" />
-            Over-Intake Breach
-          </Badge>
-          <Badge variant="info">
-            <Info className="w-3 h-3 mr-1 text-[var(--state-info-icon)]" />
-            Supernumerary Quota
-          </Badge>
-          <Badge variant="masked">
-            <Lock className="w-3 h-3 mr-1 text-[var(--masked-data-icon)]" />
-            APAAR: ••••-••••-8821
-          </Badge>
-        </div>
-      </section>
-
-      {/* 9. Modal Dialogs & Menus */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-            9. Accessible Modals & Menus (Radix Primitives)
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            Accessible focus trapping, keyboard navigation, and Escape
-            dismissal.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-4">
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                Open Confirmation Dialog Preview
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Seal Admission Cohort</DialogTitle>
-                <DialogDescription>
-                  This action marks the 2026-27 admission batch as immutable.
-                  Once sealed, no modifications to student records can occur
-                  without an authorized reopening petition.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="p-3 bg-[var(--surface-card-subdued)] rounded text-xs text-[var(--text-secondary)] border border-[var(--border-default)]">
-                <p className="font-semibold text-[var(--text-primary)]">
-                  Tamper-Evident Cryptographic Digest
-                </p>
-                <p className="font-mono mt-1 text-[11px] text-[var(--text-muted)] font-tabular">
-                  SHA256:
-                  8f9b2d3e1a0c4f5b6e7d8c9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c
+            {/* 3. Spacing Grid & Geometric Dimensions */}
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                  3. Spacing & Geometric Scale (4px Base Grid)
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  Consistent spacing tokens from 4px to 48px, standard control
+                  heights (36px / 44px), and 4px button radius.
                 </p>
               </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                  Cancel
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                {[
+                  { token: "spacing.1", px: "4px" },
+                  { token: "spacing.2", px: "8px" },
+                  { token: "spacing.3", px: "12px" },
+                  { token: "spacing.4", px: "16px" },
+                  { token: "spacing.6", px: "24px" },
+                  { token: "spacing.8", px: "32px" },
+                ].map((item) => (
+                  <div
+                    key={item.token}
+                    className="p-3 bg-[var(--surface-card)] rounded border border-[var(--border-default)] text-xs"
+                  >
+                    <p className="font-mono text-[11px] text-[var(--text-muted)]">
+                      {item.token}
+                    </p>
+                    <p className="font-semibold text-[var(--text-primary)]">
+                      {item.px}
+                    </p>
+                    <div
+                      className="mt-2 h-2 bg-[var(--brand-primary)] rounded"
+                      style={{ width: item.px }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
+
+        {/* =========================================================================
+            TAB 2: LAYER B REUSABLE PRIMITIVES
+           ========================================================================= */}
+        {activeTab === "primitives" && (
+          <div className="space-y-12">
+            {/* 1. Buttons & Button Group */}
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                  1. Buttons, Button Groups & Interactive States
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  Single primary solid button per view; keyboard focus rings,
+                  loading states with anti-double-submission.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 bg-[var(--surface-card)] p-4 rounded border border-[var(--border-default)]">
+                <Button variant="default">Primary Action</Button>
+                <Button variant="secondary">Secondary Action</Button>
+                <Button variant="outline">Outline</Button>
+                <Button variant="destructive">Destructive</Button>
+                <Button variant="ghost">Ghost</Button>
+                <Button variant="link">Statutory Link</Button>
+
+                <Button
+                  variant="default"
+                  loading={btnLoading}
+                  onClick={() => {
+                    setBtnLoading(true);
+                    setTimeout(() => setBtnLoading(false), 2000);
+                  }}
+                >
+                  {btnLoading ? "Processing..." : "Click for Loading State"}
                 </Button>
+
+                <Button variant="default" disabled>
+                  Disabled
+                </Button>
+
+                <Separator orientation="vertical" className="h-8" />
+
+                <ButtonGroup label="View modes">
+                  <Button variant="outline" size="sm">
+                    Compact
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    Standard
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    Detailed
+                  </Button>
+                </ButtonGroup>
+              </div>
+            </section>
+
+            {/* 2. Accessible Form Controls */}
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                  2. Accessible Forms, Validation & Error Summary
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  Zod schema integration, visible labels, described-by error
+                  text, and keyboard focusable error summary.
+                </p>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Statutory Quota Submission Form</CardTitle>
+                  <CardDescription>
+                    All fields strictly validated client-side with immediate
+                    accessible announcements.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="space-y-4 max-w-xl"
+                  >
+                    {/* Error Summary Component */}
+                    {Object.keys(errors).length > 0 && (
+                      <ErrorSummary
+                        title="Submission Validation Errors"
+                        errors={Object.entries(errors).map(([field, err]) => ({
+                          fieldId: field,
+                          message: err?.message || "Invalid field",
+                        }))}
+                      />
+                    )}
+
+                    <FormField
+                      label="Institution AICTE Code"
+                      id="institutionCode"
+                      required
+                      error={errors.institutionCode?.message}
+                      helperText="Official 10-digit AICTE approval identifier"
+                    >
+                      <Input
+                        id="institutionCode"
+                        {...register("institutionCode")}
+                        error={!!errors.institutionCode}
+                        placeholder="e.g. 1-10972411"
+                      />
+                    </FormField>
+
+                    <FormField
+                      label="Sanctioned Seat Intake"
+                      id="courseQuota"
+                      required
+                      error={errors.courseQuota?.message}
+                    >
+                      <Input
+                        id="courseQuota"
+                        type="number"
+                        {...register("courseQuota")}
+                        error={!!errors.courseQuota}
+                      />
+                    </FormField>
+
+                    <FormField
+                      label="Administrative Remarks"
+                      id="submissionRemarks"
+                      helperText="Optional statutory notes for state reconciliation officer"
+                    >
+                      <Textarea
+                        id="submissionRemarks"
+                        {...register("submissionRemarks")}
+                        placeholder="Add institutional justification notes if applicable..."
+                      />
+                    </FormField>
+
+                    <div className="flex items-center space-x-2 pt-2">
+                      <Checkbox
+                        id="attestationAccepted"
+                        checked={watch("attestationAccepted")}
+                        onCheckedChange={(checked) =>
+                          setValue("attestationAccepted", !!checked)
+                        }
+                      />
+                      <Label htmlFor="attestationAccepted" className="text-xs">
+                        I hereby attest that submitted admission records comply
+                        with AICTE Sanctioned Quotas.
+                      </Label>
+                    </div>
+                    {errors.attestationAccepted && (
+                      <p className="text-xs text-[var(--state-danger-text)] font-medium">
+                        {errors.attestationAccepted.message}
+                      </p>
+                    )}
+
+                    <div className="pt-2">
+                      <Button type="submit" variant="default">
+                        Validate & Submit Cohort
+                      </Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+
+              {/* Individual Form Elements Matrix */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      Search & Filter Controls
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <SearchInput
+                      value={searchValue}
+                      onChange={(val) => setSearchValue(val)}
+                      onClear={() => setSearchValue("")}
+                      placeholder="Search candidate by name, roll, or masked APAAR..."
+                    />
+
+                    <div className="space-y-2">
+                      <Label htmlFor="branchSelect">Programme Discipline</Label>
+                      <Select defaultValue="cse">
+                        <SelectTrigger id="branchSelect">
+                          <SelectValue placeholder="Select course" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="cse">
+                            Computer Science & Engineering
+                          </SelectItem>
+                          <SelectItem value="ece">
+                            Electronics & Communication
+                          </SelectItem>
+                          <SelectItem value="me">
+                            Mechanical Engineering
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Quota Allotment Tier</Label>
+                      <RadioGroup
+                        value={radioSelection}
+                        onValueChange={setRadioSelection}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="all-india" id="r-ai" />
+                          <Label htmlFor="r-ai" className="text-xs">
+                            All India Merit Quota
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="home-state" id="r-hs" />
+                          <Label htmlFor="r-hs" className="text-xs">
+                            Home State Reservation
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="supernumerary" id="r-sn" />
+                          <Label htmlFor="r-sn" className="text-xs">
+                            Supernumerary (TFW / EWS)
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2">
+                      <Label htmlFor="demoSwitch">
+                        Strict Intake Enforcement Mode
+                      </Label>
+                      <Switch
+                        id="demoSwitch"
+                        checked={switchState}
+                        onCheckedChange={setSwitchState}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      File Upload & Drag-and-Drop
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <FileUpload
+                      accept=".csv,.json"
+                      maxSizeBytes={5 * 1024 * 1024}
+                      onFileSelect={(file) => {
+                        toast({
+                          title: "File Selected",
+                          description: `${file.name} (${(file.size / 1024).toFixed(1)} KB) ready for ingestion.`,
+                          variant: "info",
+                        });
+                      }}
+                      hint="Upload official CSV or JSON admission batch ledger (Max: 5MB)"
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+            </section>
+
+            {/* 3. Alerts & Notification Banners */}
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                  3. Alerts, Badges & Toast Notifications
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  Semantic status feedback pairing text, icons, and WCAG AA
+                  contrast. Never convey status by color alone.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <Alert variant="default">
+                    <Info className="h-4 w-4" />
+                    <AlertTitle>Institutional Notice</AlertTitle>
+                    <AlertDescription>
+                      AICTE Academic Year 2026–2027 seat allocation
+                      reconciliation window closes in 4 days.
+                    </AlertDescription>
+                  </Alert>
+
+                  <Alert variant="destructive">
+                    <AlertOctagon className="h-4 w-4" />
+                    <AlertTitle>Intake Violation Detected</AlertTitle>
+                    <AlertDescription>
+                      Mechanical Engineering admitted 68 candidates against 60
+                      sanctioned seats (8 over quota).
+                    </AlertDescription>
+                  </Alert>
+                </div>
+
+                <div className="bg-[var(--surface-card)] p-4 rounded border border-[var(--border-default)] space-y-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <StatusIndicator
+                      status="compliant"
+                      label="Statutory Sealed"
+                    />
+                    <StatusIndicator
+                      status="warning"
+                      label="Quarantine Triage"
+                    />
+                    <StatusIndicator status="breach" label="Intake Breach" />
+                    <StatusIndicator status="masked" label="••••-••••-1042" />
+                  </div>
+
+                  <Separator />
+
+                  <div>
+                    <p className="text-xs font-semibold text-[var(--text-primary)] mb-2">
+                      Trigger Accessible Toast Announcements
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                          toast({
+                            title: "Audit Digest Calculated",
+                            description:
+                              "SHA-256 batch hash verified across 500 records.",
+                            variant: "info",
+                          })
+                        }
+                      >
+                        Info Toast
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                          toast({
+                            title: "Cohort Sealed",
+                            description:
+                              "Irreversible cryptographic seal applied by Head of Institution.",
+                            variant: "success",
+                          })
+                        }
+                      >
+                        Success Toast
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                          toast({
+                            title: "Quarantine Exception",
+                            description:
+                              "Candidate APAAR ID mismatch requires manual remediation.",
+                            variant: "destructive",
+                            correlationId: "req_audit_7f2a1b",
+                          })
+                        }
+                      >
+                        Persistent Error Toast
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 4. Modals, Drawers & Overlays */}
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                  4. Dialogs, Confirmation Modals & Drawers
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  Accessible focus traps, keyboard navigation (Escape to
+                  dismiss), and explicit cancellation buttons.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 bg-[var(--surface-card)] p-4 rounded border border-[var(--border-default)]">
+                <Button variant="default" onClick={() => setDialogOpen(true)}>
+                  Open Standard Dialog
+                </Button>
+
                 <Button
                   variant="destructive"
-                  onClick={() => setDialogOpen(false)}
+                  onClick={() => setConfirmDialogOpen(true)}
                 >
-                  Confirm & Seal Cohort
+                  Open Statutory Seal Confirmation
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Dropdown Actions Preview</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-52">
-              <DropdownMenuLabel>Cohort Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => alert("Export initiated")}>
-                <Download className="mr-2 h-4 w-4" />
-                <span>Export CSV Ledger</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => alert("Audit log opened")}>
-                <Eye className="mr-2 h-4 w-4" />
-                <span>View Audit Trail</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => alert("Re-evaluate triggered")}>
-                <RotateCcw className="mr-2 h-4 w-4 text-[var(--state-warning-icon)]" />
-                <span>Re-run Quota Pass</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </section>
+                <Button variant="outline" onClick={() => setDrawerOpen(true)}>
+                  Open Detail Drawer
+                </Button>
 
-      {/* 10. High-Density Institutional Table */}
-      <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border-default)] pb-2">
-          <div>
-            <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-              10. High-Density Institutional Data Table
-            </h2>
-            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-              Testing{" "}
-              {densityMode === "compact"
-                ? "36px compact rows"
-                : "44px standard rows"}{" "}
-              with monospace tabular numerics.
-            </p>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label="Regulatory help info"
+                    >
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Statutory Rule: AICTE Approval Handbook Appendix 4
+                  </TooltipContent>
+                </Tooltip>
+
+                {/* Dialog Implementation */}
+                <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Statutory Quota Details</DialogTitle>
+                      <DialogDescription>
+                        Sanctioned capacity breakdown for Academic Year
+                        2026–2027.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="py-3 text-xs text-[var(--text-secondary)] space-y-2">
+                      <p>
+                        Approved Intake: <strong>120 Seats</strong>
+                      </p>
+                      <p>
+                        Supernumerary TFW Cap: <strong>6 Seats (5%)</strong>
+                      </p>
+                      <p>
+                        EWS Supernumerary: <strong>12 Seats (10%)</strong>
+                      </p>
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setDialogOpen(false)}
+                      >
+                        Close
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                {/* Confirmation Dialog */}
+                <ConfirmationDialog
+                  open={confirmDialogOpen}
+                  onOpenChange={setConfirmDialogOpen}
+                  title="Irreversible Statutory Cohort Seal"
+                  description="Sealing this admission cohort permanently locks the ledger and issues an official compliance certificate to AICTE. This operation cannot be reversed."
+                  confirmLabel="Confirm & Seal Cohort"
+                  cancelLabel="Cancel"
+                  isDestructive={true}
+                  attestationText="I verify under statutory penalty that all quota allocations have been audited."
+                  onConfirm={() => {
+                    toast({
+                      title: "Cohort Sealed",
+                      description: "Official statutory seal applied.",
+                      variant: "success",
+                    });
+                    setConfirmDialogOpen(false);
+                  }}
+                  onCancel={() => setConfirmDialogOpen(false)}
+                />
+
+                {/* Drawer */}
+                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+                  <DrawerContent>
+                    <DrawerHeader>
+                      <DrawerTitle>Student Admission Record Detail</DrawerTitle>
+                      <DrawerDescription>
+                        Cryptographic ledger proof for Roll #2026-CSE-101.
+                      </DrawerDescription>
+                    </DrawerHeader>
+                    <div className="p-4 space-y-4 text-xs">
+                      <div className="p-3 bg-[var(--surface-card-subdued)] rounded border border-[var(--border-subtle)] space-y-2">
+                        <p>
+                          <strong>Candidate:</strong> Aarav Sharma
+                        </p>
+                        <p>
+                          <strong>Masked APAAR:</strong> ••••-••••-1042
+                        </p>
+                        <p>
+                          <strong>Category:</strong> General / All India
+                        </p>
+                        <p>
+                          <strong>Merit Rank:</strong> 1,420
+                        </p>
+                        <p className="font-mono text-[11px] text-[var(--text-muted)]">
+                          Digital Digest: 98f1c24...b855
+                        </p>
+                      </div>
+                    </div>
+                    <DrawerFooter>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setDrawerOpen(false)}
+                      >
+                        Close Panel
+                      </Button>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
+              </div>
+            </section>
+
+            {/* 5. High-Density Institutional Table & Pagination */}
+            <section className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--border-default)] pb-2">
+                <div>
+                  <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                    5. High-Density Institutional Data Table & Pagination
+                  </h2>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    Operational density (36px compact rows) with horizontal
+                    overflow containment, sort headers, and keyboard navigation.
+                  </p>
+                </div>
+                <ButtonGroup label="Table density toggle">
+                  <Button
+                    size="sm"
+                    variant={densityMode === "compact" ? "default" : "outline"}
+                    onClick={() => setDensityMode("compact")}
+                  >
+                    Compact (36px)
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={densityMode === "standard" ? "default" : "outline"}
+                    onClick={() => setDensityMode("standard")}
+                  >
+                    Standard (44px)
+                  </Button>
+                </ButtonGroup>
+              </div>
+
+              <Table density={densityMode}>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead sortable>Roll Number</TableHead>
+                    <TableHead>Masked APAAR ID</TableHead>
+                    <TableHead>Course / Branch</TableHead>
+                    <TableHead>Quota Category</TableHead>
+                    <TableHead sortable>Merit Rank</TableHead>
+                    <TableHead className="text-right">Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[
+                    {
+                      roll: "2026-CSE-101",
+                      apaar: "••••-••••-1042",
+                      branch: "Computer Science",
+                      quota: "General / All India",
+                      rank: "1,420",
+                      status: "success",
+                      text: "Reconciled",
+                    },
+                    {
+                      roll: "2026-CSE-102",
+                      apaar: "••••-••••-9821",
+                      branch: "Computer Science",
+                      quota: "OBC-NCL Home State",
+                      rank: "3,812",
+                      status: "warning",
+                      text: "Quarantine (DOB Mismatch)",
+                    },
+                    {
+                      roll: "2026-ECE-105",
+                      apaar: "••••-••••-4109",
+                      branch: "Electronics & Comm",
+                      quota: "EWS Supernumerary",
+                      rank: "5,108",
+                      status: "success",
+                      text: "Reconciled",
+                    },
+                    {
+                      roll: "2026-ME-112",
+                      apaar: "••••-••••-7734",
+                      branch: "Mechanical Engineering",
+                      quota: "Management Quota",
+                      rank: "14,920",
+                      status: "danger",
+                      text: "Quota Breach (>15%)",
+                    },
+                  ].map((row) => (
+                    <TableRow key={row.roll}>
+                      <TableCell className="font-mono font-medium font-tabular">
+                        {row.roll}
+                      </TableCell>
+                      <TableCell className="font-mono font-tabular text-[var(--text-muted)]">
+                        {row.apaar}
+                      </TableCell>
+                      <TableCell>{row.branch}</TableCell>
+                      <TableCell className="text-[var(--text-secondary)]">
+                        {row.quota}
+                      </TableCell>
+                      <TableCell className="font-mono font-tabular">
+                        {row.rank}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge variant={row.status as any} size="sm">
+                          {row.text}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                <TableCaption>
+                  AICTE Admission Batch #BATCH-2026-001 — Sample Ledger Preview
+                </TableCaption>
+              </Table>
+
+              {/* Accessible Pagination */}
+              <div className="flex justify-between items-center bg-[var(--surface-card)] p-3 rounded border border-[var(--border-default)]">
+                <span className="text-xs text-[var(--text-secondary)] font-tabular">
+                  Showing 1–4 of 120 verified admission records
+                </span>
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() =>
+                          setCurrentPage((p) => Math.max(1, p - 1))
+                        }
+                        disabled={currentPage === 1}
+                      />
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink
+                        isActive={currentPage === 1}
+                        onClick={() => setCurrentPage(1)}
+                      >
+                        1
+                      </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink
+                        isActive={currentPage === 2}
+                        onClick={() => setCurrentPage(2)}
+                      >
+                        2
+                      </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink
+                        isActive={currentPage === 3}
+                        onClick={() => setCurrentPage(3)}
+                      >
+                        3
+                      </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() =>
+                          setCurrentPage((p) => Math.min(3, p + 1))
+                        }
+                        disabled={currentPage === 3}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            </section>
+
+            {/* 6. Stepper, Progress, Metric Cards & Timeline */}
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+                  6. Steppers, Metrics, Progress & Timelines
+                </h2>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  Sequential progress visualization, KPI displays, and audit
+                  trails.
+                </p>
+              </div>
+
+              {/* Metric Cards Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                <MetricCard
+                  title="Sanctioned Intake"
+                  value="120"
+                  status="success"
+                  subtext="Sanctioned by AICTE for 2026–27"
+                />
+                <MetricCard
+                  title="Reconciled Seats"
+                  value="112"
+                  status="info"
+                  subtext="Validated against state counseling"
+                />
+                <MetricCard
+                  title="Quarantine Issues"
+                  value="6"
+                  status="warning"
+                  subtext="Requires institutional review"
+                />
+                <MetricCard
+                  title="Quota Violations"
+                  value="2"
+                  status="danger"
+                  subtext="Exceeds statutory reservation cap"
+                />
+              </div>
+
+              {/* Workflow Stepper */}
+              <div className="bg-[var(--surface-card)] p-4 rounded border border-[var(--border-default)] space-y-3">
+                <div className="flex justify-between items-center">
+                  <p className="text-xs font-semibold text-[var(--text-primary)]">
+                    Sequential Batch Reconciliation Pipeline
+                  </p>
+                  <ButtonGroup label="Stepper controls">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setStepperStep((s) => Math.max(0, s - 1))}
+                      disabled={stepperStep === 0}
+                    >
+                      Previous
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setStepperStep((s) => Math.min(3, s + 1))}
+                      disabled={stepperStep === 3}
+                    >
+                      Next Step
+                    </Button>
+                  </ButtonGroup>
+                </div>
+
+                <Stepper
+                  steps={[
+                    {
+                      title: "Upload Ingestion",
+                      description: "CSV / JSON parsing",
+                    },
+                    {
+                      title: "Automated Rules",
+                      description: "Quota & APAAR validation",
+                    },
+                    {
+                      title: "Quarantine Triage",
+                      description: "Remediate discrepancies",
+                    },
+                    {
+                      title: "Statutory Seal",
+                      description: "Cryptographic sign-off",
+                    },
+                  ]}
+                  currentStepIndex={stepperStep}
+                />
+              </div>
+
+              {/* Progress & Accordion Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-[var(--surface-card)] p-4 rounded border border-[var(--border-default)] space-y-4">
+                  <p className="text-xs font-semibold text-[var(--text-primary)]">
+                    Progress Bar Indicators
+                  </p>
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span>Reconciliation Progress</span>
+                        <span className="font-mono font-tabular">
+                          {progressVal}%
+                        </span>
+                      </div>
+                      <Progress value={progressVal} variant="default" />
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span>Sanctioned Quota Utilization</span>
+                        <span className="font-mono font-tabular text-[var(--state-success-text)]">
+                          93%
+                        </span>
+                      </div>
+                      <Progress value={93} variant="success" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[var(--surface-card)] p-4 rounded border border-[var(--border-default)]">
+                  <p className="text-xs font-semibold text-[var(--text-primary)] mb-2">
+                    Collapsible Regulatory Accordion
+                  </p>
+                  <Accordion type="single" collapsible defaultValue="rules">
+                    <AccordionItem value="rules">
+                      <AccordionTrigger>
+                        Statutory AICTE Quota Rules
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        Institutions cannot exceed approved seat matrix without
+                        explicit state council supernumerary allotment orders.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="audit">
+                      <AccordionTrigger>
+                        Audit Log Integrity Protocol
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        Every triage modification generates a SHA-256 merkle
+                        proof logged with timestamp in Indian Standard Time
+                        (IST).
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+              </div>
+            </section>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-[var(--text-muted)]">Density:</span>
-            <Button
-              variant={densityMode === "compact" ? "default" : "outline"}
-              size="sm"
-              className="h-7 text-xs"
-              onClick={() => setDensityMode("compact")}
-            >
-              Compact (36px)
-            </Button>
-            <Button
-              variant={densityMode === "standard" ? "default" : "outline"}
-              size="sm"
-              className="h-7 text-xs"
-              onClick={() => setDensityMode("standard")}
-            >
-              Standard (44px)
-            </Button>
-          </div>
-        </div>
+        )}
 
-        <div className="rounded border border-[var(--border-default)] bg-[var(--surface-card)] overflow-x-auto shadow-sm">
-          <table
-            className={`w-full text-left border-collapse ${
-              densityMode === "compact" ? "table-compact" : "table-standard"
-            } font-sans`}
-          >
-            <thead>
-              <tr className="border-b border-[var(--border-default)] bg-[var(--surface-card-subdued)] text-xs font-semibold text-[var(--text-secondary)]">
-                <th className="px-3 py-2">Roll Number</th>
-                <th className="px-3 py-2">APAAR ID (Masked)</th>
-                <th className="px-3 py-2">Course / Branch</th>
-                <th className="px-3 py-2">Quota Category</th>
-                <th className="px-3 py-2">Merit Rank</th>
-                <th className="px-3 py-2 text-right">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[var(--border-subtle)] text-xs text-[var(--text-primary)]">
+        {/* =========================================================================
+            TAB 3: LAYER C AIRE WORKFLOW COMPONENTS
+           ========================================================================= */}
+        {activeTab === "workflows" && (
+          <div className="space-y-10">
+            {/* Workflow Navigation Strip */}
+            <div className="flex flex-wrap items-center gap-2 border-b border-[var(--border-default)] pb-4">
               {[
-                {
-                  roll: "2026-CSE-001",
-                  apaar: "••••-••••-1042",
-                  branch: "Computer Science & Engineering",
-                  quota: "General / Home State",
-                  rank: "1,420",
-                  status: "success",
-                  statusText: "Reconciled",
-                },
-                {
-                  roll: "2026-CSE-002",
-                  apaar: "••••-••••-9821",
-                  branch: "Computer Science & Engineering",
-                  quota: "OBC-NCL / Supernumerary",
-                  rank: "3,812",
-                  status: "warning",
-                  statusText: "Quarantine (DOB Mismatch)",
-                },
-                {
-                  roll: "2026-ECE-015",
-                  apaar: "••••-••••-4109",
-                  branch: "Electronics & Communication",
-                  quota: "EWS All India",
-                  rank: "5,108",
-                  status: "success",
-                  statusText: "Reconciled",
-                },
-                {
-                  roll: "2026-ME-044",
-                  apaar: "••••-••••-7734",
-                  branch: "Mechanical Engineering",
-                  quota: "Management Quota",
-                  rank: "14,920",
-                  status: "danger",
-                  statusText: "Breach (Exceeds 15% Cap)",
-                },
-              ].map((row) => (
-                <tr
-                  key={row.roll}
-                  className="hover:bg-[var(--surface-card-subdued)] transition-colors"
+                { id: "overview", label: "1. Overview & Institution Status" },
+                { id: "upload", label: "2. Batch Upload & Ingestion" },
+                { id: "triage", label: "3. Quarantine Triage Workbench" },
+                { id: "records", label: "4. Student Record & Quota" },
+                { id: "audit", label: "5. Audit Explorer & Proofs" },
+              ].map((item) => (
+                <Button
+                  key={item.id}
+                  size="sm"
+                  variant={
+                    selectedWorkflowTab === item.id ? "default" : "outline"
+                  }
+                  onClick={() => setSelectedWorkflowTab(item.id)}
                 >
-                  <td className="px-3 py-2 font-mono font-medium text-[var(--text-primary)] font-tabular">
-                    {row.roll}
-                  </td>
-                  <td className="px-3 py-2 font-mono text-[var(--text-muted)] font-tabular">
-                    {row.apaar}
-                  </td>
-                  <td className="px-3 py-2">{row.branch}</td>
-                  <td className="px-3 py-2 text-[var(--text-secondary)]">
-                    {row.quota}
-                  </td>
-                  <td className="px-3 py-2 font-mono font-tabular text-[var(--text-secondary)]">
-                    {row.rank}
-                  </td>
-                  <td className="px-3 py-2 text-right">
-                    <Badge variant={row.status as any} size="sm">
-                      {row.statusText}
-                    </Badge>
-                  </td>
-                </tr>
+                  {item.label}
+                </Button>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+            </div>
 
-      {/* 11. Feedback States */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-            11. Feedback States (Empty, Loading, Error)
-          </h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-            Deterministic feedback views informing users of state and providing
-            clear recovery paths.
-          </p>
-        </div>
+            {/* WORKFLOW VIEW 1: Overview & Institution Status */}
+            {selectedWorkflowTab === "overview" && (
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                    Institution Compliance Overview & Statutory Timeline
+                  </h3>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    High-level compliance workbench summarizing AICTE intake
+                    authorization, submission timeline, and cohort verification
+                    seal.
+                  </p>
+                </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <EmptyState
-            title="No Quarantined Records"
-            description="All student admission records for this cohort have been verified without discrepancy."
-          />
-          <LoadingState
-            label="Verifying State Counseling Ledger..."
-            variant="spinner"
-          />
-          <ErrorState
-            title="State Ledger API Unreachable"
-            message="Gateway timed out connecting to DTE portal. Retry in a few moments."
-            correlationId="req_9f8a1b2c"
-            onRetry={() => alert("Retrying request...")}
-          />
-        </div>
-      </section>
-    </div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="lg:col-span-2 space-y-6">
+                    {/* Component 11: InstitutionStatusPanel */}
+                    <InstitutionStatusPanel
+                      institution={MOCK_INSTITUTION_STATUS}
+                    />
+
+                    {/* Component 14: RecordVerificationSummary */}
+                    <RecordVerificationSummary
+                      verificationData={MOCK_RECORD_VERIFICATION}
+                    />
+                  </div>
+
+                  <div className="space-y-6">
+                    {/* Component 10: SubmissionStatusTimeline */}
+                    <SubmissionStatusTimeline
+                      currentStatus={MOCK_SUBMISSION_TIMELINE.currentStatus}
+                      milestones={MOCK_SUBMISSION_TIMELINE.milestones}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* WORKFLOW VIEW 2: Batch Upload & Processing */}
+            {selectedWorkflowTab === "upload" && (
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                    Admission Batch Upload & Processing Lifecycle
+                  </h3>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    Client-side validation, parsing simulation, real-time stage
+                    progress, and validation issue breakdown.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Component 1: BatchUploadPanel */}
+                  <BatchUploadPanel
+                    onUpload={(data) => {
+                      toast({
+                        title: "Batch Received",
+                        description: `Initiating reconciliation for ${data.records.length} records.`,
+                        variant: "info",
+                      });
+                      handleSimulateProcessing();
+                    }}
+                  />
+
+                  {/* Component 2: FileProcessingProgress */}
+                  <div className="space-y-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base flex justify-between items-center">
+                          <span>Live Ingestion Pipeline</span>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={handleSimulateProcessing}
+                            disabled={isProcessing}
+                          >
+                            {isProcessing
+                              ? "Simulating..."
+                              : "Simulate Processing"}
+                          </Button>
+                        </CardTitle>
+                        <CardDescription>
+                          Deterministic stages: CSV Parse → APAAR Check → Quota
+                          Rule Verification → Merkle Digest
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <FileProcessingProgress
+                          fileName="AY2026_Engineering_Batch_01.csv"
+                          progressPercent={simulatedProgress}
+                          status={isProcessing ? "processing" : "completed"}
+                          stages={MOCK_PROCESSING_STAGES}
+                        />
+                      </CardContent>
+                    </Card>
+
+                    {/* Component 3: UploadValidationSummary */}
+                    <UploadValidationSummary
+                      summary={MOCK_VALIDATION_SUMMARY}
+                    />
+                  </div>
+                </div>
+
+                {/* Component 4: ValidationIssueSummary */}
+                <div className="pt-2">
+                  <ValidationIssueSummary
+                    issues={MOCK_VALIDATION_ISSUES}
+                    onSelectIssue={(field, issueType) => {
+                      toast({
+                        title: "Issue Filter Applied",
+                        description: `Filtering by ${field}: ${issueType}`,
+                        variant: "info",
+                      });
+                      setSelectedWorkflowTab("triage");
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* WORKFLOW VIEW 3: Quarantine Triage Workbench */}
+            {selectedWorkflowTab === "triage" && (
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                    Quarantine Triage Workbench & Issue Remediation
+                  </h3>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    Structured human oversight: sortable triage table, bulk
+                    resolution actions, and detailed discrepancy rows.
+                  </p>
+                </div>
+
+                {/* Component 6: QuarantineTriageTable */}
+                <QuarantineTriageTable
+                  records={MOCK_QUARANTINE_RECORDS}
+                  onRemediateRow={(rowId) => {
+                    toast({
+                      title: "Remediation Saved",
+                      description: `Row ${rowId} updated.`,
+                      variant: "success",
+                    });
+                  }}
+                  onDiscardRow={(rowId) => {
+                    toast({
+                      title: "Row Discarded",
+                      description: `Row ${rowId} removed from submission.`,
+                      variant: "info",
+                    });
+                  }}
+                />
+
+                {/* Component 5: QuarantineIssueRow standalone showcase */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)]">
+                    Individual Quarantine Issue Row (Expanded Detail View)
+                  </h4>
+                  <div className="bg-[var(--surface-card)] rounded border border-[var(--border-default)] p-3 divide-y divide-[var(--border-subtle)]">
+                    {MOCK_QUARANTINE_RECORDS.slice(0, 2).map((record) => (
+                      <div key={record.rowId} className="py-2">
+                        <QuarantineIssueRow
+                          record={record}
+                          onRemediate={() => {
+                            toast({
+                              title: "Action Initiated",
+                              description: `Remediation started for candidate row #${record.rowNumber}`,
+                              variant: "info",
+                            });
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* WORKFLOW VIEW 4: Student Record & Quota Allocation */}
+            {selectedWorkflowTab === "records" && (
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                    Student Record Details & Quota Capacity Indicators
+                  </h3>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    Individual verified candidate records, duplicate record
+                    comparison diffs, and seat reservation breakdown.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Component 7: StudentRecordSummary */}
+                  <div className="space-y-6">
+                    <h4 className="text-sm font-semibold text-[var(--text-primary)]">
+                      Verified Student Record Card
+                    </h4>
+                    <StudentRecordSummary student={MOCK_STUDENT_RECORD} />
+                  </div>
+
+                  {/* Component 8: QuotaCategoryIndicator */}
+                  <div className="space-y-6">
+                    <h4 className="text-sm font-semibold text-[var(--text-primary)]">
+                      Statutory Quota Capacity Overview
+                    </h4>
+                    <QuotaCategoryIndicator overview={MOCK_QUOTA_ALLOCATIONS} />
+                  </div>
+                </div>
+
+                {/* Component 9: DuplicateRecordComparisonPanel */}
+                <div className="pt-2">
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
+                    Duplicate Admission Conflict Comparison
+                  </h4>
+                  <DuplicateRecordComparisonPanel
+                    conflictData={MOCK_DUPLICATE_COMPARISON}
+                    onResolve={(action, note) => {
+                      toast({
+                        title: "Conflict Resolved",
+                        description: `Action: ${action}. Note: ${note || "None"}`,
+                        variant: "success",
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* WORKFLOW VIEW 5: Audit Explorer & Proofs */}
+            {selectedWorkflowTab === "audit" && (
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                    Statutory Audit Trail Explorer & Tamper-Evident Proofs
+                  </h3>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    Non-repudiation event ledger: role-based action logs,
+                    SHA-256 cryptographic digests, and payload diff inspection.
+                  </p>
+                </div>
+
+                {/* Component 13: AuditLogViewer */}
+                <AuditLogViewer
+                  logs={MOCK_AUDIT_EVENTS}
+                  onExport={() => {
+                    toast({
+                      title: "Audit Log Exported",
+                      description:
+                        "Official tamper-evident CSV manifest downloaded.",
+                      variant: "info",
+                    });
+                  }}
+                />
+
+                {/* Component 12: AuditEventEntry (Standalone View) */}
+                <div className="space-y-3 pt-4">
+                  <h4 className="text-sm font-semibold text-[var(--text-primary)]">
+                    Single Audit Event Proof (Detailed Signature Card)
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {MOCK_AUDIT_EVENTS.slice(0, 2).map((event) => (
+                      <AuditEventEntry key={event.id} event={event} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </TooltipProvider>
   );
 };

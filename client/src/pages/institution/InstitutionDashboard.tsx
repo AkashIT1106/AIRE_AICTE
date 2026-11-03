@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   UploadCloud,
   FileCheck2,
   AlertTriangle,
+  RefreshCw,
   Building2,
   CheckCircle2,
-  ArrowRight,
-  RefreshCw,
-  Clock,
   Layers,
+  ArrowRight,
+  Clock,
+  ShieldCheck,
+  Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -21,10 +23,10 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { EmptyState } from "@/components/feedback/EmptyState";
-import { ErrorState } from "@/components/feedback/ErrorState";
 import { SubmissionsApi, ApiException } from "@/lib/api";
 import { SubmissionBatch } from "@aire/api-contracts";
+import { EmptyState } from "@/components/feedback/EmptyState";
+import { ErrorState } from "@/components/feedback/ErrorState";
 import { useAuth } from "@/context/AuthContext";
 
 export const InstitutionDashboard: React.FC = () => {
@@ -61,13 +63,17 @@ export const InstitutionDashboard: React.FC = () => {
   // Safe fallback if active institution context is not present
   if (!activeInstitution) {
     return (
-      <div className="space-y-6">
-        <Alert variant="warning" role="alert">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle className="font-semibold">
+      <div className="space-y-6 max-w-4xl mx-auto py-8">
+        <Alert
+          variant="warning"
+          role="alert"
+          className="border-amber-200 bg-amber-50 text-amber-900"
+        >
+          <AlertTriangle className="h-5 w-5 text-amber-600" />
+          <AlertTitle className="font-semibold text-sm">
             Institutional Context Required
           </AlertTitle>
-          <AlertDescription className="text-xs">
+          <AlertDescription className="text-xs text-amber-800 leading-relaxed mt-1">
             No active institution is associated with your session. Please select
             an authorized institution from the tenant switcher in the header to
             view admission cohorts and reporting.
@@ -87,237 +93,312 @@ export const InstitutionDashboard: React.FC = () => {
     (acc, b) => acc + b.quarantineCount,
     0,
   );
+  const approvedCapacity = 360; // Baseline AICTE approved branch capacity
+  const remainingCapacity = Math.max(0, approvedCapacity - totalStudents);
+  const compliancePercentage =
+    totalStudents > 0 ? Math.round((totalValid / totalStudents) * 100) : 0;
 
   return (
-    <div className="space-y-6">
-      {/* 1. Header & Institution Context Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-[var(--border-default)]">
-        <div>
-          <div className="flex items-center space-x-2 text-xs text-[var(--text-muted)] uppercase tracking-wider">
-            <Building2 className="h-4 w-4 text-[var(--brand-teal)]" />
-            <span>
-              Institution Workspace &bull; {institutionName} ({institutionCode})
-            </span>
+    <div className="space-y-6 max-w-7xl mx-auto">
+      {/* 1. Official Institutional Masthead & Actions */}
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 md:p-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-700 font-semibold uppercase tracking-wider text-[11px]">
+                <Building2 className="h-3.5 w-3.5 text-[#245B75]" />
+                <span>
+                  Institution Workspace &bull; {institutionName} (
+                  {institutionCode})
+                </span>
+              </span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-medium">
+                <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                <span>AICTE Approved 2026–27</span>
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+              Admission Reporting &amp; Batch Submissions
+            </h1>
+            <p className="text-xs text-slate-500 flex items-center gap-2">
+              <Calendar className="h-3.5 w-3.5 text-slate-400" />
+              <span>
+                Academic Year 2026-27 &bull; Regulatory Freeze Deadline: 15 Nov
+                2026 (Active Window)
+              </span>
+            </p>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)] mt-1">
-            Admission Reporting & Batch Submissions
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)] mt-0.5">
-            Academic Year 2026-27 &bull; Regulatory Freeze Deadline: 15 Nov 2026
-            (Active Window)
-          </p>
+
+          <div className="flex items-center space-x-3 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchBatches}
+              disabled={loading}
+              className="h-9 gap-1.5 border-slate-200 text-slate-700 hover:bg-slate-50 min-w-[90px]"
+            >
+              <RefreshCw
+                className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`}
+              />
+              <span>Refresh</span>
+            </Button>
+
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => navigate("/institution/submissions/new")}
+              className="h-9 gap-2 shadow-xs bg-[#245B75] hover:bg-[#1C4666] text-white min-w-[150px] font-semibold text-xs"
+            >
+              <UploadCloud className="h-4 w-4" />
+              <span>Upload New Batch</span>
+            </Button>
+          </div>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={fetchBatches}
-            disabled={loading}
-            className="h-9 gap-1.5 min-w-[90px]"
-          >
-            <RefreshCw
-              className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`}
+        {/* Dual-Track Capacity Utilization Gauge */}
+        <div className="mt-5 pt-4 border-t border-slate-100">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2 mb-2">
+            <div className="flex items-center gap-2 text-slate-600 font-medium">
+              <ShieldCheck className="h-4 w-4 text-[#245B75]" />
+              <span>Approved Intake Capacity Utilization:</span>
+              <span className="font-mono font-bold text-slate-900">
+                {totalStudents} / {approvedCapacity} Seats Ingested
+              </span>
+            </div>
+            <div className="flex items-center gap-3 text-[11px] text-slate-500 font-medium">
+              <span className="flex items-center gap-1">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                <span>Validated: {totalValid}</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="h-2 w-2 rounded-full bg-amber-500" />
+                <span>Quarantined: {totalQuarantine}</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="h-2 w-2 rounded-full bg-slate-300" />
+                <span>Available: {remainingCapacity}</span>
+              </span>
+            </div>
+          </div>
+          <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden flex border border-slate-200/60">
+            <div
+              style={{
+                width: `${Math.min(100, (totalValid / approvedCapacity) * 100)}%`,
+              }}
+              className="bg-emerald-500 transition-all duration-300"
+              title={`Validated: ${totalValid}`}
             />
-            <span>Refresh</span>
-          </Button>
-
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => navigate("/institution/submissions/new")}
-            className="h-9 gap-2 shadow-sm min-w-[150px]"
-          >
-            <UploadCloud className="h-4 w-4" />
-            <span>Upload New Batch</span>
-          </Button>
+            <div
+              style={{
+                width: `${Math.min(100, (totalQuarantine / approvedCapacity) * 100)}%`,
+              }}
+              className="bg-amber-500 transition-all duration-300"
+              title={`Quarantined: ${totalQuarantine}`}
+            />
+          </div>
         </div>
       </div>
 
-      {/* 2. Statutory Reporting Freeze Notice */}
-      <Alert variant="info">
-        <Clock className="h-4 w-4" />
-        <AlertTitle className="font-semibold">
+      {/* 2. Statutory Regulatory Alert */}
+      <Alert
+        variant="info"
+        className="border-sky-200 bg-sky-50/70 text-sky-950 shadow-2xs"
+      >
+        <Clock className="h-4 w-4 text-sky-700" />
+        <AlertTitle className="font-semibold text-xs tracking-tight text-sky-900">
           Active Statutory Reporting Period (Journey J-02)
         </AlertTitle>
-        <AlertDescription className="text-xs">
+        <AlertDescription className="text-xs text-sky-800 leading-relaxed mt-0.5">
           Institution Data Operators may ingest unformatted admission
           spreadsheets, map headers, and remediate quarantined student records.
           All batches must be verified and sealed prior to statutory freeze.
         </AlertDescription>
       </Alert>
 
-      {/* 3. KPI Aggregate Metrics */}
+      {/* 3. KPI Metrics Grid */}
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-pulse">
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="p-4 rounded-lg border border-[var(--border-default)] bg-[var(--surface-card)] h-[106px] flex flex-col justify-between"
+              className="p-4 rounded-xl border border-slate-200 bg-white h-[106px] flex flex-col justify-between"
             >
-              <div className="h-3.5 w-20 bg-[var(--surface-card-subdued)] rounded" />
-              <div className="h-7 w-16 bg-[var(--surface-card-subdued)] rounded" />
-              <div className="h-3 w-28 bg-[var(--surface-card-subdued)] rounded" />
+              <div className="h-3.5 w-20 bg-slate-100 rounded" />
+              <div className="h-7 w-16 bg-slate-100 rounded" />
+              <div className="h-3 w-28 bg-slate-100 rounded" />
             </div>
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-[var(--surface-card)] h-[106px] flex flex-col justify-between">
-            <div className="text-xs font-medium text-[var(--text-muted)] flex items-center justify-between">
+          <Card className="p-4 bg-white border border-slate-200 shadow-2xs rounded-xl flex flex-col justify-between h-[106px]">
+            <div className="text-xs font-medium text-slate-500 flex items-center justify-between">
               <span>Total Batches</span>
-              <Layers className="h-4 w-4 text-[var(--text-muted)]" />
+              <Layers className="h-4 w-4 text-slate-400" />
             </div>
-            <div className="text-2xl font-bold font-mono font-tabular text-[var(--text-primary)]">
+            <div className="text-2xl font-bold font-mono font-tabular text-slate-900">
               {batches.length}
             </div>
-            <p className="text-[11px] text-[var(--text-muted)]">
+            <p className="text-[11px] text-slate-400">
               Submitted in cycle 2026-27
             </p>
           </Card>
 
-          <Card className="p-4 bg-[var(--surface-card)] h-[106px] flex flex-col justify-between">
-            <div className="text-xs font-medium text-[var(--text-muted)] flex items-center justify-between">
+          <Card className="p-4 bg-white border border-slate-200 shadow-2xs rounded-xl flex flex-col justify-between h-[106px]">
+            <div className="text-xs font-medium text-slate-500 flex items-center justify-between">
               <span>Total Admitted</span>
-              <FileCheck2 className="h-4 w-4 text-[var(--brand-primary)]" />
+              <FileCheck2 className="h-4 w-4 text-[#245B75]" />
             </div>
-            <div className="text-2xl font-bold font-mono font-tabular text-[var(--text-primary)]">
+            <div className="text-2xl font-bold font-mono font-tabular text-slate-900">
               {totalStudents}
             </div>
-            <p className="text-[11px] text-[var(--text-muted)]">
+            <p className="text-[11px] text-slate-400">
               Total candidate records
             </p>
           </Card>
 
-          <Card className="p-4 bg-[var(--surface-card)] border-[var(--state-success-border)] bg-[var(--state-success-bg)]/20 h-[106px] flex flex-col justify-between">
-            <div className="text-xs font-medium text-[var(--state-success-text)] flex items-center justify-between">
+          <Card className="p-4 bg-white border border-emerald-200 shadow-2xs rounded-xl flex flex-col justify-between h-[106px]">
+            <div className="text-xs font-semibold text-emerald-800 flex items-center justify-between">
               <span>Compliant / Staged</span>
-              <CheckCircle2 className="h-4 w-4 text-[var(--state-success-icon)]" />
+              <CheckCircle2 className="h-4 w-4 text-emerald-600" />
             </div>
-            <div className="text-2xl font-bold font-mono font-tabular text-[var(--state-success-text)]">
+            <div className="text-2xl font-bold font-mono font-tabular text-emerald-700">
               {totalValid}
             </div>
-            <p className="text-[11px] text-[var(--state-success-text)] opacity-80">
+            <p className="text-[11px] text-emerald-600">
               Passed schema verification
             </p>
           </Card>
 
-          <Card className="p-4 bg-[var(--surface-card)] border-[var(--state-warning-border)] bg-[var(--state-warning-bg)]/30 h-[106px] flex flex-col justify-between">
-            <div className="text-xs font-medium text-[var(--state-warning-text)] flex items-center justify-between">
+          <Card className="p-4 bg-white border border-amber-200 shadow-2xs rounded-xl flex flex-col justify-between h-[106px]">
+            <div className="text-xs font-semibold text-amber-800 flex items-center justify-between">
               <span>Quarantined</span>
-              <AlertTriangle className="h-4 w-4 text-[var(--state-warning-icon)]" />
+              <AlertTriangle className="h-4 w-4 text-amber-600" />
             </div>
-            <div className="text-2xl font-bold font-mono font-tabular text-[var(--state-warning-text)]">
+            <div className="text-2xl font-bold font-mono font-tabular text-amber-700">
               {totalQuarantine}
             </div>
-            <p className="text-[11px] text-[var(--state-warning-text)] opacity-80">
-              Remediation required
-            </p>
+            <p className="text-[11px] text-amber-600">Remediation required</p>
           </Card>
         </div>
       )}
 
       {/* 4. Submissions Ledger & Action Table */}
-      <Card>
-        <CardHeader className="pb-3">
+      <Card className="bg-white border border-slate-200 shadow-xs rounded-xl overflow-hidden">
+        <CardHeader className="pb-3 border-b border-slate-100 bg-slate-50/50">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <CardTitle>Ingested Batches Ledger</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base font-bold text-slate-900">
+                Ingested Batches Ledger
+              </CardTitle>
+              <CardDescription className="text-xs text-slate-500 mt-0.5">
                 Admission spreadsheets ingested for this institution. Defective
                 rows are isolated in quarantine triage.
               </CardDescription>
             </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-medium text-slate-500">
+                Compliance:{" "}
+                <strong className="text-slate-900">
+                  {compliancePercentage}%
+                </strong>
+              </span>
+            </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {loading ? (
-            <div className="space-y-2 p-2">
-              <div className="h-9 w-full bg-[var(--surface-card-subdued)] rounded animate-pulse" />
+            <div className="space-y-2 p-4">
+              <div className="h-9 w-full bg-slate-100 rounded animate-pulse" />
               {[1, 2, 3].map((r) => (
                 <div
                   key={r}
-                  className="h-[36px] w-full bg-[var(--surface-card-subdued)]/60 rounded animate-pulse"
+                  className="h-[38px] w-full bg-slate-50 rounded animate-pulse"
                 />
               ))}
             </div>
           ) : error ? (
-            <ErrorState
-              title="Failed to Load Submission Batches"
-              message={error.message}
-              correlationId={error.correlationId}
-              onRetry={fetchBatches}
-            />
+            <div className="p-4">
+              <ErrorState
+                title="Failed to Load Submission Batches"
+                message={error.message}
+                correlationId={error.correlationId}
+                onRetry={fetchBatches}
+              />
+            </div>
           ) : batches.length === 0 ? (
-            <EmptyState
-              title="No Admission Batches Ingested"
-              description="No admission spreadsheets have been uploaded for academic cycle 2026-27 yet."
-              action={
-                <Button
-                  size="sm"
-                  onClick={() => navigate("/institution/submissions/new")}
-                >
-                  <UploadCloud className="mr-2 h-4 w-4" />
-                  Upload First Batch
-                </Button>
-              }
-            />
+            <div className="p-6">
+              <EmptyState
+                title="No Admission Batches Ingested"
+                description="No admission spreadsheets have been uploaded for academic cycle 2026-27 yet."
+                action={
+                  <Button
+                    size="sm"
+                    onClick={() => navigate("/institution/submissions/new")}
+                    className="bg-[#245B75] hover:bg-[#1C4666] text-white"
+                  >
+                    <UploadCloud className="mr-2 h-4 w-4" />
+                    Upload First Batch
+                  </Button>
+                }
+              />
+            </div>
           ) : (
-            <div className="rounded border border-[var(--border-default)] overflow-x-auto shadow-sm">
+            <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse table-compact font-sans">
                 <thead>
-                  <tr className="border-b border-[var(--border-default)] bg-[var(--surface-card-subdued)] text-xs font-semibold text-[var(--text-secondary)]">
-                    <th className="px-3 py-2 w-[28%]">Batch / Programme</th>
-                    <th className="px-3 py-2 w-[10%]">Cycle</th>
-                    <th className="px-3 py-2 w-[20%]">File Name</th>
-                    <th className="px-3 py-2 w-[8%] text-center">Total</th>
-                    <th className="px-3 py-2 w-[8%] text-center">Staged</th>
-                    <th className="px-3 py-2 w-[8%] text-center">Quarantine</th>
-                    <th className="px-3 py-2 w-[12%]">Status</th>
-                    <th className="px-3 py-2 w-[6%] text-right">Actions</th>
+                  <tr className="border-b border-slate-200 bg-slate-50/80 text-xs font-semibold text-slate-600">
+                    <th className="px-4 py-3 w-[28%]">Batch / Programme</th>
+                    <th className="px-4 py-3 w-[10%]">Cycle</th>
+                    <th className="px-4 py-3 w-[20%]">File Name</th>
+                    <th className="px-4 py-3 w-[8%] text-center">Total</th>
+                    <th className="px-4 py-3 w-[8%] text-center">Staged</th>
+                    <th className="px-4 py-3 w-[8%] text-center">Quarantine</th>
+                    <th className="px-4 py-3 w-[12%]">Status</th>
+                    <th className="px-4 py-3 w-[6%] text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[var(--border-subtle)] text-xs text-[var(--text-primary)]">
+                <tbody className="divide-y divide-slate-100 text-xs text-slate-800">
                   {batches.map((batch) => {
                     const hasQuarantine = batch.quarantineCount > 0;
                     return (
                       <tr
                         key={batch.id}
-                        className="hover:bg-[var(--surface-card-subdued)] transition-colors cursor-pointer h-[36px]"
+                        className="hover:bg-slate-50/70 transition-colors cursor-pointer h-[44px]"
                         onClick={() =>
                           navigate(`/institution/submissions/${batch.id}`)
                         }
                       >
-                        <td className="px-3 py-2 font-medium">
-                          <div className="font-semibold text-[var(--text-primary)] truncate max-w-[240px]">
+                        <td className="px-4 py-2.5 font-medium">
+                          <div className="font-semibold text-slate-900 truncate max-w-[240px]">
                             {batch.programme}
                           </div>
-                          <div className="text-[11px] font-mono text-[var(--text-muted)] truncate max-w-[180px]">
+                          <div className="text-[11px] font-mono text-slate-400 truncate max-w-[180px]">
                             ID: {batch.id.slice(0, 8)}...
                           </div>
                         </td>
-                        <td className="px-3 py-2 font-mono text-[var(--text-secondary)] font-tabular">
+                        <td className="px-4 py-2.5 font-mono text-slate-600 font-tabular">
                           {batch.academicYear}
                         </td>
-                        <td className="px-3 py-2 text-[var(--text-secondary)] font-mono text-[11px] truncate max-w-[160px]">
+                        <td className="px-4 py-2.5 text-slate-600 font-mono text-[11px] truncate max-w-[160px]">
                           {batch.fileName}
                         </td>
-                        <td className="px-3 py-2 font-mono font-tabular text-center font-medium">
+                        <td className="px-4 py-2.5 font-mono font-tabular text-center font-medium">
                           {batch.totalCount}
                         </td>
-                        <td className="px-3 py-2 font-mono font-tabular text-center text-[var(--state-success-text)] font-semibold">
+                        <td className="px-4 py-2.5 font-mono font-tabular text-center text-emerald-700 font-semibold">
                           {batch.validCount}
                         </td>
-                        <td className="px-3 py-2 font-mono font-tabular text-center">
+                        <td className="px-4 py-2.5 font-mono font-tabular text-center">
                           {hasQuarantine ? (
-                            <span className="text-[var(--state-warning-text)] font-bold px-1.5 py-0.5 rounded bg-[var(--state-warning-bg)] border border-[var(--state-warning-border)]">
+                            <span className="text-amber-800 font-bold px-2 py-0.5 rounded-full bg-amber-100 border border-amber-200">
                               {batch.quarantineCount}
                             </span>
                           ) : (
-                            <span className="text-[var(--text-muted)]">0</span>
+                            <span className="text-slate-400">0</span>
                           )}
                         </td>
-                        <td className="px-3 py-2">
+                        <td className="px-4 py-2.5">
                           <Badge
                             variant={
                               batch.status === "READY_FOR_SIGN_OFF" ||
@@ -336,14 +417,14 @@ export const InstitutionDashboard: React.FC = () => {
                                 : batch.status}
                           </Badge>
                         </td>
-                        <td className="px-3 py-2 text-right">
+                        <td className="px-4 py-2.5 text-right">
                           <Link
                             to={`/institution/submissions/${batch.id}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center text-xs font-medium text-[var(--brand-primary)] hover:underline"
+                            className="inline-flex items-center text-xs font-semibold text-[#245B75] hover:text-[#1C4666] hover:underline"
                           >
                             <span>{hasQuarantine ? "Triage" : "View"}</span>
-                            <ArrowRight className="ml-1 h-3 w-3" />
+                            <ArrowRight className="ml-1 h-3.5 w-3.5" />
                           </Link>
                         </td>
                       </tr>

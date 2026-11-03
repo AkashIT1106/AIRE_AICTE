@@ -149,25 +149,43 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-[var(--surface-canvas)] text-[var(--text-primary)] flex flex-col font-sans">
       {/* 0. Upper Institutional Identity Band (Government of India / Ministry of Education / AICTE) */}
-      <div className="bg-[#0E1B26] text-[var(--text-inverted)]/80 text-[11px] font-medium h-7 px-4 md:px-6 flex items-center justify-between border-b border-white/10 select-none">
+      <div className="bg-[#0B1520] text-[var(--text-inverted)]/80 text-[11px] font-medium h-7 px-4 md:px-6 flex items-center justify-between border-b border-white/10 select-none">
         <div className="flex items-center space-x-2">
-          <span>भारत सरकार / Government of India</span>
-          <span className="text-white/40">&bull;</span>
-          <span className="hidden sm:inline">
+          <span className="font-semibold text-white/95">भारत सरकार</span>
+          <span className="text-white/40">/</span>
+          <span>Government of India</span>
+          <span className="text-white/30 hidden sm:inline">&bull;</span>
+          <span className="hidden sm:inline text-white/80">
             शिक्षा मंत्रालय / Ministry of Education
           </span>
         </div>
-        <div className="text-[10px] text-[var(--text-inverted)]/70 font-mono tracking-wider">
-          अखिल भारतीय तकनीकी शिक्षा परिषद / AICTE
+        <div className="flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-3 text-[10px] text-white/60">
+            <span
+              className="hover:text-white cursor-pointer transition-colors"
+              title="Screen Reader Access"
+            >
+              Screen Reader Access
+            </span>
+            <span className="text-white/20">|</span>
+            <span className="font-mono hover:text-white cursor-pointer">
+              A- A A+
+            </span>
+            <span className="text-white/20">|</span>
+            <span className="font-medium text-white/80">English</span>
+          </div>
+          <div className="text-[10px] text-[var(--brand-teal)]/90 font-mono tracking-wider font-semibold border-l border-white/10 pl-3">
+            AICTE CENTRAL PORTAL
+          </div>
         </div>
       </div>
 
       {/* 1. Global Institutional Header (Fixed 64px) */}
-      <header className="bg-[var(--surface-header)] text-[var(--text-inverted)] h-16 px-4 md:px-6 shadow-sm border-b border-[var(--border-strong)]/30 flex items-center justify-between sticky top-0 z-40 select-none">
+      <header className="bg-[#11283B] text-[var(--text-inverted)] h-16 px-4 md:px-6 shadow-sm border-b border-[#1E3B54] flex items-center justify-between sticky top-0 z-40 select-none">
         <div className="flex items-center space-x-3">
           <button
             type="button"
-            className="md:hidden text-[var(--text-inverted)]/80 hover:text-[var(--text-inverted)] min-h-[44px] min-w-[44px] p-2 flex items-center justify-center focus-aire rounded"
+            className="md:hidden text-[var(--text-inverted)]/80 hover:text-[var(--text-inverted)] min-h-[44px] min-w-[44px] p-2 flex items-center justify-center focus-aire rounded-md"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
@@ -181,22 +199,22 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
           <Link
             to="/"
-            className="flex items-center space-x-3 focus-aire rounded group"
+            className="flex items-center space-x-3 focus-aire rounded-md group"
           >
-            <div className="flex items-center justify-center h-9 w-9 rounded bg-[var(--brand-teal)]/20 border border-[var(--brand-teal)]/40 text-[var(--brand-teal)]">
-              <ShieldCheck className="h-6 w-6 stroke-[2]" />
+            <div className="flex items-center justify-center h-9 w-9 rounded-md bg-[#1C4666] border border-white/20 text-white shadow-xs group-hover:border-white/40 transition-colors">
+              <ShieldCheck className="h-5 w-5 stroke-[2.2]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-base font-bold tracking-tight text-[var(--text-inverted)]">
+                <span className="text-base font-bold tracking-tight text-white font-sans">
                   AIRE
                 </span>
-                <span className="text-[10px] uppercase font-semibold tracking-wider px-1.5 py-0.5 rounded bg-[var(--brand-primary)] text-[var(--text-inverted)] border border-white/20">
-                  Reconciliation Portal
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#1C4666] text-white/90 border border-white/15">
+                  AICTE Portal
                 </span>
               </div>
-              <p className="hidden sm:block text-xs text-[var(--text-inverted)]/70 leading-none mt-0.5">
-                Admission Reconciliation & Evidence Platform
+              <p className="hidden sm:block text-[11px] text-white/70 leading-none mt-0.5 tracking-tight">
+                Admission Reconciliation &amp; Evidence Platform
               </p>
             </div>
           </Link>
@@ -387,12 +405,12 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                   onClick={() => setMobileMenuOpen(false)}
                   title={sidebarCollapsed ? item.name : undefined}
                   className={cn(
-                    "flex items-center px-3 py-2 text-xs font-medium rounded transition-colors group focus-aire min-h-[44px] md:min-h-[36px]",
+                    "flex items-center px-3 py-2 text-xs font-medium rounded-md transition-all group focus-aire min-h-[44px] md:min-h-[38px]",
                     sidebarCollapsed
                       ? "md:justify-center md:px-2"
                       : "justify-start",
                     isActive
-                      ? "bg-[var(--brand-subtle)] text-[var(--brand-primary)] border-l-2 border-[var(--brand-primary)] font-semibold shadow-xs"
+                      ? "bg-[#EAF2F6] text-[#1E4A61] border-l-[3px] border-[#245B75] font-semibold shadow-xs"
                       : "text-[var(--text-secondary)] hover:bg-[var(--surface-card-subdued)] hover:text-[var(--text-primary)]",
                   )}
                 >
