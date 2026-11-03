@@ -10,12 +10,14 @@ export interface AccordionProps {
   items: AccordionItem[];
   allowMultiple?: boolean;
   className?: string;
+  variant?: "bordered" | "default";
 }
 
 export const Accordion: React.FC<AccordionProps> = ({
   items,
   allowMultiple = false,
   className = "",
+  variant = "bordered",
 }) => {
   const [openIds, setOpenIds] = useState<string[]>([items[0]?.id || ""]);
 
@@ -29,58 +31,101 @@ export const Accordion: React.FC<AccordionProps> = ({
     }
   };
 
+  const containerClasses = [
+    "ux4g-accordion",
+    variant === "bordered" ? "ux4g-accordion-bordered" : "",
+    "ux4g-accordion-arrow-right",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className={`ux4g-accordion divide-y divide-[#E2E8F0] border border-[#CBD5E1] rounded-xl bg-white overflow-hidden shadow-xs ${className}`}>
+    <div
+      className={containerClasses}
+      style={
+        {
+          "--ux4g-accordion-button-padding-y": "18px",
+          "--ux4g-accordion-button-padding-x": "22px",
+          "--ux4g-accordion-body-padding-x": "22px",
+          "--ux4g-accordion-body-padding-y": "20px",
+          "--ux4g-accordion-title-size": "16px",
+          "--ux4g-accordion-title-line-height": "1.45",
+          "--ux4g-accordion-body-size": "15px",
+          "--ux4g-accordion-body-line-height": "1.65",
+          gap: "12px",
+        } as React.CSSProperties
+      }
+    >
       {items.map((item) => {
         const isOpen = openIds.includes(item.id);
         const headerId = `accordion-header-${item.id}`;
         const panelId = `accordion-panel-${item.id}`;
 
         return (
-          <div key={item.id} className="transition-colors">
-            <h3>
+          <div
+            key={item.id}
+            className={`ux4g-accordion__item ${
+              isOpen ? "ux4g-accordion__item--expanded" : ""
+            }`}
+            style={{
+              borderColor: isOpen ? "#CBD5E1" : "#E2E8F0",
+              borderWidth: "1px",
+              borderStyle: "solid",
+              backgroundColor: "#FFFFFF",
+              borderRadius: "12px",
+              boxShadow: isOpen
+                ? "0 4px 12px -2px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.03)"
+                : "none",
+              transition: "border-color 0.15s ease, box-shadow 0.15s ease",
+            }}
+          >
+            <h3 className="ux4g-accordion__header">
               <button
                 type="button"
                 id={headerId}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => toggleItem(item.id)}
-                className="w-full py-4.5 px-6 text-left flex items-center justify-between gap-4 font-semibold text-base text-[#0F172A] hover:text-[#2563EB] hover:bg-[#F8FAFC] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#2563EB] transition-colors"
+                className={`ux4g-accordion__button ${isOpen ? "" : "collapsed"}`}
+                style={{
+                  fontWeight: 600,
+                  color: isOpen ? "#0F172A" : "#1E293B",
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: isOpen ? "12px 12px 0 0" : "12px",
+                }}
               >
-                <span>{item.question}</span>
-                <svg
-                  className={`w-5 h-5 text-[#64748B] shrink-0 transition-transform duration-200 ${
-                    isOpen ? "rotate-180 text-[#2563EB]" : ""
-                  }`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                <span className="ux4g-accordion__button-content">
+                  <span className="ux4g-accordion__title">{item.question}</span>
+                </span>
               </button>
             </h3>
 
-            {isOpen && (
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={headerId}
+              className={`ux4g-accordion__collapse ${isOpen ? "show" : ""}`}
+              style={{
+                display: isOpen ? "block" : "none",
+              }}
+            >
               <div
-                id={panelId}
-                role="region"
-                aria-labelledby={headerId}
-                className="px-6 pb-5 pt-1 text-sm sm:text-base text-[#475569] leading-relaxed bg-[#FFFFFF]"
+                className="ux4g-accordion__body"
+                style={{
+                  backgroundColor: "#FFFFFF",
+                  color: "#475569",
+                  borderTop: "1px solid #F1F5F9",
+                  paddingTop: "12px",
+                }}
               >
                 {typeof item.answer === "string" ? (
-                  <p>{item.answer}</p>
+                  <p style={{ margin: 0 }}>{item.answer}</p>
                 ) : (
                   item.answer
                 )}
               </div>
-            )}
+            </div>
           </div>
         );
       })}
