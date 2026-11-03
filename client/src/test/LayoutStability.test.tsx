@@ -124,4 +124,70 @@ describe("Layout Stability & Structural Shell Standards (Brightloop Invariants)"
       screen.getByRole("navigation", { name: "Breadcrumb" }),
     ).toBeInTheDocument();
   });
+
+  it("renders accessible SkipLink pointing to main content landmark (#content)", () => {
+    const { container } = render(
+      <BrowserRouter>
+        <AppShell>
+          <div data-testid="page-content">Main Canvas</div>
+        </AppShell>
+      </BrowserRouter>,
+    );
+
+    const skipLink = screen.getByRole("link", {
+      name: /Skip to main content/i,
+    });
+    expect(skipLink).toBeInTheDocument();
+    expect(skipLink).toHaveAttribute("href", "#content");
+
+    const mainContent = container.querySelector("#content");
+    expect(mainContent).toBeInTheDocument();
+  });
+
+  it("closes mobile drawer on Escape key press", () => {
+    const { container } = render(
+      <BrowserRouter>
+        <AppShell>
+          <div>Mobile Test</div>
+        </AppShell>
+      </BrowserRouter>,
+    );
+
+    const toggleButton = screen.getByRole("button", {
+      name: /Toggle navigation menu/i,
+    });
+    const aside = container.querySelector("aside");
+
+    // Open drawer
+    fireEvent.click(toggleButton);
+    expect(aside?.className).toContain("translate-x-0");
+
+    // Press Escape
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(aside?.className).toContain("-translate-x-full");
+  });
+
+  it("provides accessible link names and attributes when desktop sidebar is collapsed", () => {
+    const { container } = render(
+      <BrowserRouter>
+        <AppShell>
+          <div>Collapsed View Test</div>
+        </AppShell>
+      </BrowserRouter>,
+    );
+
+    const collapseButton = screen.getByRole("button", {
+      name: /Collapse sidebar/i,
+    });
+    fireEvent.click(collapseButton);
+
+    const aside = container.querySelector("aside");
+    expect(aside?.className).toContain("md:w-16");
+
+    // Links still have accessible names via aria-label
+    const dashboardLink = screen.getByRole("link", {
+      name: "Dashboard Overview",
+    });
+    expect(dashboardLink).toBeInTheDocument();
+  });
 });

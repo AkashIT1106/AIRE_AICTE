@@ -74,13 +74,13 @@ export const Breadcrumbs: React.FC = () => {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="h-9 px-4 md:px-6 border-b border-[var(--border-default)] bg-[var(--surface-card)] flex items-center text-xs text-[var(--text-muted)] select-none shadow-[0_1px_2px_rgba(0,0,0,0.02)]"
+      className="h-9 flex items-center text-xs text-txt-muted select-none mb-3"
     >
       <ol className="flex items-center space-x-1.5 overflow-hidden">
         <li className="flex items-center">
           <Link
             to="/"
-            className="text-[var(--text-muted)] hover:text-[var(--brand-primary)] transition-colors focus-aire rounded p-1 flex items-center gap-1"
+            className="text-txt-muted hover:text-brand-primary transition-colors focus-aire rounded p-1 flex items-center gap-1"
             aria-label="Home"
           >
             <Home className="h-3.5 w-3.5" />
@@ -97,13 +97,13 @@ export const Breadcrumbs: React.FC = () => {
 
           return (
             <React.Fragment key={index}>
-              <li className="text-[var(--text-muted)] opacity-40">
+              <li className="text-txt-muted opacity-40">
                 <ChevronRight className="h-3 w-3 stroke-[2.5]" />
               </li>
               <li className="flex items-center">
                 {isLast || !item.href ? (
                   <span
-                    className="font-semibold text-[var(--text-primary)] truncate max-w-[240px] px-1 py-0.5 rounded bg-[var(--surface-card-subdued)]/60 border border-[var(--border-subtle)] text-[11px]"
+                    className="font-semibold text-txt-primary truncate max-w-[240px] px-1.5 py-0.5 rounded bg-surface-card-subdued border border-line-subtle text-[11px]"
                     title={item.label}
                     aria-current="page"
                   >
@@ -112,7 +112,7 @@ export const Breadcrumbs: React.FC = () => {
                 ) : (
                   <Link
                     to={item.href}
-                    className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] hover:underline transition-colors truncate max-w-[180px] focus-aire rounded px-1 py-0.5 font-medium"
+                    className="text-txt-secondary hover:text-brand-primary hover:underline transition-colors truncate max-w-[180px] focus-aire rounded px-1 py-0.5 font-medium"
                     title={item.label}
                   >
                     {truncatedLabel}

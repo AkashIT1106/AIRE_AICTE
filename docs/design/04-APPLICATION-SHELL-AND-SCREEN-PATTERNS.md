@@ -6,15 +6,15 @@ The authenticated workspace should use one stable shell. Avoid the current multi
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│ AIRE   Institutional Records & Verification       Help  Notifications  User │  64px
+│ AIRE   Institutional Records & Verification       Help  Notifications  User  │  64px
 ├──────────────────────────────────────────────────────────────────────────────┤
 │ Breadcrumbs: Institution  /  Admissions  /  Dashboard                        │
 ├──────────────────────┬───────────────────────────────────────────────────────┤
 │                      │                                                       │
 │ WORKSPACE            │  Page title                         Primary action    │
-│                      │  Institution / cycle context                         │
+│                      │  Institution / cycle context                          │
 │ Overview             │                                                       │
-│                      │  Page-specific content                               │
+│                      │  Page-specific content                                │
 │ ADMISSIONS           │                                                       │
 │  Batches             │  Tables / forms / panels / review details             │
 │  Student records     │                                                       │
@@ -32,7 +32,7 @@ The authenticated workspace should use one stable shell. Avoid the current multi
 │ SETTINGS             │                                                       │
 │  Institution setup   │                                                       │
 ├──────────────────────┴───────────────────────────────────────────────────────┤
-│ AIRE · Help · Privacy · Last updated / system status                          │
+│ AIRE · Help · Privacy · Last updated / system status                         │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
