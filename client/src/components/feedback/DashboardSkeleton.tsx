@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const DashboardSkeleton: React.FC = () => {
   return (
     <div
-      className="space-y-6 animate-pulse"
+      className="ux4g-animate-pulse space-y-6 animate-pulse"
       role="status"
       aria-label="Loading dashboard metrics and ledger"
     >

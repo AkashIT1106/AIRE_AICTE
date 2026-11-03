@@ -417,8 +417,8 @@ export const QuarantineTriagePage: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="rounded-xl border border-slate-200 overflow-x-auto shadow-2xs">
-                <table className="w-full text-left border-collapse table-compact font-sans">
+              <div className="ux4g-o-x-auto rounded-xl border border-slate-200 overflow-x-auto shadow-2xs">
+                <table className="ux4g-table w-full text-left border-collapse table-compact font-sans">
                   <thead>
                     <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600">
                       <th className="px-3.5 py-2.5 w-12 text-center">Row</th>
@@ -502,8 +502,8 @@ export const QuarantineTriagePage: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="rounded-xl border border-slate-200 overflow-x-auto shadow-2xs">
-                <table className="w-full text-left border-collapse table-compact font-sans">
+              <div className="ux4g-o-x-auto rounded-xl border border-slate-200 overflow-x-auto shadow-2xs">
+                <table className="ux4g-table w-full text-left border-collapse table-compact font-sans">
                   <thead>
                     <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600">
                       <th className="px-3.5 py-2.5 w-12 text-center">Row</th>

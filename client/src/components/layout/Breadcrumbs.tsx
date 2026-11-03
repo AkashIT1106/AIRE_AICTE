@@ -76,7 +76,7 @@ export const Breadcrumbs: React.FC = () => {
       aria-label="Breadcrumb"
       className="h-9 flex items-center text-xs text-txt-muted select-none mb-3"
     >
-      <ol className="flex items-center space-x-1.5 overflow-hidden">
+      <ol className="ux4g-breadcrumb flex items-center space-x-1.5 overflow-hidden">
         <li className="flex items-center">
           <Link
             to="/"

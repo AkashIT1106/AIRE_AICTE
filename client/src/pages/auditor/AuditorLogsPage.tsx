@@ -343,8 +343,8 @@ export const AuditorLogsPage: React.FC = () => {
         </div>
 
         {/* Audit Log Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+        <div className="ux4g-o-x-auto overflow-x-auto">
+          <table className="ux4g-table w-full text-left text-xs border-collapse">
             <thead>
               <tr className="border-b border-[var(--border-default)] bg-[var(--surface-card-subdued)] text-[var(--text-muted)] uppercase tracking-wider font-semibold">
                 <th className="py-3 px-4">Timestamp (IST)</th>

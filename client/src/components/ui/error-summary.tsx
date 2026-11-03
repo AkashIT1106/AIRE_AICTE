@@ -55,7 +55,7 @@ export const ErrorSummary = React.forwardRef<HTMLDivElement, ErrorSummaryProps>(
         aria-labelledby="error-summary-title"
         tabIndex={-1}
         className={cn(
-          "rounded border-2 border-state-danger-icon bg-state-danger-bg p-4 mb-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2",
+          "ux4g-alert ux4g-alert-error rounded border-2 border-state-danger-icon bg-state-danger-bg p-4 mb-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2",
           className,
         )}
         {...props}

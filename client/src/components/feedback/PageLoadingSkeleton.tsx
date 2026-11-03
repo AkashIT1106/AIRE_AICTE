@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const PageLoadingSkeleton: React.FC = () => {
   return (
     <div
-      className="space-y-6 animate-pulse p-2"
+      className="ux4g-animate-pulse space-y-6 animate-pulse p-2"
       role="status"
       aria-label="Loading page workspace"
     >

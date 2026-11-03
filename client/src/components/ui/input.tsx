@@ -35,17 +35,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          "flex h-9 w-full rounded border border-line-default bg-surface-card px-3 py-1 text-sm text-txt-primary shadow-sm transition-colors",
+          "ux4g-input ux4g-input-m flex h-9 w-full rounded border border-line-default bg-surface-card px-3 py-1 text-sm text-txt-primary shadow-sm transition-colors",
           "file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-txt-muted",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card",
           "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-surface-card-subdued",
           readOnly &&
             "cursor-default bg-surface-card-subdued text-txt-secondary",
           error &&
-            "border-state-danger-icon focus-visible:ring-state-danger-icon",
+            "ux4g-border-error border-state-danger-icon focus-visible:ring-state-danger-icon",
           valid &&
             !error &&
-            "border-state-success-icon focus-visible:ring-state-success-icon",
+            "ux4g-border-success border-state-success-icon focus-visible:ring-state-success-icon",
           startAdornment && "pl-9",
           (endAdornment || valid) && "pr-9",
           className,

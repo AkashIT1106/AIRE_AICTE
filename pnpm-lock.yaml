@@ -262,6 +262,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.19(tsx@4.23.15))
+      ux4g-web-components:
+        specifier: ^3.0.2
+        version: 3.0.2
       zod:
         specifier: ^3.24.2
         version: 3.25.76
@@ -3937,6 +3940,9 @@ packages:
     resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
     hasBin: true
 
+  ux4g-web-components@3.0.2:
+    resolution: {integrity: sha512-7FuSYAiS0eL/2NG91rY8qAhXbYOwCku3z2bRf4p6V/COOuFRvVgeq+zPszwXJt93wyQ5xnqXZEfuYnZO3HbXgA==}
+
   valibot@1.4.2:
     resolution: {integrity: sha512-gjdCvJ6d3RyHAneqxMYMW9QMCwYMb3jpOO0IyHZV1bnRHFBHrX3VkIILt5XYR0WhwHiH7Mty8ovuPZ/O3gamrg==}
     peerDependencies:
@@ -7300,6 +7306,8 @@ snapshots:
   utils-merge@1.0.1: {}
 
   uuid@11.1.1: {}
+
+  ux4g-web-components@3.0.2: {}
 
   valibot@1.4.2(typescript@5.9.3):
     optionalDependencies:

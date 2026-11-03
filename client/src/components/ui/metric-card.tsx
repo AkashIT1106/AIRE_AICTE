@@ -68,7 +68,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   return (
     <div
       className={cn(
-        "rounded border border-line-default bg-surface-card p-5 shadow-sm transition-all",
+        "ux4g-card rounded border border-line-default bg-surface-card p-5 shadow-sm transition-all",
         status === "success" && "border-state-success-border",
         status === "warning" && "border-state-warning-border",
         status === "danger" && "border-state-danger-border",

@@ -49,9 +49,9 @@ export const RouteErrorBoundary: React.FC = () => {
   return (
     <div
       role="alert"
-      className="flex items-center justify-center min-h-[500px] p-6 bg-[var(--surface-canvas)]"
+      className="ux4g-d-flex ux4g-ai-center ux4g-jc-center flex items-center justify-center min-h-[500px] p-6 bg-[var(--surface-canvas)]"
     >
-      <Card className="max-w-md w-full shadow-sm border-[var(--state-danger-border)]">
+      <Card className="ux4g-card max-w-md w-full shadow-sm border-[var(--state-danger-border)]">
         <CardHeader className="text-center pb-2">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--state-danger-bg)] text-[var(--state-danger-icon)] border border-[var(--state-danger-border)] mb-3">
             <AlertOctagon className="h-6 w-6 stroke-[2]" />

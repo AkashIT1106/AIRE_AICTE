@@ -18,7 +18,7 @@ const Checkbox = React.forwardRef<
     checked={checked}
     aria-invalid={error ? "true" : props["aria-invalid"]}
     className={cn(
-      "peer relative h-4 w-4 shrink-0 rounded-sm border border-line-strong bg-surface-card transition-colors",
+      "ux4g-form-check ux4g-checkbox peer relative h-4 w-4 shrink-0 rounded-sm border border-line-strong bg-surface-card transition-colors",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card",
       "disabled:cursor-not-allowed disabled:opacity-50",
       "data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary data-[state=checked]:text-txt-inverted",

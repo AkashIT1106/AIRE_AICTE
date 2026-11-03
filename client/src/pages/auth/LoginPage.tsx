@@ -207,7 +207,7 @@ export const LoginPage: React.FC = () => {
 
           {/* Centered Sign-In Card */}
           <div className="w-full max-w-md mx-auto my-auto py-8">
-            <div className="border border-[var(--border-default)] bg-[var(--surface-card)] rounded-xl shadow-xs p-6 sm:p-8">
+            <div className="ux4g-card border border-[var(--border-default)] bg-[var(--surface-card)] rounded-xl shadow-xs p-6 sm:p-8">
               <div className="mb-6">
                 <div className="flex items-center justify-between">
                   <h1 className="text-xl font-bold tracking-tight text-[var(--text-primary)]">

@@ -47,7 +47,7 @@ const Progress = React.forwardRef<
       <ProgressPrimitive.Root
         ref={ref}
         className={cn(
-          "relative w-full overflow-hidden rounded-full bg-surface-card-subdued border border-line-subtle",
+          "ux4g-progress relative w-full overflow-hidden rounded-full bg-surface-card-subdued border border-line-subtle",
           sizeStyles[size],
           className,
         )}

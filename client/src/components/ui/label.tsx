@@ -4,11 +4,11 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const labelVariants = cva(
-  "text-sm font-medium leading-none text-txt-primary peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none",
+  "ux4g-label ux4g-fs-14 ux4g-fw-medium text-sm font-medium leading-none text-txt-primary peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none",
   {
     variants: {
       error: {
-        true: "text-state-danger-text",
+        true: "ux4g-text-error text-state-danger-text",
       },
     },
   },

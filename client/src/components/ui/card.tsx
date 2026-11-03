@@ -41,7 +41,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         onClick={onClick}
         onKeyDown={handleKeyDown}
         className={cn(
-          "rounded border border-line-default text-txt-primary shadow-sm transition-all",
+          "ux4g-card rounded border border-line-default text-txt-primary shadow-sm transition-all",
           subdued ? "bg-surface-card-subdued" : "bg-surface-card",
           isInteractive &&
             "cursor-pointer hover:border-line-interactive hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2",
@@ -73,7 +73,7 @@ const CardTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none tracking-tight text-txt-primary",
+      "ux4g-card-title text-lg font-semibold leading-none tracking-tight text-txt-primary",
       className,
     )}
     {...props}
@@ -87,7 +87,10 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-txt-secondary", className)}
+    className={cn(
+      "ux4g-fs-14 ux4g-text-neutral-secondary text-sm text-txt-secondary",
+      className,
+    )}
     {...props}
   />
 ));
@@ -97,7 +100,11 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  <div
+    ref={ref}
+    className={cn("ux4g-card-body p-6 pt-0", className)}
+    {...props}
+  />
 ));
 CardContent.displayName = "CardContent";
 

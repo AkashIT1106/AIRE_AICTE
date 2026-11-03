@@ -10,7 +10,7 @@ export function SkipLink({
   children = "Skip to main content",
 }: SkipLinkProps) {
   return (
-    <a href={href} className="skip-link">
+    <a href={href} className="ux4g-skip-link skip-link">
       {children}
     </a>
   );

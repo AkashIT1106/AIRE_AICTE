@@ -25,14 +25,15 @@ const SelectTrigger = React.forwardRef<
     aria-invalid={error ? "true" : props["aria-invalid"]}
     aria-busy={loading ? "true" : undefined}
     className={cn(
-      "flex h-9 w-full items-center justify-between rounded border border-line-default bg-surface-card px-3 py-2 text-sm text-txt-primary shadow-sm ring-offset-surface-card placeholder:text-txt-muted",
+      "ux4g-select ux4g-form-select flex h-9 w-full items-center justify-between rounded border border-line-default bg-surface-card px-3 py-2 text-sm text-txt-primary shadow-sm ring-offset-surface-card placeholder:text-txt-muted",
       "focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2",
       "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-surface-card-subdued",
       "[&>span]:line-clamp-1",
-      error && "border-state-danger-icon focus:ring-state-danger-icon",
+      error &&
+        "ux4g-border-error border-state-danger-icon focus:ring-state-danger-icon",
       valid &&
         !error &&
-        "border-state-success-icon focus:ring-state-success-icon",
+        "ux4g-border-success border-state-success-icon focus:ring-state-success-icon",
       className,
     )}
     {...props}

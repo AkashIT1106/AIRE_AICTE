@@ -27,10 +27,10 @@ export const Stepper: React.FC<StepperProps> = ({
   ...props
 }) => {
   return (
-    <nav aria-label="Progress" className="w-full">
+    <nav aria-label="Progress" className="ux4g-w-100 w-full">
       <ol
         className={cn(
-          "flex w-full",
+          "ux4g-stepper flex w-full",
           orientation === "horizontal"
             ? "flex-row items-center justify-between"
             : "flex-col space-y-4",

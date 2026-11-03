@@ -174,12 +174,12 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       : "Authorized Identity";
 
   return (
-    <div className="min-h-screen bg-surface-canvas text-txt-primary flex flex-col font-sans">
+    <div className="min-h-screen bg-surface-canvas text-txt-primary flex flex-col font-sans ux4g-min-h-screen">
       {/* 0. Accessible Skip to Main Content Link (WCAG 2.2 AA SC 2.4.1) */}
       <SkipLink href="#content">Skip to main content</SkipLink>
 
       {/* 1. Global Consolidated Header (Fixed 64px - UX4G Single Header Pattern) */}
-      <header className="bg-surface-header text-txt-inverted h-16 px-4 md:px-6 shadow-sm border-b border-line-default flex items-center justify-between sticky top-0 z-40 select-none">
+      <header className="ux4g-navbar bg-surface-header text-txt-inverted h-16 px-4 md:px-6 shadow-sm border-b border-line-default flex items-center justify-between sticky top-0 z-40 select-none">
         <div className="flex items-center space-x-3">
           <button
             ref={hamburgerButtonRef}
@@ -362,7 +362,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         {/* Sidebar Navigation (Adaptive Desktop w-64/w-16, Mobile off-canvas drawer) */}
         <aside
           className={cn(
-            "fixed inset-y-16 left-0 z-40 bg-surface-sidebar border-r border-line-default flex flex-col transition-all duration-200 ease-in-out md:static md:inset-auto md:min-h-[calc(100vh-4rem-2.25rem)] select-none",
+            "ux4g-drawer fixed inset-y-16 left-0 z-40 bg-surface-sidebar border-r border-line-default flex flex-col transition-all duration-200 ease-in-out md:static md:inset-auto md:min-h-[calc(100vh-4rem-2.25rem)] select-none",
             sidebarCollapsed ? "md:w-16" : "md:w-64",
             mobileMenuOpen
               ? "translate-x-0 w-64 shadow-xl"

@@ -39,6 +39,8 @@ export const PublicHeader: React.FC = () => {
   const toggleDarkMode = () => {
     const next = !isDarkMode;
     setIsDarkMode(next);
+    const theme = next ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
     if (next) {
       document.documentElement.classList.add("dark");
     } else {
@@ -63,7 +65,7 @@ export const PublicHeader: React.FC = () => {
   };
 
   return (
-    <header className="w-full bg-[var(--surface-card)] border-b border-[var(--border-default)] sticky top-0 z-50">
+    <header className="ux4g-navbar w-full bg-[var(--surface-card)] border-b border-[var(--border-default)] sticky top-0 z-50">
       {/* 1. UX4G Statutory Identity & Accessibility Bar */}
       <div className="bg-[#0B1520] text-white/90 text-xs py-1.5 px-4 sm:px-6 lg:px-8 border-b border-white/10 select-none">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">

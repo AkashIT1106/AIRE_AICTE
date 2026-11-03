@@ -13,7 +13,7 @@ import {
 
 export const NotFoundPage: React.FC = () => {
   return (
-    <div className="flex items-center justify-center min-h-[500px] p-4">
+    <div className="ux4g-d-flex ux4g-ai-center ux4g-jc-center flex items-center justify-center min-h-[500px] p-4">
       <Card className="max-w-md w-full shadow-sm">
         <CardHeader className="text-center pb-2">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--surface-card-subdued)] text-[var(--brand-primary)] mb-2">

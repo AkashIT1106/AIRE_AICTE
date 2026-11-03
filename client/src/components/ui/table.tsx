@@ -16,7 +16,7 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, containerClassName, density = "compact", ...props }, ref) => (
     <div
       className={cn(
-        "relative w-full overflow-x-auto rounded border border-line-default bg-surface-card",
+        "ux4g-o-x-auto relative w-full overflow-x-auto rounded border border-line-default bg-surface-card",
         containerClassName,
       )}
       tabIndex={0}
@@ -26,7 +26,7 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
         <table
           ref={ref}
           className={cn(
-            "w-full caption-bottom text-sm border-collapse",
+            "ux4g-table w-full caption-bottom text-sm border-collapse",
             density === "compact" ? "table-compact" : "table-standard",
             className,
           )}

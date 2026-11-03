@@ -4,28 +4,30 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded px-2 py-0.5 text-xs font-medium transition-colors select-none",
+  "ux4g-badge inline-flex items-center rounded px-2 py-0.5 text-xs font-medium transition-colors select-none",
   {
     variants: {
       variant: {
-        default: "bg-brand-primary text-txt-inverted hover:bg-brand-hover",
+        default:
+          "ux4g-badge-primary bg-brand-primary text-txt-inverted hover:bg-brand-hover",
         secondary:
-          "bg-surface-card-subdued text-txt-secondary border border-line-default",
-        outline: "border border-line-strong text-txt-primary",
+          "ux4g-badge-secondary bg-surface-card-subdued text-txt-secondary border border-line-default",
+        outline:
+          "ux4g-badge-outline border border-line-strong text-txt-primary",
         success:
-          "bg-state-success-bg text-state-success-text border border-state-success-border",
+          "ux4g-badge-success bg-state-success-bg text-state-success-text border border-state-success-border",
         warning:
-          "bg-state-warning-bg text-state-warning-text border border-state-warning-border",
+          "ux4g-badge-warning bg-state-warning-bg text-state-warning-text border border-state-warning-border",
         danger:
-          "bg-state-danger-bg text-state-danger-text border border-state-danger-border",
-        info: "bg-state-info-bg text-state-info-text border border-state-info-border",
+          "ux4g-badge-error bg-state-danger-bg text-state-danger-text border border-state-danger-border",
+        info: "ux4g-badge-info bg-state-info-bg text-state-info-text border border-state-info-border",
         masked:
-          "bg-masked-bg text-masked-text border border-masked-border font-mono tracking-wider",
+          "ux4g-badge-neutral bg-masked-bg text-masked-text border border-masked-border font-mono tracking-wider",
       },
       size: {
-        default: "text-xs px-2 py-0.5",
-        sm: "text-[11px] px-1.5 py-0.2",
-        lg: "text-sm px-2.5 py-1",
+        default: "ux4g-badge-md text-xs px-2 py-0.5",
+        sm: "ux4g-badge-sm text-[11px] px-1.5 py-0.2",
+        lg: "ux4g-badge-lg text-sm px-2.5 py-1",
       },
       interactive: {
         true: "cursor-pointer hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-1",

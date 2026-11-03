@@ -30,16 +30,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <textarea
         className={cn(
-          "flex min-h-[80px] w-full rounded border border-line-default bg-surface-card px-3 py-2 text-sm text-txt-primary shadow-sm placeholder:text-txt-muted transition-colors",
+          "ux4g-textarea ux4g-input flex min-h-[80px] w-full rounded border border-line-default bg-surface-card px-3 py-2 text-sm text-txt-primary shadow-sm placeholder:text-txt-muted transition-colors",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card",
           "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-surface-card-subdued",
           readOnly &&
             "cursor-default bg-surface-card-subdued text-txt-secondary",
           error &&
-            "border-state-danger-icon focus-visible:ring-state-danger-icon",
+            "ux4g-border-error border-state-danger-icon focus-visible:ring-state-danger-icon",
           valid &&
             !error &&
-            "border-state-success-icon focus-visible:ring-state-success-icon",
+            "ux4g-border-success border-state-success-icon focus-visible:ring-state-success-icon",
           resizeClasses[resize],
           className,
         )}

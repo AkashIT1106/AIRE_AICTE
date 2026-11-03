@@ -74,7 +74,9 @@ export const FormField: React.FC<FormFieldProps> = ({
 
   return (
     <FormFieldContext.Provider value={{ id, error, hasError }}>
-      <div className={cn("flex flex-col space-y-1.5", className)}>
+      <div
+        className={cn("ux4g-form-group flex flex-col space-y-1.5", className)}
+      >
         {label && (
           <Label
             htmlFor={id}

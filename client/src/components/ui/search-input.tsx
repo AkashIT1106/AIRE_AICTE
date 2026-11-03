@@ -85,7 +85,12 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
     const hasContent = Boolean(currentValue && currentValue.length > 0);
 
     return (
-      <div className={cn("relative flex items-center w-full", className)}>
+      <div
+        className={cn(
+          "ux4g-input-group relative flex items-center w-full",
+          className,
+        )}
+      >
         <Search
           className="pointer-events-none absolute left-3 h-4 w-4 text-txt-muted shrink-0"
           aria-hidden="true"
@@ -101,7 +106,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
           placeholder={placeholder}
           disabled={disabled}
           className={cn(
-            "flex h-9 w-full rounded border border-line-default bg-surface-card pl-9 pr-9 py-1 text-sm text-txt-primary shadow-sm transition-colors",
+            "ux4g-input ux4g-input-m flex h-9 w-full rounded border border-line-default bg-surface-card pl-9 pr-9 py-1 text-sm text-txt-primary shadow-sm transition-colors",
             "placeholder:text-txt-muted",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card",
             "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-surface-card-subdued",

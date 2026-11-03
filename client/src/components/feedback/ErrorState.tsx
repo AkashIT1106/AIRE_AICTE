@@ -22,7 +22,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
     <div
       role="alert"
       className={cn(
-        "flex flex-col items-center justify-center p-8 text-center rounded border border-[var(--state-danger-border)] bg-[var(--state-danger-bg)] my-4",
+        "ux4g-alert ux4g-alert-error ux4g-d-flex ux4g-flex-column ux4g-ai-center flex flex-col items-center justify-center p-8 text-center rounded border border-[var(--state-danger-border)] bg-[var(--state-danger-bg)] my-4",
         className,
       )}
     >

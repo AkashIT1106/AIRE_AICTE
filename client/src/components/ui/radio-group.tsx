@@ -29,7 +29,7 @@ const RadioGroupItem = React.forwardRef<
     ref={ref}
     aria-invalid={error ? "true" : props["aria-invalid"]}
     className={cn(
-      "peer relative aspect-square size-4 rounded-full border border-line-strong bg-surface-card text-brand-primary transition-colors",
+      "ux4g-form-check peer relative aspect-square size-4 rounded-full border border-line-strong bg-surface-card text-brand-primary transition-colors",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card",
       "disabled:cursor-not-allowed disabled:opacity-50",
       "before:content-[''] before:absolute before:-inset-[14px]", // 44px min touch target (16px + 2*14px = 44px)

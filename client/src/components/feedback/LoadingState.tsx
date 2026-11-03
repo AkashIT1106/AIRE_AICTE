@@ -56,11 +56,11 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
       role="status"
       aria-label={label}
       className={cn(
-        "flex flex-col items-center justify-center p-12 text-center",
+        "ux4g-d-flex ux4g-flex-column ux4g-ai-center flex flex-col items-center justify-center p-12 text-center",
         className,
       )}
     >
-      <Loader2 className="h-8 w-8 animate-spin text-[var(--brand-primary)] mb-3" />
+      <Loader2 className="ux4g-spinner ux4g-spinner-m ux4g-animate-spin h-8 w-8 animate-spin text-[var(--brand-primary)] mb-3" />
       <p className="text-sm font-medium text-[var(--text-secondary)]">
         {label}
       </p>

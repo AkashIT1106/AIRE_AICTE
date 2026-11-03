@@ -144,7 +144,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   return (
     <span
       className={cn(
-        "inline-flex items-center font-medium rounded border select-none transition-colors",
+        "ux4g-badge inline-flex items-center font-medium rounded border select-none transition-colors",
         config.className,
         sizeClasses[size],
         className,

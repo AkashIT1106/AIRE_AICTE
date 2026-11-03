@@ -443,8 +443,8 @@ export const BatchUploadPage: React.FC = () => {
                   official template above.
                 </div>
               ) : (
-                <div className="rounded-xl border border-slate-200 overflow-x-auto shadow-2xs max-h-60 overflow-y-auto">
-                  <table className="w-full text-left border-collapse table-compact font-sans">
+                <div className="ux4g-o-x-auto rounded-xl border border-slate-200 overflow-x-auto shadow-2xs max-h-60 overflow-y-auto">
+                  <table className="ux4g-table w-full text-left border-collapse table-compact font-sans">
                     <thead>
                       <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600 sticky top-0 z-10">
                         <th className="px-3 py-2">#</th>

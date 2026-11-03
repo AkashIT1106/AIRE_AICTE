@@ -4,19 +4,19 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const alertVariants = cva(
-  "relative w-full rounded border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4",
+  "ux4g-alert relative w-full rounded border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4",
   {
     variants: {
       variant: {
         default:
-          "bg-surface-card text-txt-primary border-line-default [&>svg]:text-txt-primary",
-        info: "bg-state-info-bg text-state-info-text border-state-info-border [&>svg]:text-state-info-icon",
+          "ux4g-alert-neutral bg-surface-card text-txt-primary border-line-default [&>svg]:text-txt-primary",
+        info: "ux4g-alert-info bg-state-info-bg text-state-info-text border-state-info-border [&>svg]:text-state-info-icon",
         success:
-          "bg-state-success-bg text-state-success-text border-state-success-border [&>svg]:text-state-success-icon",
+          "ux4g-alert-success bg-state-success-bg text-state-success-text border-state-success-border [&>svg]:text-state-success-icon",
         warning:
-          "bg-state-warning-bg text-state-warning-text border-state-warning-border [&>svg]:text-state-warning-icon",
+          "ux4g-alert-warning bg-state-warning-bg text-state-warning-text border-state-warning-border [&>svg]:text-state-warning-icon",
         destructive:
-          "bg-state-danger-bg text-state-danger-text border-state-danger-border [&>svg]:text-state-danger-icon",
+          "ux4g-alert-error bg-state-danger-bg text-state-danger-text border-state-danger-border [&>svg]:text-state-danger-icon",
       },
     },
     defaultVariants: {

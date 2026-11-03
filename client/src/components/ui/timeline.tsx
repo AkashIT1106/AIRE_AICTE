@@ -27,7 +27,7 @@ export const Timeline: React.FC<TimelineProps> = ({
   return (
     <ol
       className={cn(
-        "relative space-y-6 pl-6 border-l-2 border-line-default ml-3",
+        "ux4g-timeline relative space-y-6 pl-6 border-l-2 border-line-default ml-3",
         className,
       )}
       {...props}

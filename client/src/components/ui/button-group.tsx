@@ -15,7 +15,10 @@ export function ButtonGroup({
     <div
       role="group"
       aria-label={label}
-      className={cn("inline-flex flex-wrap items-center gap-2", className)}
+      className={cn(
+        "ux4g-btn-group inline-flex flex-wrap items-center gap-2",
+        className,
+      )}
       {...props}
     >
       {children}

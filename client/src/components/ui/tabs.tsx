@@ -41,6 +41,7 @@ const TabsList = React.forwardRef<
     <TabsPrimitive.List
       ref={ref}
       className={cn(
+        "ux4g-tab",
         variant === "pill"
           ? "inline-flex h-10 items-center gap-1 rounded border border-line-default bg-surface-card-subdued p-1"
           : "inline-flex h-auto items-center gap-6 border-b border-line-default bg-transparent p-0 rounded-none w-full",

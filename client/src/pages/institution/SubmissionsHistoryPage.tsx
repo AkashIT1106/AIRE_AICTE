@@ -248,8 +248,8 @@ export const SubmissionsHistoryPage: React.FC = () => {
               No batches matched query &ldquo;{searchQuery}&rdquo;.
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse table-compact font-sans">
+            <div className="ux4g-o-x-auto overflow-x-auto">
+              <table className="ux4g-table w-full text-left border-collapse table-compact font-sans">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600">
                     <th className="px-4 py-3">Batch / Programme</th>

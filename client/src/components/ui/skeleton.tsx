@@ -10,7 +10,7 @@ function Skeleton({
       aria-busy="true"
       aria-hidden="true"
       className={cn(
-        "rounded bg-surface-card-subdued animate-pulse motion-reduce:animate-none",
+        "ux4g-skeleton ux4g-animate-pulse rounded bg-surface-card-subdued animate-pulse motion-reduce:animate-none",
         className,
       )}
       {...props}

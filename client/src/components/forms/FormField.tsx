@@ -22,7 +22,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   children,
 }) => {
   return (
-    <div className={cn("flex flex-col space-y-1.5", className)}>
+    <div className={cn("ux4g-form-group flex flex-col space-y-1.5", className)}>
       {label && (
         <Label htmlFor={id} required={required}>
           {label}
