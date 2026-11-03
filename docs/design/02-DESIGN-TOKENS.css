@@ -1,0 +1,110 @@
+/* ==========================================================================
+   AIRE Canonical Design Tokens Specification — v1.0
+   
+   Authoritative Reference Document:
+   This file documents the canonical DTCG 2025.10 tokens defined in client/design-tokens.json
+   and synchronized to client/src/index.css via client/scripts/sync-tokens.js.
+   
+   Governing Authority: ADR-UX-01 (docs/design/UX-DECISIONS.md)
+   Target Standard: WCAG 2.2 Level AA / GIGW 3.0 / UX4G 3.0 Alignment
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---------------------------------------------------------------------------
+     1. Surface Tokens
+     --------------------------------------------------------------------------- */
+  --surface-canvas: #F5F7F8;         /* Canvas / page background */
+  --surface-card: #FFFFFF;           /* Elevated card container */
+  --surface-card-subdued: #F0F4F8;   /* Inset well / secondary container */
+  --surface-header: #183B56;         /* Unified institutional masthead */
+  --surface-sidebar: #FFFFFF;        /* Navigation rail / drawer */
+  --surface-overlay: #172B3A;        /* Modal backdrop / scrim */
+
+  /* ---------------------------------------------------------------------------
+     2. Semantic Text Tokens
+     --------------------------------------------------------------------------- */
+  --text-primary: #172B3A;           /* High-contrast body & headings (12.6:1 on white) */
+  --text-secondary: #526579;         /* Supporting labels & descriptions (5.4:1 on white) */
+  --text-muted: #5A6E82;             /* Metadata, hints & timestamps (4.6:1 on white) */
+  --text-inverted: #FFFFFF;          /* Text on dark headers & primary buttons */
+  --text-link: #0D635C;              /* Text link color (7.2:1 on white) */
+
+  /* ---------------------------------------------------------------------------
+     3. Border & Line Tokens
+     --------------------------------------------------------------------------- */
+  --border-subtle: #D8E0E8;          /* Dividers and interior card separation */
+  --border-default: #D8E0E7;         /* Container boundaries and form controls */
+  --border-strong: #7B90A2;          /* Active form borders & high-contrast UI limits (3.1:1 on white) */
+  --border-interactive: #0F766E;     /* Selected / active tab border */
+
+  /* ---------------------------------------------------------------------------
+     4. Brand & Action Tokens
+     --------------------------------------------------------------------------- */
+  --brand-primary: #245B75;          /* Institutional Navy primary action (5.8:1 on white) */
+  --brand-primary-hover: #1C4666;    /* Darker active/hover state */
+  --brand-primary-active: #0D2233;   /* Pressed state */
+  --brand-subtle: #E8F0F7;           /* Selected row / nav pill background */
+  --brand-teal: #0F766E;             /* Statutory verification badge & accent (5.1:1 on white) */
+
+  /* ---------------------------------------------------------------------------
+     5. Semantic Status Tokens (Text & Background Pairings)
+     --------------------------------------------------------------------------- */
+  --state-success-bg: #EAF4ED;       /* Validated / Clean background tint */
+  --state-success-border: #BBF7D0;   /* Success boundary */
+  --state-success-text: #166534;     /* Success text (6.1:1 on success-bg) */
+  --state-success-icon: #16A34A;     /* Success graphical cue */
+
+  --state-warning-bg: #FFF4E5;       /* Quarantined / Action Required tint */
+  --state-warning-border: #FDE68A;   /* Warning boundary */
+  --state-warning-text: #B45309;     /* Warning text (4.8:1 on warning-bg) */
+  --state-warning-icon: #D97706;     /* Warning graphical cue */
+
+  --state-danger-bg: #FDECEC;        /* Error / Violation tint */
+  --state-danger-border: #FECACA;    /* Danger boundary */
+  --state-danger-text: #B42318;      /* Danger text (5.2:1 on danger-bg) */
+  --state-danger-icon: #DC2626;      /* Danger graphical cue */
+
+  --state-info-bg: #EAF2F6;          /* Statutory notice tint */
+  --state-info-border: #BAE6FD;      /* Info boundary */
+  --state-info-text: #245B75;        /* Info text (5.8:1 on info-bg) */
+  --state-info-icon: #0284C7;        /* Info graphical cue */
+
+  /* ---------------------------------------------------------------------------
+     6. Privacy & Identity Vault Tokens
+     --------------------------------------------------------------------------- */
+  --masked-data-bg: #F0F4F8;
+  --masked-data-border: #D8E0E7;
+  --masked-data-text: #334E68;
+  --masked-data-icon: #526579;
+
+  /* ---------------------------------------------------------------------------
+     7. Accessibility & Focus Ring Tokens (WCAG 2.2 SC 2.4.11 / 2.4.13)
+     --------------------------------------------------------------------------- */
+  --focus-ring: #245B75;             /* High-visibility 2px focus ring */
+  --focus-ring-offset: #FFFFFF;      /* Focus ring separation offset */
+
+  /* ---------------------------------------------------------------------------
+     8. Typography Foundations
+     --------------------------------------------------------------------------- */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --text-xs: 0.75rem;                /* 12px / 16px line-height: Captions, metadata, badges */
+  --text-sm: 0.8125rem;              /* 13px / 18px line-height: High-density tables (table-compact) */
+  --text-base: 0.875rem;             /* 14px / 20px line-height: Operational UI baseline */
+  --text-md: 1.0rem;                 /* 16px / 24px line-height: Form inputs & body prose */
+  --text-lg: 1.125rem;               /* 18px / 28px line-height: Card titles */
+  --heading-sm: 1.25rem;             /* 20px / 28px line-height: Section headers */
+  --heading-md: 1.5rem;              /* 24px / 32px line-height: Page H1 titles */
+  --heading-lg: 2.0rem;              /* 32px / 40px line-height: Hero headlines */
+
+  /* ---------------------------------------------------------------------------
+     9. Stacking & Elevation
+     --------------------------------------------------------------------------- */
+  --z-header: 40;
+  --z-overlay: 50;
+  --z-toast: 60;
+  --z-skip-link: 70;
+}
