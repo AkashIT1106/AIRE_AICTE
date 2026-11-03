@@ -28,7 +28,8 @@ export const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // If already authenticated, redirect to destination or root gateway
-  const from = (location.state as any)?.from?.pathname || "/";
+  const rawFrom = (location.state as any)?.from?.pathname;
+  const from = rawFrom && rawFrom !== "/" ? rawFrom : "/gateway";
   if (isAuthenticated && user) {
     return <Navigate to={from} replace />;
   }

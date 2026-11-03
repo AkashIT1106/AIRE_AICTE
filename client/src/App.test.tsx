@@ -3,8 +3,56 @@ import { render, screen, waitFor } from "@testing-library/react";
 import App, { createAppRouter } from "./App";
 
 describe("Client Root Application — Production Architecture & Standalone Authentication", () => {
-  it("renders standalone login gateway with brand identity and secure form for unauthenticated users", async () => {
+  it("renders public landing page at / with UX4G identity, hero, persona portals, and process stepper", async () => {
     render(<App />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", {
+          name: /Institutional Student Records\./i,
+        }),
+      ).toBeInTheDocument();
+    });
+
+    // UX4G Statutory Identity & Accessibility
+    expect(screen.getAllByText(/भारत सरकार/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Government of India/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/An AICTE Digital Initiative/i)).toBeInTheDocument();
+
+    // Persona portals
+    expect(
+      screen.getByRole("heading", { name: /For Institutions/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /For AICTE Reviewers/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /For Students/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /For Auditors/i }),
+    ).toBeInTheDocument();
+
+    // 6-step verification process
+    expect(
+      screen.getByText(/A clear and structured verification process/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/1\. Prepare Records/i)).toBeInTheDocument();
+    expect(screen.getByText(/2\. Upload a Batch/i)).toBeInTheDocument();
+    expect(screen.getByText(/3\. Validate Data/i)).toBeInTheDocument();
+    expect(screen.getByText(/4\. Review Issues/i)).toBeInTheDocument();
+    expect(screen.getByText(/5\. Submit Records/i)).toBeInTheDocument();
+    expect(screen.getByText(/6\. Track Status/i)).toBeInTheDocument();
+
+    // Call to action
+    expect(screen.getAllByText(/Sign in to AIRE/i).length).toBeGreaterThan(0);
+  });
+
+  it("renders standalone login gateway with brand identity and secure form for unauthenticated users", async () => {
+    const router = createAppRouter({
+      initialEntries: ["/login"],
+    });
+    render(<App router={router} />);
 
     await waitFor(() => {
       expect(
@@ -28,7 +76,10 @@ describe("Client Root Application — Production Architecture & Standalone Authe
   });
 
   it("does not render application shell sidebar or navigation on the login route", async () => {
-    render(<App />);
+    const router = createAppRouter({
+      initialEntries: ["/login"],
+    });
+    render(<App router={router} />);
 
     await waitFor(() => {
       expect(
@@ -46,7 +97,10 @@ describe("Client Root Application — Production Architecture & Standalone Authe
   });
 
   it("renders neutral institutional branding without unsupported claims or dev credentials", async () => {
-    render(<App />);
+    const router = createAppRouter({
+      initialEntries: ["/login"],
+    });
+    render(<App router={router} />);
 
     await waitFor(() => {
       expect(

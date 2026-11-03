@@ -17,6 +17,7 @@ import { RouteErrorBoundary } from "@/components/feedback/RouteErrorBoundary";
 // Public lightweight entry points (eagerly loaded for zero-hop initial interaction)
 import { RootGateway } from "@/pages/RootGateway";
 import { LoginPage } from "@/pages/auth/LoginPage";
+import { LandingPage } from "@/pages/LandingPage";
 
 // Protected workspace pages — code-split dynamically to prevent unauthorized bundle leakage
 const InstitutionDashboard = React.lazy(() =>
@@ -94,6 +95,10 @@ export const createAppRoutes = (): RouteObject[] => [
       },
       {
         path: "/",
+        element: <LandingPage />,
+      },
+      {
+        path: "/gateway",
         element: <RootGateway />,
       },
       {
