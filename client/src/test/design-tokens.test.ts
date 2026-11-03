@@ -84,10 +84,11 @@ describe("Canonical Design Tokens & WCAG Contrast Validation", () => {
     const content = fs.readFileSync(tokensPath, "utf-8");
     const parsed = JSON.parse(content);
 
-    const navy = parsed.color.primitive.brand.navy["900"].$value.hex; // #173B57
+    const navy = parsed.color.primitive.brand.navy["900"].$value.hex; // #183B56
+    const actionBlue = parsed.color.primitive.brand.action.$value.hex; // #245B75
     const teal = parsed.color.primitive.brand.teal["700"].$value.hex; // #0F766E
     const white = parsed.color.primitive.neutral.surface.$value.hex; // #FFFFFF
-    const canvas = parsed.color.primitive.neutral.canvas.$value.hex; // #F5F7FA
+    const canvas = parsed.color.primitive.neutral.canvas.$value.hex; // #F5F7F8
     const textPrimary = parsed.color.primitive.neutral.slate["900"].$value.hex; // #172B3A
     const textSecondary =
       parsed.color.primitive.neutral.slate["600"].$value.hex; // #526579
@@ -121,17 +122,19 @@ describe("Canonical Design Tokens & WCAG Contrast Validation", () => {
     expect(crMutedSurface).toBeGreaterThanOrEqual(4.5);
     expect(crMutedCanvas).toBeGreaterThanOrEqual(4.5);
 
-    // 4. White text on Institutional Navy Primary Button (WCAG AA: >= 4.5:1, AAA: >= 7.0:1)
-    const crNavyButton = contrastRatio(white, navy);
-    expect(crNavyButton).toBeGreaterThanOrEqual(7.0);
+    // 4. White text on Institutional Navy (WCAG AA: >= 4.5:1, AAA: >= 7.0:1)
+    const crNavy = contrastRatio(white, navy);
+    expect(crNavy).toBeGreaterThanOrEqual(7.0);
 
-    // 5. White text on Teal Accent (WCAG AA: >= 4.5:1)
+    // 5. White text on Action Blue (WCAG AA: >= 4.5:1) and Teal Verification Accent
+    const crAction = contrastRatio(white, actionBlue);
+    expect(crAction).toBeGreaterThanOrEqual(4.5);
     const crTeal = contrastRatio(white, teal);
     expect(crTeal).toBeGreaterThanOrEqual(4.5);
 
-    // 6. Focus indicator against white surface and canvas (WCAG 2.2 SC 2.4.11 / 2.4.13: >= 3.0:1)
-    const crFocusRingWhite = contrastRatio(teal, white);
-    const crFocusRingCanvas = contrastRatio(teal, canvas);
+    // 6. Focus indicator (Action Blue) against white surface and canvas (WCAG 2.2 SC 2.4.11 / 2.4.13: >= 3.0:1)
+    const crFocusRingWhite = contrastRatio(actionBlue, white);
+    const crFocusRingCanvas = contrastRatio(actionBlue, canvas);
     expect(crFocusRingWhite).toBeGreaterThanOrEqual(3.0);
     expect(crFocusRingCanvas).toBeGreaterThanOrEqual(3.0);
 
@@ -148,15 +151,16 @@ describe("Canonical Design Tokens & WCAG Contrast Validation", () => {
 
   it("index.css contains synchronized CSS custom properties matching canonical tokens", () => {
     const css = fs.readFileSync(indexPath, "utf-8");
-    expect(css).toContain("--brand-primary: #173B57;");
-    expect(css).toContain("--surface-canvas: #F5F7FA;");
+    expect(css).toContain("--brand-primary: #245B75;");
+    expect(css).toContain("--surface-canvas: #F5F7F8;");
+    expect(css).toContain("--surface-header: #183B56;");
     expect(css).toContain("--surface-card: #FFFFFF;");
     expect(css).toContain("--text-primary: #172B3A;");
     expect(css).toContain("--text-secondary: #526579;");
     expect(css).toContain("--text-muted: #5A6E82;");
-    expect(css).toContain("--focus-ring: #0F766E;");
+    expect(css).toContain("--focus-ring: #245B75;");
     expect(css).toContain("--border-subtle: #D8E0E8;");
-    expect(css).toContain("--border-default: #CBD5E1;");
+    expect(css).toContain("--border-default: #D8E0E7;");
     expect(css).toContain("--border-strong: #7B90A2;");
   });
 });

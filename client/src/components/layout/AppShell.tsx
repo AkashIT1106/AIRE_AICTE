@@ -68,6 +68,17 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     return () => clearInterval(interval);
   }, []);
 
+  // Escape key handler for mobile drawer accessibility
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileMenuOpen]);
+
   // Determine current active workspace from route
   const currentPath = location.pathname;
   const isAicte = currentPath.startsWith("/aicte");
@@ -137,14 +148,29 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-[var(--surface-canvas)] text-[var(--text-primary)] flex flex-col font-sans">
+      {/* 0. Upper Institutional Identity Band (Government of India / Ministry of Education / AICTE) */}
+      <div className="bg-[#0E1B26] text-[var(--text-inverted)]/80 text-[11px] font-medium h-7 px-4 md:px-6 flex items-center justify-between border-b border-white/10 select-none">
+        <div className="flex items-center space-x-2">
+          <span>भारत सरकार / Government of India</span>
+          <span className="text-white/40">&bull;</span>
+          <span className="hidden sm:inline">
+            शिक्षा मंत्रालय / Ministry of Education
+          </span>
+        </div>
+        <div className="text-[10px] text-[var(--text-inverted)]/70 font-mono tracking-wider">
+          अखिल भारतीय तकनीकी शिक्षा परिषद / AICTE
+        </div>
+      </div>
+
       {/* 1. Global Institutional Header (Fixed 64px) */}
       <header className="bg-[var(--surface-header)] text-[var(--text-inverted)] h-16 px-4 md:px-6 shadow-sm border-b border-[var(--border-strong)]/30 flex items-center justify-between sticky top-0 z-40 select-none">
         <div className="flex items-center space-x-3">
           <button
             type="button"
-            className="md:hidden text-[var(--text-inverted)]/80 hover:text-[var(--text-inverted)] p-1.5 focus-aire rounded"
+            className="md:hidden text-[var(--text-inverted)]/80 hover:text-[var(--text-inverted)] min-h-[44px] min-w-[44px] p-2 flex items-center justify-center focus-aire rounded"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
               <X className="h-5 w-5" />

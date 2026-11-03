@@ -72,7 +72,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [0.0902, 0.2314, 0.3412],
-              "hex": "#173B57"
+              "hex": "#183B56"
             },
             "$description": "Authoritative Institutional Navy primary brand color"
           },
@@ -168,6 +168,15 @@
             },
             "$description": "Deepest Teal shade"
           }
+        },
+        "action": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [0.1412, 0.3569, 0.4588],
+            "hex": "#245B75"
+          },
+          "$description": "Action blue interactive accent for buttons and focus indicator"
         }
       },
       "neutral": {
@@ -195,7 +204,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [0.7961, 0.8353, 0.8824],
-              "hex": "#CBD5E1"
+              "hex": "#D8E0E7"
             },
             "$description": "Standard border default for cards and form controls"
           },
@@ -277,7 +286,7 @@
           "$value": {
             "colorSpace": "srgb",
             "components": [0.9608, 0.9686, 0.9804],
-            "hex": "#F5F7FA"
+            "hex": "#F5F7F8"
           },
           "$description": "Neutral-first canvas background reducing screen glare"
         },
@@ -308,7 +317,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [0.9412, 0.9922, 0.9569],
-              "hex": "#F0FDF4"
+              "hex": "#EAF4ED"
             },
             "$description": "Success state background tint"
           },
@@ -326,7 +335,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [0.0784, 0.3255, 0.1765],
-              "hex": "#14532D"
+              "hex": "#166534"
             },
             "$description": "Success state readable text (8.7:1 on success bg)"
           },
@@ -346,7 +355,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [1, 0.9843, 0.9216],
-              "hex": "#FFFBEB"
+              "hex": "#FFF4E5"
             },
             "$description": "Warning/quarantine background tint"
           },
@@ -364,7 +373,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [0.4706, 0.2078, 0.0588],
-              "hex": "#78350F"
+              "hex": "#B45309"
             },
             "$description": "Warning state readable text (8.75:1 on warning bg)"
           },
@@ -384,7 +393,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [0.9961, 0.949, 0.949],
-              "hex": "#FEF2F2"
+              "hex": "#FDECEC"
             },
             "$description": "Critical/Show Cause background tint"
           },
@@ -402,7 +411,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [0.498, 0.1137, 0.1137],
-              "hex": "#7F1D1D"
+              "hex": "#B42318"
             },
             "$description": "Critical error readable text (9.16:1 on danger bg)"
           },
@@ -422,7 +431,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [0.9412, 0.9765, 1],
-              "hex": "#F0F9FF"
+              "hex": "#EAF2F6"
             },
             "$description": "Informational banner background tint"
           },
@@ -440,7 +449,7 @@
             "$value": {
               "colorSpace": "srgb",
               "components": [0.0471, 0.2902, 0.4314],
-              "hex": "#0C4A6E"
+              "hex": "#245B75"
             },
             "$description": "Informational text (8.87:1 on info bg)"
           },
@@ -475,7 +484,7 @@
         },
         "header": {
           "$type": "color",
-          "$value": "{color.primitive.neutral.slate.950}",
+          "$value": "{color.primitive.brand.navy.900}",
           "$description": "Top regulatory application header banner"
         },
         "sidebar": {
@@ -546,7 +555,7 @@
       "action": {
         "primary": {
           "$type": "color",
-          "$value": "{color.primitive.brand.navy.900}",
+          "$value": "{color.primitive.brand.action}",
           "$description": "Primary action button background"
         },
         "primary-hover": {
@@ -588,7 +597,7 @@
       "focus": {
         "ring": {
           "$type": "color",
-          "$value": "{color.primitive.brand.teal.700}",
+          "$value": "{color.primitive.brand.action}",
           "$description": "Focus ring indicator stroke meeting WCAG 2.2 AA (5.5:1 on white)"
         },
         "offset": {
