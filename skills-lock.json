@@ -61,6 +61,12 @@
       "skillPath": "prisma-postgres/SKILL.md",
       "computedHash": "d1622693b450df943ad90194efd2e95637d73aec0edf7e03b1ad17648d29c93b"
     },
+    "react-hook-form": {
+      "source": "pproenca/dot-skills",
+      "sourceType": "github",
+      "skillPath": "skills/.curated/react-hook-form/SKILL.md",
+      "computedHash": "e9881245bb3f993f93c9fce336ca7a517ce39864aa46c95d04238fc5ebc4e4d1"
+    },
     "redis-core": {
       "source": "redis/agent-skills",
       "sourceType": "github",

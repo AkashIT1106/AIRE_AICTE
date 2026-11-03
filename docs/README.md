@@ -13,6 +13,7 @@ Welcome to the authoritative documentation for AIRE. This documentation system i
 | **00 Governance**         | [`docs/00-governance/`](./00-governance/documentation-map.md)             | Authority policy, documentation map, requirement traceability, and decision registers.  |
 | **01 Product**            | [`docs/01-product/`](./01-product/product-overview.md)                    | Vision, problem statement, scope boundaries, user personas, and glossary.               |
 | **02 Experience**         | [`docs/02-experience/`](./02-experience/experience-overview.md)           | Information architecture, interaction contracts, design foundations, and accessibility. |
+| **03 Design System**      | [`docs/03-design-system/`](./03-design-system/README.md)                  | Semantic tokens, typography, component foundations, WCAG 2.2 AA rules, and decisions.   |
 | **03 Architecture**       | [`docs/03-architecture/`](./03-architecture/architecture-overview.md)     | System context, modular monolith design, technology decisions, and deployment.          |
 | **04 Domain**             | [`docs/04-domain/`](./04-domain/domain-overview.md)                       | Domain models, business rules (intake, reconciliation, policy), and core workflows.     |
 | **05 Security & Privacy** | [`docs/05-security-privacy/`](./05-security-privacy/security-overview.md) | Authentication, authorization (RLS), privacy by design, Identity Vault, and audit.      |
@@ -30,6 +31,7 @@ Welcome to the authoritative documentation for AIRE. This documentation system i
 - **Source of Truth Policy:** [`docs/00-governance/source-of-truth-policy.md`](./00-governance/source-of-truth-policy.md)
 - **Requirements Traceability Matrix (243 Requirements):** [`docs/00-governance/requirements-traceability.md`](./00-governance/requirements-traceability.md)
 - **Decision Register:** [`docs/00-governance/decisions/decision-register.md`](./00-governance/decisions/decision-register.md)
+- **Design System & Foundations:** [`docs/03-design-system/README.md`](./03-design-system/README.md)
 - **UI/UX Audit Records:** [`docs/04-frontend/ui-ux-audit.md`](./04-frontend/ui-ux-audit.md)
 - **SSO Provider Boundary Guide:** [`docs/SSO_PROVIDER_INTEGRATION_BOUNDARY.md`](./SSO_PROVIDER_INTEGRATION_BOUNDARY.md)
 

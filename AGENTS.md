@@ -222,17 +222,21 @@ For tenant-sensitive changes, test missing authentication, unauthorized access, 
 
 ## 10. Frontend and UI
 
+- `client/design-tokens.json` is canonical; follow the design system specifications in [`docs/03-design-system/`](docs/03-design-system/README.md).
+- Use semantic tokens for all UI styling (`bg-brand-primary`, `text-txt-primary`, `border-line-default`); never use raw Tailwind color utilities or inline hex values.
+- Do not introduce arbitrary colors, neon gradients, or placeholder AI dashboard styling.
+- Do not duplicate token values across CSS, Tailwind, and components; synchronize via `pnpm run build:tokens`.
+- Validate token changes and contrast against WCAG 2.2 Level AA ($\ge 4.5:1$ text, $\ge 3:1$ UI controls) via automated tests.
+- Use the existing Radix + shadcn/ui components (`client/src/components/ui/`); check the design system before creating new components.
+- Do not present design recommendations as approved product requirements.
 - Consult [`.agents/skills/shadcn/SKILL.md`](.agents/skills/shadcn/SKILL.md) when building or modifying UI components and layouts.
 - Consult [`.agents/skills/vercel-react-best-practices/SKILL.md`](.agents/skills/vercel-react-best-practices/SKILL.md) for React performance, bundle optimization, and rendering efficiency.
 - Consult [`.agents/skills/zod/SKILL.md`](.agents/skills/zod/SKILL.md) for form schemas and input validation.
-- Follow existing design tokens, system, and component conventions; inspect before changing.
-- Do not invent arbitrary colors, spacing, typography, or a new visual language.
-- Use the approved icon library; do not create custom icons when a library icon exists.
-- Keep layouts responsive; verify relevant breakpoints.
+- Use the approved icon library (`lucide-react`); do not create custom icons when a library icon exists.
+- Keep layouts responsive; verify relevant breakpoints (desktop and mobile).
 - Include applicable loading, empty, error, success, and disabled states.
-- Make forms accessible and validated.
-- Do not expose unauthorized data/actions; UI visibility is not authorization.
-- Avoid layout shifts and fabricated frontend-only workflows.
+- Make forms accessible and validated; do not expose unauthorized data/actions (UI visibility is not authorization).
+- Avoid layout shifts (CLS = 0) and fabricated frontend-only workflows.
 - Treat supplied visual references as authoritative unless asked to change them.
 
 ## 11. Dependencies and current practices

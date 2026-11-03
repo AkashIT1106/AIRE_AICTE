@@ -36,6 +36,16 @@ docs/
 │   ├── design-foundations.md                         # Typography, color tokens, layout, density
 │   ├── accessibility.md                              # WCAG 2.2 AA baseline, contrast, keyboard traps, GIGW
 │   └── motion-and-feedback.md                        # Micro-interactions, toast notifications, reduced-motion
+├── 03-design-system/
+│   ├── README.md                                     # Design system architecture, usage, and governance
+│   ├── design-rationale.md                           # Research foundations (HCI, USWDS, GOV.UK, WCAG 2.2), palette selection, contrast
+│   ├── design-principles.md                          # 8 operational UI/UX principles (Recognition over recall, Error prevention, Density)
+│   ├── design-tokens.md                              # Semantic DTCG 2025.10 tokens (surfaces, text, state, typography, 4px grid)
+│   ├── typography-and-layout.md                      # Typographic scale, tabular numerics, institutional vs public density
+│   ├── component-foundations.md                      # Component contracts (buttons, tables, dialogs, drawers, badges)
+│   ├── accessibility-and-responsive-rules.md         # WCAG 2.2 AA rules, focus management, touch targets, reduced motion
+│   ├── frontend-architecture.md                      # Frontend architecture, Radix UI + shadcn integration, developer guide
+│   └── design-decisions.md                           # Stage 2 & 3 design decisions log (DD-001 through DD-011)
 ├── 03-architecture/
 │   ├── system-context.md                             # C4 Level 1 context diagram & external boundaries
 │   ├── architecture-overview.md                      # Modular monolith blueprint & architectural invariants
@@ -113,8 +123,8 @@ Autonomous coding agents must load only documents relevant to their assigned sco
 2. [`docs/02-experience/experience-overview.md`](../02-experience/experience-overview.md)
 3. [`docs/02-experience/information-architecture.md`](../02-experience/information-architecture.md)
 4. [`docs/02-experience/interaction-contracts.md`](../02-experience/interaction-contracts.md)
-5. [`docs/02-experience/design-foundations.md`](../02-experience/design-foundations.md)
-6. [`docs/02-experience/accessibility.md`](../02-experience/accessibility.md)
+5. [`docs/03-design-system/README.md`](../03-design-system/README.md) (Design tokens, components, typography)
+6. [`docs/03-design-system/accessibility-and-responsive-rules.md`](../03-design-system/accessibility-and-responsive-rules.md)
 7. Audit reference: [`docs/04-frontend/screen-inventory.md`](../04-frontend/screen-inventory.md)
 
 ### Pathway B: Authentication, Authorization & Tenant Isolation
