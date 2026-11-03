@@ -1,21 +1,68 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import App from "./App";
 
-describe("Client Root Application", () => {
-  it("renders regulatory header and platform title", () => {
+describe("Client Root Application — Production Architecture & Standalone Authentication", () => {
+  it("renders standalone login gateway with brand identity and secure form for unauthenticated users", async () => {
     render(<App />);
-    expect(screen.getByText("AIRE")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: /Sign in to your account/i }),
+      ).toBeInTheDocument();
+    });
+
+    // Brand and platform title
+    expect(screen.getAllByText("AIRE").length).toBeGreaterThan(0);
     expect(
-      screen.getByText("AICTE Admission Reconciliation & Evidence Platform"),
+      screen.getAllByText(/Admission Reconciliation & Evidence Platform/i)
+        .length,
+    ).toBeGreaterThan(0);
+
+    // Form inputs
+    expect(screen.getByLabelText(/Email address/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Sign in/i }),
     ).toBeInTheDocument();
   });
 
-  it("displays foundation status components", () => {
+  it("does not render application shell sidebar or navigation on the login route", async () => {
     render(<App />);
-    expect(screen.getByText("Foundation Status")).toBeInTheDocument();
-    expect(screen.getByText("API Monolith")).toBeInTheDocument();
-    expect(screen.getByText("Data Architecture")).toBeInTheDocument();
-    expect(screen.getByText("Security & Isolation")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: /Sign in to your account/i }),
+      ).toBeInTheDocument();
+    });
+
+    // AppShell sidebar and collapse button must NOT be rendered on /login
+    expect(
+      screen.queryByRole("navigation", { name: "Workspace navigation" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /Collapse sidebar/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("renders neutral institutional branding without unsupported claims or dev credentials", async () => {
+    render(<App />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: /Sign in to your account/i }),
+      ).toBeInTheDocument();
+    });
+
+    // Must NOT contain unsupported claims or dev shortcuts
+    expect(
+      screen.queryByText(/DPDP Act 2023 Classified/i),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Development Test Credentials/i),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /DIT Operator/i }),
+    ).not.toBeInTheDocument();
   });
 });
