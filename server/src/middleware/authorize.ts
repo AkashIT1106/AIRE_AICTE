@@ -1,16 +1,29 @@
 import { Request, Response, NextFunction } from "express";
-import { Permission, hasAnyPermission } from "@aire/authorization";
+import {
+  Permission,
+  evaluateAccessPolicy,
+  AccessSubject,
+  AccessResource,
+} from "@aire/authorization";
 import { ApiResponse, ErrorCode } from "@aire/shared-types";
 import { AuthorizationService } from "../services/authorization.service.js";
 import { logAuditEvent } from "../services/audit.service.js";
 
 export interface AuthorizeOptions {
   requireTenant?: boolean;
+  resourceType?: string;
+  getWorkflowState?: (
+    req: Request,
+  ) => Promise<string | undefined> | string | undefined;
+  getResourceOwnerId?: (
+    req: Request,
+  ) => Promise<string | undefined> | string | undefined;
 }
 
 /**
  * AIRE Centralized Authorization Middleware.
- * Enforces least privilege, default deny, membership verification, and tenant context isolation.
+ * Enforces least privilege, default deny, membership verification, tenant context isolation,
+ * and attribute-based contextual security (ABAC).
  */
 export function requirePermission(
   permission: Permission,
@@ -62,7 +75,7 @@ export function requirePermission(
             actorId: userId,
             tenantId: requestedInstitutionId || null,
             action: "TENANT_ACCESS_DENIED",
-            resourceType: "INSTITUTION",
+            resourceType: options.resourceType || "INSTITUTION",
             resourceId: requestedInstitutionId || null,
             status: "DENIED",
             metadata: { reason: tenantResolution.reason },
@@ -87,7 +100,7 @@ export function requirePermission(
         };
       }
 
-      // 2. Permission Evaluation
+      // 2. Build Subject & Resource for unified RBAC + ABAC evaluation
       const userRoles: string[] = [];
       if (req.tenantContext?.role) {
         userRoles.push(req.tenantContext.role);
@@ -97,26 +110,57 @@ export function requirePermission(
         await AuthorizationService.getActivePlatformRoles(userId);
       userRoles.push(...platformRoles);
 
-      const hasRequiredPermission = hasAnyPermission(userRoles, permission);
+      const subject: AccessSubject = {
+        userId,
+        roles: userRoles,
+        activeInstitutionId: req.tenantContext?.institutionId,
+        platformRoles,
+      };
 
-      if (!hasRequiredPermission) {
+      let workflowState: string | undefined;
+      if (options.getWorkflowState) {
+        workflowState = await options.getWorkflowState(req);
+      }
+
+      let ownerId: string | undefined;
+      if (options.getResourceOwnerId) {
+        ownerId = await options.getResourceOwnerId(req);
+      }
+
+      const resource: AccessResource = {
+        type: options.resourceType || "RESOURCE",
+        institutionId:
+          req.tenantContext?.institutionId || requestedInstitutionId,
+        workflowState,
+        ownerId,
+      };
+
+      const decision = evaluateAccessPolicy(subject, permission, resource);
+
+      if (!decision.allowed) {
         await logAuditEvent({
           severity: "warn",
           correlationId,
           actorId: userId,
           tenantId: req.tenantContext?.institutionId || null,
-          action: "ROLE_PERMISSION_DENIED",
-          resourceType: "PERMISSION",
+          action: decision.deniedCode || "PERMISSION_DENIED",
+          resourceType: resource.type,
           resourceId: permission,
           status: "DENIED",
-          metadata: { userRoles, requiredPermission: permission },
+          metadata: {
+            userRoles,
+            requiredPermission: permission,
+            reason: decision.reason,
+          },
         });
 
         const response: ApiResponse<null> = {
           data: null,
           error: {
             code: ErrorCode.PERMISSION_DENIED,
-            message: `User does not possess the required permission: ${permission}`,
+            message:
+              decision.reason ||
+              `User does not possess the required permission: ${permission}`,
             correlationId,
           },
         };

@@ -4,6 +4,7 @@ import {
   UserRole,
   MembershipStatus,
   hasAnyPermission,
+  ROLE_PERMISSIONS,
 } from "@aire/authorization";
 
 export interface ResolvedTenantAccess {
@@ -12,6 +13,33 @@ export interface ResolvedTenantAccess {
   role?: string;
   isPlatformAdmin?: boolean;
   reason?: string;
+}
+
+export interface UserAuthContext {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+  platformRoles: string[];
+  memberships: Array<{
+    institutionId: string;
+    role: string;
+    status: string;
+    institution: {
+      id: string;
+      code: string;
+      name: string;
+      status: string;
+    };
+  }>;
+  activeInstitution: {
+    id: string;
+    code: string;
+    name: string;
+    role: string;
+  } | null;
+  permissions: Permission[];
 }
 
 /**
@@ -32,6 +60,22 @@ export class AuthorizationService {
       },
     });
     return platformRoles.map((r) => r.role);
+  }
+
+  /**
+   * Retrieves all active institution memberships for a user with institution details.
+   */
+  static async getUserMemberships(userId: string) {
+    const prisma = getPrismaClient();
+    return prisma.institutionMember.findMany({
+      where: {
+        userId,
+        status: MembershipStatus.ACTIVE,
+      },
+      include: {
+        institution: true,
+      },
+    });
   }
 
   /**
@@ -78,13 +122,7 @@ export class AuthorizationService {
 
     // 2. If no institution is requested, check if the user belongs to exactly one active institution
     if (!requestedInstitutionId) {
-      const prisma = getPrismaClient();
-      const activeMemberships = await prisma.institutionMember.findMany({
-        where: {
-          userId,
-          status: MembershipStatus.ACTIVE,
-        },
-      });
+      const activeMemberships = await this.getUserMemberships(userId);
 
       if (activeMemberships.length === 1) {
         return {
@@ -133,6 +171,85 @@ export class AuthorizationService {
       institutionId: membership.institutionId,
       role: membership.role,
       isPlatformAdmin: false,
+    };
+  }
+
+  /**
+   * Builds the comprehensive authorization context for an authenticated user.
+   */
+  static async getUserContext(
+    user: { id: string; email: string; name: string },
+    requestedInstitutionId?: string,
+  ): Promise<UserAuthContext> {
+    const [platformRoles, memberships] = await Promise.all([
+      this.getActivePlatformRoles(user.id),
+      this.getUserMemberships(user.id),
+    ]);
+
+    // Determine active institution
+    let activeInstitution: UserAuthContext["activeInstitution"] = null;
+    let activeRole: string | undefined;
+
+    if (requestedInstitutionId) {
+      const targetMember = memberships.find(
+        (m) => m.institutionId === requestedInstitutionId,
+      );
+      if (targetMember) {
+        activeInstitution = {
+          id: targetMember.institution.id,
+          code: targetMember.institution.code,
+          name: targetMember.institution.name,
+          role: targetMember.role,
+        };
+        activeRole = targetMember.role;
+      }
+    }
+
+    if (!activeInstitution && memberships.length > 0) {
+      const first = memberships[0];
+      activeInstitution = {
+        id: first.institution.id,
+        code: first.institution.code,
+        name: first.institution.name,
+        role: first.role,
+      };
+      activeRole = first.role;
+    }
+
+    // Aggregate effective permissions
+    const effectiveRoles = [...platformRoles];
+    if (activeRole) {
+      effectiveRoles.push(activeRole);
+    }
+
+    const permissionSet = new Set<Permission>();
+    for (const role of effectiveRoles) {
+      const perms = ROLE_PERMISSIONS[role as UserRole] || [];
+      for (const p of perms) {
+        permissionSet.add(p);
+      }
+    }
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+      platformRoles,
+      memberships: memberships.map((m) => ({
+        institutionId: m.institutionId,
+        role: m.role,
+        status: m.status,
+        institution: {
+          id: m.institution.id,
+          code: m.institution.code,
+          name: m.institution.name,
+          status: m.institution.status,
+        },
+      })),
+      activeInstitution,
+      permissions: Array.from(permissionSet),
     };
   }
 

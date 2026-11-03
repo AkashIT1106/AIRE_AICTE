@@ -1,36 +1,97 @@
 import { Router, Request, Response } from "express";
 import { authenticate } from "../middleware/auth.js";
 import { requirePermission } from "../middleware/authorize.js";
-import { Permission } from "@aire/authorization";
-import { withTenantContext } from "../config/database.js";
+import { Permission, UserRole } from "@aire/authorization";
+import { withTenantContext, getPrismaClient } from "../config/database.js";
 import { ApiResponse, ErrorCode } from "@aire/shared-types";
 import { AuthorizationService } from "../services/authorization.service.js";
 
 export const tenantRouter: Router = Router();
 
 /**
- * Returns current authenticated identity profile and active institution memberships.
+ * Returns current authenticated identity profile, memberships, active tenant, and effective permissions.
  */
 tenantRouter.get(
   "/auth/me",
   authenticate,
   async (req: Request, res: Response) => {
-    const userId = req.user!.id;
-    const platformRoles =
-      await AuthorizationService.getActivePlatformRoles(userId);
+    try {
+      const headerInst = req.headers["x-institution-id"];
+      const requestedInstId = Array.isArray(headerInst)
+        ? headerInst[0]
+        : (headerInst as string | undefined) ||
+          (req.query.institutionId as string | undefined);
 
-    const response: ApiResponse<unknown> = {
-      data: {
-        user: {
-          id: req.user!.id,
-          email: req.user!.email,
-          name: req.user!.name,
+      const context = await AuthorizationService.getUserContext(
+        req.user!,
+        requestedInstId,
+      );
+
+      const response: ApiResponse<typeof context> = {
+        data: context,
+        error: null,
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      const response: ApiResponse<null> = {
+        data: null,
+        error: {
+          code: ErrorCode.INTERNAL_ERROR,
+          message: "Failed to resolve authenticated session context",
+          correlationId: req.correlationId,
+          details: (error as Error).message,
         },
-        platformRoles,
-      },
-      error: null,
-    };
-    res.status(200).json(response);
+      };
+      res.status(500).json(response);
+    }
+  },
+);
+
+/**
+ * Returns institutions authorized for the current user.
+ */
+tenantRouter.get(
+  "/institutions",
+  authenticate,
+  async (req: Request, res: Response) => {
+    const userId = req.user!.id;
+    const prisma = getPrismaClient();
+
+    try {
+      const platformRoles =
+        await AuthorizationService.getActivePlatformRoles(userId);
+      const isPlatformAdmin = platformRoles.some(
+        (r) => r === UserRole.SUPER_ADMIN || r === UserRole.AICTE_ADMIN,
+      );
+
+      let institutions;
+      if (isPlatformAdmin) {
+        institutions = await prisma.institution.findMany({
+          orderBy: { name: "asc" },
+        });
+      } else {
+        const memberships =
+          await AuthorizationService.getUserMemberships(userId);
+        institutions = memberships.map((m) => m.institution);
+      }
+
+      const response: ApiResponse<typeof institutions> = {
+        data: institutions,
+        error: null,
+      };
+      res.status(200).json(response);
+    } catch (error) {
+      const response: ApiResponse<null> = {
+        data: null,
+        error: {
+          code: ErrorCode.INTERNAL_ERROR,
+          message: "Failed to list authorized institutions",
+          correlationId: req.correlationId,
+          details: (error as Error).message,
+        },
+      };
+      res.status(500).json(response);
+    }
   },
 );
 
