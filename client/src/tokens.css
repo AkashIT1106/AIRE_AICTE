@@ -1,0 +1,79 @@
+/* AUTO-GENERATED FROM client/design-tokens.json. DO NOT EDIT DIRECTLY. */
+/* Run `pnpm run build:tokens` to regenerate. */
+
+:root {
+  /* AIRE Semantic DTCG Tokens */
+  --aire-color-brand-primary: #24536F;
+  --aire-color-brand-primary-hover: #19384E;
+  --aire-color-brand-deep: #142C3D;
+  --aire-color-brand-700: #2B6685;
+  --aire-color-brand-600: #357E9E;
+  --aire-color-brand-100: #D6E3EB;
+  --aire-color-brand-50: #EAF1F5;
+
+  --aire-color-accent-teal: #075E58;
+  --aire-color-accent-teal-subtle: #E7F2EF;
+  --aire-color-accent-warm: #8B4F16;
+  --aire-color-accent-warm-subtle: #F6EFE4;
+
+  --aire-color-surface-page: #F5F7F7;
+  --aire-color-surface-default: #FFFFFF;
+  --aire-color-surface-subtle: #EEF3F3;
+  --aire-color-surface-soft: #FBFCFC;
+
+  --aire-color-border-default: #D8E0E3;
+  --aire-color-border-divider: #E7ECEE;
+  --aire-color-border-strong: #AAB7BE;
+
+  --aire-color-text-primary: #1D2935;
+  --aire-color-text-secondary: #536474;
+
+  --aire-color-state-success: #176B45;
+  --aire-color-state-success-bg: #E7F2EC;
+  --aire-color-state-success-border: #B7DEC8;
+
+  --aire-color-state-warning: #8A4D0A;
+  --aire-color-state-warning-bg: #F8F0E5;
+  --aire-color-state-warning-border: #F2D8B3;
+
+  --aire-color-state-error: #B42318;
+  --aire-color-state-error-bg: #FCEDEB;
+  --aire-color-state-error-border: #F9C3BE;
+
+  --aire-color-state-info: #245B78;
+  --aire-color-state-info-bg: #EAF1F5;
+  --aire-color-state-info-border: #BDD5E1;
+
+  --aire-color-state-pending: #536474;
+  --aire-color-state-pending-bg: #EEF3F3;
+  --aire-color-state-pending-border: #D8E0E3;
+
+  --aire-radius-control: 6px;
+  --aire-radius-card: 10px;
+  --aire-radius-feature: 16px;
+  --aire-radius-full: 9999px;
+
+  /* Glassmorphism restrained layer tokens (design.md Section 7) */
+  --aire-glass-bg: rgba(255, 255, 255, 0.92);
+  --aire-glass-backdrop: blur(12px);
+  --aire-glass-border: 1px solid rgba(216, 224, 227, 0.7);
+  --aire-glass-shadow: 0 4px 16px -2px rgba(20, 44, 61, 0.06);
+
+  /* UX4G 3.0 Cascade Theme Overrides */
+  --ux4g-color-primary-50: #EAF1F5 !important;
+  --ux4g-color-primary-100: #D6E3EB !important;
+  --ux4g-color-primary-200: #B5CEDB !important;
+  --ux4g-color-primary-600: #24536F !important;
+  --ux4g-color-primary-700: #19384E !important;
+  --ux4g-color-primary-800: #142C3D !important;
+  --ux4g-color-primary-900: #10212E !important;
+  --ux4g-color-primary-950: #0B1720 !important;
+
+  --ux4g-color-secondary-50: #F6EFE4 !important;
+  --ux4g-color-secondary-600: #8B4F16 !important;
+  --ux4g-color-secondary-700: #703E10 !important;
+  --ux4g-color-secondary-800: #552F0C !important;
+
+  --ux4g-font-family-base: "Noto Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  --ux4g-text-neutral-primary: #1D2935 !important;
+}

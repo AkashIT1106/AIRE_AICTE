@@ -34,29 +34,14 @@ export const Accordion: React.FC<AccordionProps> = ({
   const containerClasses = [
     "ux4g-accordion",
     variant === "bordered" ? "ux4g-accordion-bordered" : "",
-    "ux4g-accordion-arrow-right",
+    "ux4g-accordion-arrow-right flex flex-col gap-3",
     className,
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <div
-      className={containerClasses}
-      style={
-        {
-          "--ux4g-accordion-button-padding-y": "18px",
-          "--ux4g-accordion-button-padding-x": "22px",
-          "--ux4g-accordion-body-padding-x": "22px",
-          "--ux4g-accordion-body-padding-y": "20px",
-          "--ux4g-accordion-title-size": "16px",
-          "--ux4g-accordion-title-line-height": "1.45",
-          "--ux4g-accordion-body-size": "15px",
-          "--ux4g-accordion-body-line-height": "1.65",
-          gap: "12px",
-        } as React.CSSProperties
-      }
-    >
+    <div className={containerClasses}>
       {items.map((item) => {
         const isOpen = openIds.includes(item.id);
         const headerId = `accordion-header-${item.id}`;
@@ -65,38 +50,33 @@ export const Accordion: React.FC<AccordionProps> = ({
         return (
           <div
             key={item.id}
-            className={`ux4g-accordion__item ${
-              isOpen ? "ux4g-accordion__item--expanded" : ""
+            className={`ux4g-accordion__item bg-neutral-0 rounded-card border transition-all duration-150 ${
+              isOpen
+                ? "ux4g-accordion__item--expanded border-neutral-300 shadow-xs"
+                : "border-neutral-200"
             }`}
-            style={{
-              borderColor: isOpen ? "#CBD5E1" : "#E2E8F0",
-              borderWidth: "1px",
-              borderStyle: "solid",
-              backgroundColor: "#FFFFFF",
-              borderRadius: "12px",
-              boxShadow: isOpen
-                ? "0 4px 12px -2px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.03)"
-                : "none",
-              transition: "border-color 0.15s ease, box-shadow 0.15s ease",
-            }}
           >
-            <h3 className="ux4g-accordion__header">
+            <h3 className="ux4g-accordion__header m-0 p-0 text-base">
               <button
                 type="button"
                 id={headerId}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => toggleItem(item.id)}
-                className={`ux4g-accordion__button ${isOpen ? "" : "collapsed"}`}
-                style={{
-                  fontWeight: 600,
-                  color: isOpen ? "#0F172A" : "#1E293B",
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: isOpen ? "12px 12px 0 0" : "12px",
-                }}
+                className={`ux4g-accordion__button w-full flex items-center justify-between p-4 sm:p-5 text-left font-semibold text-neutral-800 hover:text-brand-primary transition-colors cursor-pointer select-none ${
+                  isOpen ? "" : "collapsed"
+                }`}
               >
-                <span className="ux4g-accordion__button-content">
-                  <span className="ux4g-accordion__title">{item.question}</span>
+                <span className="ux4g-accordion__button-content flex-grow pr-4">
+                  <span className="ux4g-accordion__title text-base">{item.question}</span>
+                </span>
+                <span
+                  className={`inline-block transition-transform duration-200 text-neutral-600 ${
+                    isOpen ? "rotate-90" : ""
+                  }`}
+                  aria-hidden="true"
+                >
+                  ›
                 </span>
               </button>
             </h3>
@@ -105,22 +85,11 @@ export const Accordion: React.FC<AccordionProps> = ({
               id={panelId}
               role="region"
               aria-labelledby={headerId}
-              className={`ux4g-accordion__collapse ${isOpen ? "show" : ""}`}
-              style={{
-                display: isOpen ? "block" : "none",
-              }}
+              className={`ux4g-accordion__collapse ${isOpen ? "show block" : "hidden"}`}
             >
-              <div
-                className="ux4g-accordion__body"
-                style={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#475569",
-                  borderTop: "1px solid #F1F5F9",
-                  paddingTop: "12px",
-                }}
-              >
+              <div className="ux4g-accordion__body px-4 pb-4 sm:px-5 sm:pb-5 pt-1 text-sm text-neutral-600 border-t border-neutral-150 leading-relaxed">
                 {typeof item.answer === "string" ? (
-                  <p style={{ margin: 0 }}>{item.answer}</p>
+                  <p className="m-0">{item.answer}</p>
                 ) : (
                   item.answer
                 )}
@@ -132,3 +101,5 @@ export const Accordion: React.FC<AccordionProps> = ({
     </div>
   );
 };
+
+export const AireAccordion = Accordion;

@@ -4,253 +4,180 @@ export const AireSecurityIllustration: React.FC<{ className?: string }> = ({
   className = "",
 }) => {
   return (
-    <div className={`relative w-full max-w-lg mx-auto ${className}`}>
-      {/* Ambient background glow */}
-      <div
-        className="absolute -inset-4 bg-gradient-to-br from-[#ECFDF5]/50 via-[#EFF6FF]/40 to-[#F8FAFC] rounded-3xl blur-2xl -z-10 pointer-events-none"
-        aria-hidden="true"
-      />
-
+    <div className={`relative w-full max-w-xl mx-auto select-none ${className}`}>
+      {/* Crisp Editorial Architectural Diagram — AIRE Security & Provenance Layer */}
       <svg
-        viewBox="0 0 540 420"
+        viewBox="0 0 560 420"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-auto drop-shadow-lg"
+        className="w-full h-auto drop-shadow-sm"
         role="img"
-        aria-label="Technical security diagram representing AIRE tenant isolation, Identity Vault, and immutable audit logging"
+        aria-label="Editorial vector architectural diagram of PostgreSQL Forced RLS Tenant Isolation, Purpose-Bound Identity Vault, and SHA-256 Tamper-Evident Audit Ledger"
       >
         <defs>
-          <linearGradient id="secShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#1E293B" />
-            <stop offset="100%" stopColor="#0F172A" />
-          </linearGradient>
-
-          <linearGradient id="secVaultGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#059669" />
-            <stop offset="100%" stopColor="#047857" />
-          </linearGradient>
-
-          <linearGradient id="secCardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#FFFFFF" />
-            <stop offset="100%" stopColor="#F8FAFC" />
-          </linearGradient>
-
-          <filter id="secDropShadow" x="-10%" y="-10%" width="125%" height="125%">
-            <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#0F172A" floodOpacity="0.07" />
+          <filter id="secSubtleShadow" x="-5%" y="-5%" width="110%" height="115%">
+            <feDropShadow dx="0" dy="6" stdDeviation="10" floodColor="#142C3D" floodOpacity="0.05" />
           </filter>
         </defs>
 
         {/* 1. Underlying Coordinate Field */}
-        <g opacity="0.3" stroke="#CBD5E1" strokeWidth="1" strokeDasharray="3 3">
-          <line x1="30" y1="50" x2="510" y2="50" />
-          <line x1="30" y1="150" x2="510" y2="150" />
-          <line x1="30" y1="250" x2="510" y2="250" />
-          <line x1="30" y1="350" x2="510" y2="350" />
+        <g stroke="#D8E0E3" strokeWidth="1" strokeDasharray="4 4" opacity="0.6">
+          <line x1="30" y1="50" x2="530" y2="50" />
+          <line x1="30" y1="160" x2="530" y2="160" />
+          <line x1="30" y1="270" x2="530" y2="270" />
+          <line x1="30" y1="370" x2="530" y2="370" />
+          <line x1="80" y1="30" x2="80" y2="390" />
+          <line x1="280" y1="30" x2="280" y2="390" />
+          <line x1="480" y1="30" x2="480" y2="390" />
         </g>
 
-        {/* 2. Platform Base Tier: PostgreSQL Multi-Tenant Isolation Enclave */}
-        <g id="tenant-isolation-tier" filter="url(#secDropShadow)">
-          {/* Main Tenant Barrier */}
+        {/* 2. Platform Base Tier: PostgreSQL Forced RLS Multi-Tenant Boundary */}
+        <g id="tenant-isolation-tier" filter="url(#secSubtleShadow)">
           <rect
             x="40"
-            y="280"
-            width="460"
-            height="100"
-            rx="12"
-            fill="url(#secCardGrad)"
-            stroke="#CBD5E1"
-            strokeWidth="1.5"
-          />
-
-          {/* Tier Label Strip */}
-          <rect x="40" y="280" width="460" height="28" rx="12" fill="#1E293B" />
-          <rect x="40" y="296" width="460" height="12" fill="#1E293B" />
-          <text
-            x="58"
-            y="298"
-            fill="#94A3B8"
-            fontSize="10"
-            fontFamily="system-ui, sans-serif"
-            fontWeight="bold"
-            letterSpacing="0.08em"
-          >
-            TIER 1: DATABASE ROW-LEVEL SECURITY (FORCED RLS)
-          </text>
-          <rect x="420" y="286" width="66" height="16" rx="8" fill="#065F46" />
-          <text
-            x="453"
-            y="298"
-            fill="#A7F3D0"
-            fontSize="8"
-            fontFamily="system-ui, sans-serif"
-            fontWeight="bold"
-            textAnchor="middle"
-          >
-            ISOLATED
-          </text>
-
-          {/* Tenant 1 Chamber */}
-          <rect x="56" y="320" width="124" height="48" rx="6" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="1" />
-          <text x="68" y="338" fill="#1E293B" fontSize="10" fontWeight="bold">Institution A</text>
-          <text x="68" y="352" fill="#64748B" fontSize="8" fontFamily="monospace">tenant_id = 0x4A1</text>
-
-          {/* Wall Barrier */}
-          <line x1="196" y1="320" x2="196" y2="368" stroke="#EF4444" strokeWidth="2" strokeDasharray="3 2" />
-
-          {/* Tenant 2 Chamber */}
-          <rect x="212" y="320" width="124" height="48" rx="6" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="1" />
-          <text x="224" y="338" fill="#1E293B" fontSize="10" fontWeight="bold">Institution B</text>
-          <text x="224" y="352" fill="#64748B" fontSize="8" fontFamily="monospace">tenant_id = 0x7B8</text>
-
-          {/* Wall Barrier */}
-          <line x1="352" y1="320" x2="352" y2="368" stroke="#EF4444" strokeWidth="2" strokeDasharray="3 2" />
-
-          {/* Tenant N Chamber */}
-          <rect x="368" y="320" width="116" height="48" rx="6" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="1" />
-          <text x="380" y="338" fill="#1E293B" fontSize="10" fontWeight="bold">Institution N</text>
-          <text x="380" y="352" fill="#64748B" fontSize="8" fontFamily="monospace">tenant_id = 0x9F3</text>
-        </g>
-
-        {/* 3. Middle Tier Left: Identity Vault (DPDP Act 2023 Isolation) */}
-        <g id="identity-vault-box" filter="url(#secDropShadow)">
-          <rect
-            x="40"
-            y="120"
-            width="216"
-            height="136"
-            rx="12"
-            fill="url(#secCardGrad)"
-            stroke="#A7F3D0"
-            strokeWidth="1.5"
-          />
-          {/* Header */}
-          <path
-            d="M40 132 C40 125.373 45.373 120 52 120 L244 120 C250.627 120 256 125.373 256 132 L256 148 L40 148 Z"
-            fill="url(#secVaultGrad)"
-          />
-          <text
-            x="56"
-            y="139"
+            y="270"
+            width="480"
+            height="110"
+            rx="10"
             fill="#FFFFFF"
-            fontSize="10"
-            fontFamily="system-ui, sans-serif"
-            fontWeight="bold"
-            letterSpacing="0.05em"
-          >
-            PROTECTED IDENTITY VAULT
+            stroke="#D8E0E3"
+            strokeWidth="1.5"
+          />
+          {/* Header strip in Deep Ink Navy */}
+          <path
+            d="M40 280 Q40 270 50 270 H510 Q520 270 520 280 V302 H40 Z"
+            fill="#142C3D"
+          />
+          <text x="60" y="292" fill="#FFFFFF" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+            DATABASE MULTI-TENANT ISOLATION LAYER (FORCED ROW-LEVEL SECURITY)
           </text>
 
-          {/* Vault Icon */}
-          <g transform="translate(60, 168)">
-            <circle cx="16" cy="16" r="16" fill="#ECFDF5" stroke="#A7F3D0" strokeWidth="1" />
-            <path
-              d="M16 9 V15 M11 15 H21 M11 15 V23 H21 V15"
-              stroke="#059669"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
+          {/* Tenant Enclaves */}
+          <g>
+            {/* Institution A Enclave */}
+            <rect x="58" y="316" width="138" height="50" rx="6" fill="#F5F7F7" stroke="#D8E0E3" strokeWidth="1" />
+            <text x="68" y="334" fill="#142C3D" fontSize="10" fontWeight="600" fontFamily="sans-serif">
+              TENANT: 1-10928
+            </text>
+            <text x="68" y="352" fill="#075E58" fontSize="8" fontWeight="600" fontFamily="monospace">
+              RLS BOUNDARY: ENFORCED
+            </text>
+
+            {/* Institution B Enclave */}
+            <rect x="211" y="316" width="138" height="50" rx="6" fill="#F5F7F7" stroke="#D8E0E3" strokeWidth="1" />
+            <text x="221" y="334" fill="#142C3D" fontSize="10" fontWeight="600" fontFamily="sans-serif">
+              TENANT: 1-84912
+            </text>
+            <text x="221" y="352" fill="#075E58" fontSize="8" fontWeight="600" fontFamily="monospace">
+              RLS BOUNDARY: ENFORCED
+            </text>
+
+            {/* AICTE Regulatory Scope */}
+            <rect x="364" y="316" width="138" height="50" rx="6" fill="#EAF1F5" stroke="#24536F" strokeWidth="1" />
+            <text x="374" y="334" fill="#24536F" fontSize="10" fontWeight="600" fontFamily="sans-serif">
+              COUNCIL AUDIT SCOPE
+            </text>
+            <text x="374" y="352" fill="#24536F" fontSize="8" fontWeight="600" fontFamily="monospace">
+              CROSS-TENANT READ: GOVERNED
+            </text>
           </g>
-
-          <text x="100" y="178" fill="#0F172A" fontSize="10" fontWeight="bold">Zero PII in Logs</text>
-          <text x="100" y="191" fill="#64748B" fontSize="8.5">Envelope Encryption</text>
-
-          {/* Masked Data Record Preview */}
-          <rect x="56" y="210" width="184" height="32" rx="4" fill="#F1F5F9" stroke="#E2E8F0" strokeWidth="1" />
-          <text x="68" y="225" fill="#475569" fontSize="8" fontFamily="monospace">APAAR: •••• •••• 8912</text>
-          <text x="68" y="236" fill="#059669" fontSize="7.5" fontWeight="bold">ACCESS: PURPOSE-BOUND</text>
         </g>
 
-        {/* 4. Middle Tier Right: Tamper-Evident Ledger & Audit Chain */}
-        <g id="audit-ledger-box" filter="url(#secDropShadow)">
+        {/* 3. Purpose-Bound Identity Vault (Upper Left Tier) */}
+        <g id="identity-vault-tier" filter="url(#secSubtleShadow)">
           <rect
-            x="284"
-            y="120"
-            width="216"
-            height="136"
-            rx="12"
-            fill="url(#secCardGrad)"
-            stroke="#CBD5E1"
+            x="40"
+            y="60"
+            width="230"
+            height="180"
+            rx="10"
+            fill="#FFFFFF"
+            stroke="#D8E0E3"
             strokeWidth="1.5"
           />
-          {/* Header */}
+          {/* Header Strip in Deep Teal */}
           <path
-            d="M284 132 C284 125.373 289.373 120 296 120 L488 120 C494.627 120 500 125.373 500 132 L500 148 L284 148 Z"
-            fill="url(#secShieldGrad)"
+            d="M40 70 Q40 60 50 60 H260 Q270 60 270 70 V92 H40 Z"
+            fill="#075E58"
           />
-          <text
-            x="300"
-            y="139"
-            fill="#FFFFFF"
-            fontSize="10"
-            fontFamily="system-ui, sans-serif"
-            fontWeight="bold"
-            letterSpacing="0.05em"
-          >
-            TAMPER-EVIDENT AUDIT TRAIL
+          <text x="56" y="82" fill="#FFFFFF" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+            IDENTITY VAULT & TOKENIZATION
           </text>
 
-          {/* Mini Hash Link 1 */}
-          <rect x="300" y="162" width="184" height="24" rx="4" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="1" />
-          <circle cx="312" cy="174" r="3" fill="#2563EB" />
-          <text x="322" y="177" fill="#334155" fontSize="8" fontFamily="monospace">BATCH_SEAL: 0x8a7f...2d</text>
+          <text x="56" y="118" fill="#536474" fontSize="10" fontFamily="sans-serif">
+            Plaintext Student PII:
+          </text>
+          <rect x="56" y="128" width="198" height="24" rx="4" fill="#FCEDEB" stroke="#B42318" strokeWidth="1" />
+          <text x="68" y="144" fill="#B42318" fontSize="9" fontWeight="600" fontFamily="monospace">
+            NEVER PERSISTED IN LEDGER
+          </text>
 
-          {/* Connector Line */}
-          <line x1="392" y1="186" x2="392" y2="194" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round" />
-
-          {/* Mini Hash Link 2 */}
-          <rect x="300" y="194" width="184" height="24" rx="4" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="1" />
-          <circle cx="312" cy="206" r="3" fill="#10B981" />
-          <text x="322" y="209" fill="#334155" fontSize="8" fontFamily="monospace">AUTH_EVENT: NodalOfficer#04</text>
-
-          {/* Status strip */}
-          <text x="300" y="242" fill="#64748B" fontSize="8.5" fontWeight="600">
-            Append-Only Log • Historical Immutability
+          <text x="56" y="174" fill="#536474" fontSize="10" fontFamily="sans-serif">
+            Cryptographic Vault Token:
+          </text>
+          <rect x="56" y="184" width="198" height="24" rx="4" fill="#E7F2EF" stroke="#075E58" strokeWidth="1" />
+          <text x="68" y="200" fill="#075E58" fontSize="9" fontWeight="600" fontFamily="monospace">
+            tok_a79f82d1c54b03ee
           </text>
         </g>
 
-        {/* 5. Top Crest: Human Governance Authority */}
-        <g id="human-authority-crest" filter="url(#secDropShadow)">
+        {/* 4. Immutable Append-Only Audit Trail (Upper Right Tier) */}
+        <g id="audit-trail-tier" filter="url(#secSubtleShadow)">
           <rect
-            x="170"
-            y="30"
-            width="200"
-            height="62"
-            rx="12"
+            x="290"
+            y="60"
+            width="230"
+            height="180"
+            rx="10"
             fill="#FFFFFF"
-            stroke="#CBD5E1"
+            stroke="#D8E0E3"
             strokeWidth="1.5"
           />
-          <circle cx="200" cy="61" r="16" fill="#FEF3C7" stroke="#F59E0B" strokeWidth="1.5" />
-          {/* Scales of justice / gavel icon */}
+          {/* Header Strip in Institutional Action Navy */}
           <path
-            d="M200 52 V70 M193 57 H207 M190 64 L193 57 L196 64 Z M204 64 L207 57 L210 64 Z"
-            stroke="#B45309"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            d="M290 70 Q290 60 300 60 H510 Q520 60 520 70 V92 H290 Z"
+            fill="#24536F"
           />
-          <text x="226" y="55" fill="#1E293B" fontSize="10" fontWeight="bold">Human Governance</text>
-          <text x="226" y="68" fill="#64748B" fontSize="8">Policy & Final Decisions</text>
+          <text x="306" y="82" fill="#FFFFFF" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+            APPEND-ONLY AUDIT LEDGER
+          </text>
+
+          {/* Audit Node 1 */}
+          <circle cx="312" cy="120" r="5" fill="#24536F" />
+          <line x1="312" y1="125" x2="312" y2="155" stroke="#D8E0E3" strokeWidth="1.5" />
+          <text x="326" y="118" fill="#1D2935" fontSize="10" fontWeight="600" fontFamily="sans-serif">
+            INTAKE_UPLOADED
+          </text>
+          <text x="326" y="130" fill="#536474" fontSize="8" fontFamily="monospace">
+            ACTOR: REGISTRAR • HASH: e4b2..
+          </text>
+
+          {/* Audit Node 2 */}
+          <circle cx="312" cy="160" r="5" fill="#075E58" />
+          <line x1="312" y1="165" x2="312" y2="195" stroke="#D8E0E3" strokeWidth="1.5" />
+          <text x="326" y="158" fill="#1D2935" fontSize="10" fontWeight="600" fontFamily="sans-serif">
+            EVALUATION_COMPLETED
+          </text>
+          <text x="326" y="170" fill="#536474" fontSize="8" fontFamily="monospace">
+            ENGINE: DETERMINISTIC V1.4
+          </text>
+
+          {/* Audit Node 3 */}
+          <circle cx="312" cy="200" r="5" fill="#8B4F16" />
+          <text x="326" y="198" fill="#1D2935" fontSize="10" fontWeight="600" fontFamily="sans-serif">
+            STATUTORY_SEALED
+          </text>
+          <text x="326" y="210" fill="#536474" fontSize="8" fontFamily="monospace">
+            DUAL-AUTH: DRAFT LOCKED
+          </text>
         </g>
 
-        {/* Flow Connectors connecting Governance to Tiers */}
+        {/* 5. Secure Bus Connectors */}
         <path
-          d="M270 92 V110"
-          stroke="#94A3B8"
-          strokeWidth="1.5"
-          strokeDasharray="3 3"
-        />
-        <path
-          d="M148 256 V280"
-          stroke="#059669"
-          strokeWidth="1.5"
-          strokeDasharray="3 3"
-        />
-        <path
-          d="M392 256 V280"
-          stroke="#2563EB"
-          strokeWidth="1.5"
-          strokeDasharray="3 3"
+          d="M155 240 V270 M405 240 V270"
+          stroke="#24536F"
+          strokeWidth="2"
+          strokeDasharray="4 4"
         />
       </svg>
     </div>

@@ -1,26 +1,16 @@
+@import "./tokens.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --ux4g-font-family-base: "Noto Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  /* Institutional Sapphire Palette cascading into UX4G components */
-  --ux4g-color-primary-50: #eff6ff !important;
-  --ux4g-color-primary-100: #dbeafe !important;
-  --ux4g-color-primary-200: #bfdbfe !important;
-  --ux4g-color-primary-600: #1d4ed8 !important;
-  --ux4g-color-primary-700: #1e40af !important;
-  --ux4g-color-primary-800: #1e3a8a !important;
-}
 
 /* Ensure smooth scrolling for in-page navigation */
 html {
   scroll-behavior: smooth;
 }
 
-/* Accessible focus styling */
+/* Accessible focus styling adhering to design.md §14.2 & UX4G */
 :focus-visible {
-  outline: 2px solid var(--ux4g-color-primary-600, #1d4ed8);
+  outline: 2px solid var(--aire-color-brand-primary, #24536F);
   outline-offset: 2px;
 }
 
@@ -31,10 +21,10 @@ html {
   left: 1rem;
   z-index: 9999;
   padding: 0.5rem 1rem;
-  background-color: var(--ux4g-color-primary-600, #1d4ed8);
+  background-color: var(--aire-color-brand-primary, #24536F);
   color: #ffffff;
   font-weight: 600;
-  border-radius: 0 0 4px 4px;
+  border-radius: 0 0 6px 6px;
   text-decoration: none;
   transition: top 0.15s ease-in-out;
 }
@@ -42,3 +32,19 @@ html {
 .skip-link:focus {
   top: 0;
 }
+
+/* Glassmorphism restrained layer class adhering strictly to design.md §7 */
+.aire-glass-panel {
+  background: var(--aire-glass-bg);
+  backdrop-filter: var(--aire-glass-backdrop);
+  -webkit-backdrop-filter: var(--aire-glass-backdrop);
+  border: var(--aire-glass-border);
+  box-shadow: var(--aire-glass-shadow);
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  .aire-glass-panel {
+    background: #ffffff;
+  }
+}
+
