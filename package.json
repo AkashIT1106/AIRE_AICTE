@@ -17,7 +17,6 @@
     "lint": "oxlint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
-    "build:tokens": "pnpm --filter @aire/client build:tokens",
     "prisma:generate": "pnpm --filter @aire/server prisma:generate",
     "prisma:migrate": "pnpm --filter @aire/server prisma:migrate",
     "docker:up": "docker compose up -d",

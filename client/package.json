@@ -8,8 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "build:tokens": "node scripts/sync-tokens.js"
+    "test": "vitest run"
   },
   "dependencies": {
     "@aire/api-contracts": "workspace:*",
