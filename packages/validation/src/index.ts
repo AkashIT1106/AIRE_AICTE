@@ -45,3 +45,88 @@ export const environmentSchema = z.object({
 
 export type EnvironmentConfig = z.infer<typeof environmentSchema>;
 export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
+
+// -----------------------------------------------------------------------------
+// Admission & Submission Schemas (J-02 & M06 Data Pipeline)
+// -----------------------------------------------------------------------------
+
+export const RESERVATION_CATEGORIES = [
+  "GEN",
+  "OBC-NCL",
+  "SC",
+  "ST",
+  "EWS",
+] as const;
+
+export const QUOTA_CATEGORIES = [
+  "General / All India",
+  "Home State Quota",
+  "Management Quota",
+  "Supernumerary",
+  "Tuition Fee Waiver",
+  "Lateral Entry",
+] as const;
+
+export const reservationCategorySchema = z.enum(RESERVATION_CATEGORIES, {
+  errorMap: () => ({
+    message: "Invalid category. Allowed: GEN, OBC-NCL, SC, ST, EWS",
+  }),
+});
+
+export const quotaCategorySchema = z.enum(QUOTA_CATEGORIES, {
+  errorMap: () => ({
+    message:
+      "Invalid quota category. Allowed: General / All India, Home State Quota, Management Quota, Supernumerary, Tuition Fee Waiver, Lateral Entry",
+  }),
+});
+
+export const admissionRecordSchema = z.object({
+  studentName: z
+    .string()
+    .min(2, "Student name must be at least 2 characters")
+    .max(120, "Student name cannot exceed 120 characters"),
+  rollNumber: z
+    .string()
+    .min(3, "Roll number or Application ID must be at least 3 characters")
+    .max(50, "Roll number cannot exceed 50 characters")
+    .regex(
+      /^[a-zA-Z0-9_\-/]+$/,
+      "Roll number must contain only letters, numbers, dashes, underscores, and slashes",
+    ),
+  dateOfBirth: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date of birth must be in YYYY-MM-DD format"),
+  category: reservationCategorySchema,
+  quota: quotaCategorySchema,
+  apaarId: z
+    .string()
+    .regex(
+      /^(\d{12}|\d{4}-\d{4}-\d{4}|••••-••••-\d{4})?$/,
+      "APAAR ID must be 12 digits or formatted 12-digit format",
+    )
+    .optional(),
+});
+
+export const admissionBatchInputSchema = z.object({
+  academicYear: z
+    .string()
+    .regex(
+      /^\d{4}-\d{2}$/,
+      "Academic year must be format YYYY-YY (e.g. 2026-27)",
+    ),
+  programme: z.string().min(2, "Programme must be specified"),
+  fileName: z.string().min(1, "File name must be specified"),
+  records: z
+    .array(z.record(z.unknown()))
+    .min(1, "Batch must contain at least 1 record"),
+});
+
+export const quarantineRemediationSchema = admissionRecordSchema
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided for remediation",
+  });
+
+export type AdmissionRecord = z.infer<typeof admissionRecordSchema>;
+export type AdmissionBatchInput = z.infer<typeof admissionBatchInputSchema>;
+export type QuarantineRemediation = z.infer<typeof quarantineRemediationSchema>;
