@@ -20,6 +20,7 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://aire_user:aire_secure_dev_password@localhost:5433/aire_db?schema=public
+      APP_DATABASE_URL: postgresql://aire_app_user:aire_app_secure_dev_password@localhost:5433/aire_db?schema=public
       REDIS_HOST: localhost
       REDIS_PORT: 6379
       NODE_ENV: test
