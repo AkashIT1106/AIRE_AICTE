@@ -21,15 +21,17 @@ specifications exist.
 
 ## 2. Assigned modules
 
-  Module   Name                                   Priority
-  -------- -------------------------------------- ----------
-  M04      Regulatory Policy and Rule Registry    Core
-  M07      APAAR Identity Verification Gateway    Core
-  M09      Admission Entitlement Engine           Core
-  M10      Cohort Reconciliation Engine           Core
-  M11      Exception and Human Review Workbench   Core
-  M13      Dashboards, Reports and Analytics      Core
-  M14      Integration Hub                        Core
+Module Name Priority
+
+---
+
+M04 Regulatory Policy and Rule Registry Core
+M07 APAAR Identity Verification Gateway Core
+M09 Admission Entitlement Engine Core
+M10 Cohort Reconciliation Engine Core
+M11 Exception and Human Review Workbench Core
+M13 Dashboards, Reports and Analytics Core
+M14 Integration Hub Core
 
 These are complete vertical module responsibilities.
 
@@ -214,46 +216,49 @@ Tests cover provider success, failure and unavailability.
 
 ## 4. Cross-module dependencies
 
-  -----------------------------------------------------------------------
-  Your module             Dependency              Required coordination
-  ----------------------- ----------------------- -----------------------
-  M04                     M02, M03                Institution, programme
-                                                  and approval references
+---
 
-  M07                     M01, M15                Authorization, identity
-                                                  protection and audit
+Your module Dependency Required coordination
 
-  M07                     M05, M06, M08           Submission/admission
-                                                  verification interfaces
+---
 
-  M09                     M02, M03, M04, M08      Canonical records,
-                                                  approvals, policies and
-                                                  admissions
+M04 M02, M03 Institution, programme
+and approval references
 
-  M10                     M09                     Admission-level
-                                                  evaluation results
+M07 M01, M15 Authorization, identity
+protection and audit
 
-  M10                     M08                     Admission lifecycle
-                                                  snapshots
+M07 M05, M06, M08 Submission/admission
+verification interfaces
 
-  M11                     M10                     Findings and exception
-                                                  source references
+M09 M02, M03, M04, M08 Canonical records,
+approvals, policies and
+admissions
 
-  M11                     M05, M06, M08           Institutional responses
-                                                  and source records
+M10 M09 Admission-level
+evaluation results
 
-  M11                     M12                     AEP and review decision
-                                                  references
+M10 M08 Admission lifecycle
+snapshots
 
-  M13                     M05, M06, M09, M10,     Reporting data and
-                          M11, M12                access scope
+M11 M10 Findings and exception
+source references
 
-  M14                     M07 and other           Provider adapters and
-                          integration consumers   integration contracts
+M11 M05, M06, M08 Institutional responses
+and source records
 
-  All assigned modules    M01, M15                Authorization, privacy,
-                                                  audit and governance
-  -----------------------------------------------------------------------
+M11 M12 AEP and review decision
+references
+
+M13 M05, M06, M09, M10, Reporting data and
+M11, M12 access scope
+
+M14 M07 and other Provider adapters and
+integration consumers integration contracts
+
+All assigned modules M01, M15 Authorization, privacy,
+audit and governance
+-----------------------------------------------------------------------
 
 Do not access another module's internal implementation directly. Agree
 on service interfaces, API contracts and event contracts with the
@@ -263,38 +268,38 @@ relevant owner.
 
 ### Phase 0 --- Research and Requirements Validation
 
--   Research regulatory policy sources and applicability questions.
--   Research APAAR and other integration access requirements.
--   Identify provider API limitations and external dependencies.
--   Document unresolved assumptions and evidence requirements.
--   Do not assume public documentation means production API access
-    exists.
+- Research regulatory policy sources and applicability questions.
+- Research APAAR and other integration access requirements.
+- Identify provider API limitations and external dependencies.
+- Document unresolved assumptions and evidence requirements.
+- Do not assume public documentation means production API access
+  exists.
 
 ### Phase 1 --- Engineering Foundation
 
--   Review repository and module conventions.
--   Confirm backend service/worker, validation, API error, database,
-    migration, testing and logging conventions.
--   Prepare assigned module plans.
--   Do not establish a separate application architecture.
+- Review repository and module conventions.
+- Confirm backend service/worker, validation, API error, database,
+  migration, testing and logging conventions.
+- Prepare assigned module plans.
+- Do not establish a separate application architecture.
 
 ### Phase 2 --- Identity, Access and Security Foundation
 
--   Coordinate with M01 owners.
--   Define authorization and scope boundaries.
--   Identify sensitive data and processing purposes.
--   Integrate with approved authorization, audit and secure transaction
-    conventions.
--   Do not implement protected production workflows before the Phase 2
-    security gate passes.
+- Coordinate with M01 owners.
+- Define authorization and scope boundaries.
+- Identify sensitive data and processing purposes.
+- Integrate with approved authorization, audit and secure transaction
+  conventions.
+- Do not implement protected production workflows before the Phase 2
+  security gate passes.
 
 ### Phase 3 --- Institution, Programme and Approval Registry
 
--   Review M02/M03 contracts.
--   Define required policy and engine reference fields.
--   Validate approval/programme compatibility.
--   Coordinate integration requirements with Developer A.
--   Do not duplicate registry or approval management.
+- Review M02/M03 contracts.
+- Define required policy and engine reference fields.
+- Validate approval/programme compatibility.
+- Coordinate integration requirements with Developer A.
+- Do not duplicate registry or approval management.
 
 ### Phase 4 --- Regulatory Policy Registry
 
@@ -304,12 +309,12 @@ fixtures, review and activation workflow.
 
 ### Phase 5 --- Institution Submission and Ingestion
 
--   Define admission data contract needed by M07 and downstream
-    evaluation.
--   Validate identity verification handoff.
--   Coordinate ingestion and quarantine integration.
--   Define provider-independent verification outcomes.
--   Do not duplicate M05 or M06.
+- Define admission data contract needed by M07 and downstream
+  evaluation.
+- Validate identity verification handoff.
+- Coordinate ingestion and quarantine integration.
+- Define provider-independent verification outcomes.
+- Do not duplicate M05 or M06.
 
 ### Phase 6 --- Identity Gateway and Admission Ledger
 
@@ -385,23 +390,23 @@ Do not skip specification review.
 
 ## 7. Engineering restrictions
 
--   Do not implement regulatory calculations using AI.
--   Do not create a second admission ledger.
--   Do not duplicate approval or institution registry logic.
--   Do not bypass central authorization.
--   Do not access private repositories of other modules.
--   Do not silently change shared contracts.
--   Do not treat provider downtime as failed verification.
--   Do not treat an exception as a fraud verdict.
--   Do not issue AEP independently of approved evaluation results.
--   Do not expose student PII through dashboards or logs.
--   Do not claim production integrations without evidence.
--   Do not invent regulatory policy values.
--   Do not mark untested functionality as verified.
+- Do not implement regulatory calculations using AI.
+- Do not create a second admission ledger.
+- Do not duplicate approval or institution registry logic.
+- Do not bypass central authorization.
+- Do not access private repositories of other modules.
+- Do not silently change shared contracts.
+- Do not treat provider downtime as failed verification.
+- Do not treat an exception as a fraud verdict.
+- Do not issue AEP independently of approved evaluation results.
+- Do not expose student PII through dashboards or logs.
+- Do not claim production integrations without evidence.
+- Do not invent regulatory policy values.
+- Do not mark untested functionality as verified.
 
 ## 8. Module completion report
 
-``` text
+```text
 MODULE COMPLETION REPORT
 
 Developer: B

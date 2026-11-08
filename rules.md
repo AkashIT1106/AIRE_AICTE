@@ -30,16 +30,16 @@ the affected work and report the conflict.
 Before modifying code, read relevant documentation, including as
 applicable:
 
--   `docs/README.md`
--   `docs/00-governance/documentation-map.md`
--   `docs/00-governance/source-of-truth-policy.md`
--   Product requirements.
--   Module specification.
--   Domain rules and workflows.
--   Architecture and database specifications.
--   API contracts.
--   Security and privacy specifications.
--   Testing and acceptance criteria.
+- `docs/README.md`
+- `docs/00-governance/documentation-map.md`
+- `docs/00-governance/source-of-truth-policy.md`
+- Product requirements.
+- Module specification.
+- Domain rules and workflows.
+- Architecture and database specifications.
+- API contracts.
+- Security and privacy specifications.
+- Testing and acceptance criteria.
 
 Do not begin implementation based only on a short task description when
 a detailed specification exists.
@@ -79,7 +79,7 @@ Bypass defined service interfaces.
 
 ### Complete vertical ownership
 
-``` text
+```text
 Functional Module
     |
     +-- Frontend
@@ -124,16 +124,16 @@ reassignment requires explicit team approval.
 Before implementing a cross-module dependency, agree on a contract
 defining:
 
--   Purpose.
--   Input and output fields.
--   Validation requirements.
--   Error responses.
--   Authorization requirements.
--   Tenant and scope requirements.
--   Data ownership.
--   Versioning.
--   Expected failure behaviour.
--   Test cases.
+- Purpose.
+- Input and output fields.
+- Validation requirements.
+- Error responses.
+- Authorization requirements.
+- Tenant and scope requirements.
+- Data ownership.
+- Versioning.
+- Expected failure behaviour.
+- Test cases.
 
 Do not assume another module's internal database schema, directly import
 its private services, create duplicate models for the same concept,
@@ -147,15 +147,17 @@ documentation.
 
 Follow the documented AIRE technology baseline.
 
-  Layer                          Technology
-  ------------------------------ --------------------------------
-  Frontend                       React + TypeScript
-  Backend                        Node.js + Express + TypeScript
-  Database                       PostgreSQL
-  ORM                            Prisma
-  Background processing          Redis + BullMQ
-  Optional document AI service   Python + FastAPI
-  Deployment                     Docker-based infrastructure
+Layer Technology
+
+---
+
+Frontend React + TypeScript
+Backend Node.js + Express + TypeScript
+Database PostgreSQL
+ORM Prisma
+Background processing Redis + BullMQ
+Optional document AI service Python + FastAPI
+Deployment Docker-based infrastructure
 
 Engineering standards: - Use TypeScript consistently. - Avoid
 unnecessary `any`. - Prefer reusable components and services. - Separate
@@ -173,16 +175,16 @@ conventions.
 PostgreSQL is the authoritative business data store. Redis is not
 authoritative business storage.
 
--   Use Prisma according to approved architecture.
--   Use migrations for schema changes.
--   Do not manually modify production schema.
--   Preserve referential integrity and appropriate constraints.
--   Apply tenant isolation and PostgreSQL RLS to tenant-owned data as
-    specified.
--   Use secure transaction handling.
--   Preserve important historical records.
--   Make background processing idempotent.
--   Keep sensitive data out of unnecessary logs.
+- Use Prisma according to approved architecture.
+- Use migrations for schema changes.
+- Do not manually modify production schema.
+- Preserve referential integrity and appropriate constraints.
+- Apply tenant isolation and PostgreSQL RLS to tenant-owned data as
+  specified.
+- Use secure transaction handling.
+- Preserve important historical records.
+- Make background processing idempotent.
+- Keep sensitive data out of unnecessary logs.
 
 Before a schema change, review affected modules and data ownership,
 identify dependent queries/services, define and test a migration and
@@ -197,26 +199,26 @@ Security is implemented from the beginning.
 
 ### Authorization
 
--   Use centralized authentication and authorization.
--   Apply RBAC, ABAC and scope-based authorization as specified.
--   Use least privilege and default-deny behaviour.
--   Validate permissions on the backend.
--   Enforce tenant isolation at database level.
--   Do not trust frontend role checks.
--   Do not allow users to manipulate their own privileged scopes.
--   Apply purpose and field-level restrictions where required.
+- Use centralized authentication and authorization.
+- Apply RBAC, ABAC and scope-based authorization as specified.
+- Use least privilege and default-deny behaviour.
+- Validate permissions on the backend.
+- Enforce tenant isolation at database level.
+- Do not trust frontend role checks.
+- Do not allow users to manipulate their own privileged scopes.
+- Apply purpose and field-level restrictions where required.
 
 ### Privacy
 
--   Isolate raw student PII in the encrypted Identity Vault.
--   Use pseudonymous references for operational queries wherever
-    possible.
--   Avoid unnecessary personal-data collection.
--   Protect sensitive uploads and evidence.
--   Do not expose student identifiers through URLs, logs or error
-    messages.
--   Apply approved retention/deletion policies.
--   Audit sensitive data access.
+- Isolate raw student PII in the encrypted Identity Vault.
+- Use pseudonymous references for operational queries wherever
+  possible.
+- Avoid unnecessary personal-data collection.
+- Protect sensitive uploads and evidence.
+- Do not expose student identifiers through URLs, logs or error
+  messages.
+- Apply approved retention/deletion policies.
+- Audit sensitive data access.
 
 Test unauthorized access, cross-tenant access, privilege escalation,
 scope manipulation, session revocation, sensitive-field exposure,
@@ -254,16 +256,16 @@ authorised human review workflows.
 
 External integrations use provider adapters.
 
--   Validate actual provider access.
--   Use documented API contracts.
--   Use mock adapters when live access is unavailable.
--   Clearly label mock, sandbox and production environments.
--   Handle timeouts and provider unavailability.
--   Implement controlled retries.
--   Validate external response data.
--   Protect credentials.
--   Avoid sensitive payload logging.
--   Document provider limitations.
+- Validate actual provider access.
+- Use documented API contracts.
+- Use mock adapters when live access is unavailable.
+- Clearly label mock, sandbox and production environments.
+- Handle timeouts and provider unavailability.
+- Implement controlled retries.
+- Validate external response data.
+- Protect credentials.
+- Avoid sensitive payload logging.
+- Document provider limitations.
 
 Never claim production integration merely because a mock provider works.
 Public documentation does not establish that AIRE has authorised
@@ -273,33 +275,33 @@ production access.
 
 Every module owner is responsible for its module frontend.
 
--   Follow approved UX documentation.
--   Reuse shared design-system components.
--   Maintain consistent navigation and layout.
--   Support loading, empty, error and success states.
--   Validate forms.
--   Display backend validation errors clearly.
--   Enforce role-aware visibility.
--   Do not rely on frontend visibility as authorization.
--   Protect sensitive information in the UI.
--   Maintain accessible interactions.
--   Avoid duplicate components when a shared component exists.
+- Follow approved UX documentation.
+- Reuse shared design-system components.
+- Maintain consistent navigation and layout.
+- Support loading, empty, error and success states.
+- Validate forms.
+- Display backend validation errors clearly.
+- Enforce role-aware visibility.
+- Do not rely on frontend visibility as authorization.
+- Protect sensitive information in the UI.
+- Maintain accessible interactions.
+- Avoid duplicate components when a shared component exists.
 
 Do not create a different visual language for each module.
 
 ## 12. Backend and API rules
 
--   Follow documented API conventions.
--   Validate every untrusted request.
--   Apply authentication and authorization.
--   Use consistent response formats and correct HTTP status codes.
--   Keep business logic in appropriate domain services.
--   Handle errors explicitly.
--   Avoid leaking stack traces or sensitive data.
--   Apply pagination to large result sets where required.
--   Use idempotency for retryable operations.
--   Document API changes.
--   Test successful and unsuccessful requests.
+- Follow documented API conventions.
+- Validate every untrusted request.
+- Apply authentication and authorization.
+- Use consistent response formats and correct HTTP status codes.
+- Keep business logic in appropriate domain services.
+- Handle errors explicitly.
+- Avoid leaking stack traces or sensitive data.
+- Apply pagination to large result sets where required.
+- Use idempotency for retryable operations.
+- Document API changes.
+- Test successful and unsuccessful requests.
 
 Frontend validation never replaces backend validation.
 
@@ -308,7 +310,7 @@ Frontend validation never replaces backend validation.
 Follow the repository's existing branch strategy. If the team adopts
 feature branches, descriptive examples include:
 
-``` text
+```text
 feature/developer-a/M02-institution-registry
 feature/developer-a/M06-data-ingestion
 feature/developer-b/M04-policy-registry
@@ -365,7 +367,7 @@ works. Record known test gaps.
 Follow Phase 0 through Phase 12 in the approved roadmap. Do not skip
 phases or silently combine them.
 
-``` text
+```text
 1. Read phase requirements
         |
 2. Identify assigned module tasks
@@ -403,11 +405,13 @@ reported. May we proceed to Phase N+1?"**
 
 Approved responses:
 
-  Response                     Meaning
-  ---------------------------- --------------------------------------
-  `APPROVE PHASE N`            Phase accepted; next phase may begin
-  `HOLD PHASE N`               Stop and wait
-  `CHANGES REQUIRED PHASE N`   Fix issues and repeat validation
+Response Meaning
+
+---
+
+`APPROVE PHASE N` Phase accepted; next phase may begin
+`HOLD PHASE N` Stop and wait
+`CHANGES REQUIRED PHASE N` Fix issues and repeat validation
 
 Silence is not approval. A successful build is not approval. A
 developer's self-assessment is not final approval. An AI coding agent
@@ -417,7 +421,7 @@ relevant tests and resubmit.
 
 ## 16. Phase completion report
 
-``` text
+```text
 AIRE — PHASE COMPLETION REPORT
 
 Phase Number:

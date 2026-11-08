@@ -25,10 +25,12 @@ Implementing Phase 3 establishes the foundation for Developer A's core domain mo
 ## Capabilities
 
 ### New Capabilities
+
 - `institution-registry`: Authoritative lifecycle management for institutions, campuses, academic programmes, and programme aliases.
 - `approval-entitlement-registry`: Management of annual AICTE approval orders (EOA/LOA) and granular seat entitlements (sanctioned intake, reservation breakdown).
 
 ### Modified Capabilities
+
 <!-- No existing OpenSpec capabilities to modify -->
 
 ## Impact

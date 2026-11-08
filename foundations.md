@@ -47,42 +47,45 @@ verification evidence, and human-reviewed exceptions and decisions.
 
 ## 3. Documentation hierarchy
 
-  -----------------------------------------------------------------------------------------
-  Document/location                                     Purpose
-  ----------------------------------------------------- -----------------------------------
-  `docs/README.md`                                      Documentation portal
+---
 
-  `docs/00-governance/documentation-map.md`             Documentation navigation
+Document/location Purpose
 
-  `docs/00-governance/source-of-truth-policy.md`        Source-of-truth rules
+---
 
-  `docs/00-governance/requirements-traceability.md`     Requirements traceability
+`docs/README.md` Documentation portal
 
-  `docs/00-governance/decisions/decision-register.md`   Architecture and UX decisions
+`docs/00-governance/documentation-map.md` Documentation navigation
 
-  `docs/01-product/`                                    Product requirements and scope
+`docs/00-governance/source-of-truth-policy.md` Source-of-truth rules
 
-  `docs/02-experience/`                                 UX and experience specifications
+`docs/00-governance/requirements-traceability.md` Requirements traceability
 
-  `docs/03-architecture/`                               Architecture and technology
-                                                        decisions
+`docs/00-governance/decisions/decision-register.md` Architecture and UX decisions
 
-  `docs/04-domain/`                                     Domain models, rules and workflows
+`docs/01-product/` Product requirements and scope
 
-  `docs/05-security-privacy/`                           Security and privacy specifications
+`docs/02-experience/` UX and experience specifications
 
-  `docs/06-data/`                                       Data architecture and lifecycle
+`docs/03-architecture/` Architecture and technology
+decisions
 
-  `docs/07-api-integrations/`                           API and integration contracts
+`docs/04-domain/` Domain models, rules and workflows
 
-  `docs/08-engineering/`                                Coding standards, testing and
-                                                        repository rules
+`docs/05-security-privacy/` Security and privacy specifications
 
-  `docs/09-delivery/`                                   Roadmap, milestones and acceptance
-                                                        criteria
+`docs/06-data/` Data architecture and lifecycle
 
-  `docs/10-reference/`                                  Research and source references
-  -----------------------------------------------------------------------------------------
+`docs/07-api-integrations/` API and integration contracts
+
+`docs/08-engineering/` Coding standards, testing and
+repository rules
+
+`docs/09-delivery/` Roadmap, milestones and acceptance
+criteria
+
+`docs/10-reference/` Research and source references
+-----------------------------------------------------------------------------------------
 
 The modular documents under `docs/` are authoritative for ongoing
 implementation. `PROJECT_PLAN.md` is an executive baseline and
@@ -100,15 +103,17 @@ unless an architecture decision explicitly approves them.
 
 ### Technology baseline
 
-  Layer                          Technology
-  ------------------------------ --------------------------------
-  Frontend                       React + TypeScript
-  Backend                        Node.js + Express + TypeScript
-  Database                       PostgreSQL
-  ORM                            Prisma
-  Background processing          Redis + BullMQ
-  Optional document AI service   Python + FastAPI
-  Deployment                     Docker-based infrastructure
+Layer Technology
+
+---
+
+Frontend React + TypeScript
+Backend Node.js + Express + TypeScript
+Database PostgreSQL
+ORM Prisma
+Background processing Redis + BullMQ
+Optional document AI service Python + FastAPI
+Deployment Docker-based infrastructure
 
 Do not replace frameworks, databases or major libraries without checking
 the technology decisions and obtaining approval.
@@ -125,79 +130,82 @@ convention.
 
 ## 5. Functional module catalogue
 
-  ------------------------------------------------------------------------
-  Module                  Name                    Primary responsibility
-  ----------------------- ----------------------- ------------------------
-  M01                     Identity,               Authentication, users,
-                          Authentication and      roles, permissions,
-                          Access Management       memberships, scopes and
-                                                  sessions
+---
 
-  M02                     Institution and         Institutions, campuses,
-                          Programme Registry      programmes, aliases and
-                                                  canonical references
+Module Name Primary responsibility
 
-  M03                     Approval and Seat       Approval orders,
-                          Entitlement Registry    amendments, effective
-                                                  periods and
-                                                  programme-level
-                                                  entitlements
+---
 
-  M04                     Regulatory Policy and   Versioned policies, rule
-                          Rule Registry           schemas, applicability,
-                                                  review and activation
+M01 Identity, Authentication, users,
+Authentication and roles, permissions,
+Access Management memberships, scopes and
+sessions
 
-  M05                     Institution Onboarding  Institution onboarding,
-                          and Admission           assignments, secure
-                          Submission              submissions and upload
-                                                  workflows
+M02 Institution and Institutions, campuses,
+Programme Registry programmes, aliases and
+canonical references
 
-  M06                     Data Ingestion and      File parsing, mapping,
-                          Normalisation           validation, quarantine
-                                                  and batch processing
+M03 Approval and Seat Approval orders,
+Entitlement Registry amendments, effective
+periods and
+programme-level
+entitlements
 
-  M07                     APAAR Identity          Provider-adapter-based
-                          Verification Gateway    identity verification
-                                                  and verification status
+M04 Regulatory Policy and Versioned policies, rule
+Rule Registry schemas, applicability,
+review and activation
 
-  M08                     Admission Lifecycle and Append-only admission
-                          Record Ledger           events, corrections,
-                                                  withdrawals and
-                                                  cancellations
+M05 Institution Onboarding Institution onboarding,
+and Admission assignments, secure
+Submission submissions and upload
+workflows
 
-  M09                     Admission Entitlement   Deterministic
-                          Engine                  admission-level approval
-                                                  and policy evaluation
+M06 Data Ingestion and File parsing, mapping,
+Normalisation validation, quarantine
+and batch processing
 
-  M10                     Cohort Reconciliation   Cohort-level
-                          Engine                  reconciliation,
-                                                  findings, snapshots and
-                                                  historical replay
+M07 APAAR Identity Provider-adapter-based
+Verification Gateway identity verification
+and verification status
 
-  M11                     Exception and Human     Exceptions, reviewer
-                          Review Workbench        assignments, evidence,
-                                                  institutional responses
-                                                  and decisions
+M08 Admission Lifecycle and Append-only admission
+Record Ledger events, corrections,
+withdrawals and
+cancellations
 
-  M12                     Verifiable Student      Verifiable records and
-                          Records and AEP         Admission Entitlement
-                          Issuance                Proof artefacts
+M09 Admission Entitlement Deterministic
+Engine admission-level approval
+and policy evaluation
 
-  M13                     Dashboards, Reports and Role-specific
-                          Analytics               dashboards, privacy-safe
-                                                  reporting and controlled
-                                                  exports
+M10 Cohort Reconciliation Cohort-level
+Engine reconciliation,
+findings, snapshots and
+historical replay
 
-  M14                     Integration Hub         External-system
-                                                  adapters, API contracts,
-                                                  retries and integration
-                                                  monitoring
+M11 Exception and Human Exceptions, reviewer
+Review Workbench assignments, evidence,
+institutional responses
+and decisions
 
-  M15                     Privacy, Security and   Cross-cutting privacy,
-                          Governance              security, audit,
-                                                  retention and governance
-                                                  controls
-  ------------------------------------------------------------------------
+M12 Verifiable Student Verifiable records and
+Records and AEP Admission Entitlement
+Issuance Proof artefacts
+
+M13 Dashboards, Reports and Role-specific
+Analytics dashboards, privacy-safe
+reporting and controlled
+exports
+
+M14 Integration Hub External-system
+adapters, API contracts,
+retries and integration
+monitoring
+
+M15 Privacy, Security and Cross-cutting privacy,
+Governance security, audit,
+retention and governance
+controls
+------------------------------------------------------------------------
 
 ## 6. Proposed developer ownership
 
@@ -207,29 +215,29 @@ prescribe developer ownership.
 
 ### Developer A --- Institutional data and admission lifecycle
 
--   M02 --- Institution and Programme Registry
--   M03 --- Approval and Seat Entitlement Registry
--   M05 --- Institution Onboarding and Admission Submission
--   M06 --- Data Ingestion and Normalisation
--   M08 --- Admission Lifecycle and Record Ledger
--   M12 --- Verifiable Student Records and AEP Issuance
+- M02 --- Institution and Programme Registry
+- M03 --- Approval and Seat Entitlement Registry
+- M05 --- Institution Onboarding and Admission Submission
+- M06 --- Data Ingestion and Normalisation
+- M08 --- Admission Lifecycle and Record Ledger
+- M12 --- Verifiable Student Records and AEP Issuance
 
 ### Developer B --- Regulatory evaluation and review
 
--   M04 --- Regulatory Policy and Rule Registry
--   M07 --- APAAR Identity Verification Gateway
--   M09 --- Admission Entitlement Engine
--   M10 --- Cohort Reconciliation Engine
--   M11 --- Exception and Human Review Workbench
--   M13 --- Dashboards, Reports and Analytics
--   M14 --- Integration Hub
+- M04 --- Regulatory Policy and Rule Registry
+- M07 --- APAAR Identity Verification Gateway
+- M09 --- Admission Entitlement Engine
+- M10 --- Cohort Reconciliation Engine
+- M11 --- Exception and Human Review Workbench
+- M13 --- Dashboards, Reports and Analytics
+- M14 --- Integration Hub
 
 ### Shared ownership
 
--   M01 --- Identity, Authentication and Access Management
--   M15 --- Privacy, Security and Governance
--   Repository foundation, shared contracts, database conventions,
-    CI/CD, deployment and integration testing.
+- M01 --- Identity, Authentication and Access Management
+- M15 --- Privacy, Security and Governance
+- Repository foundation, shared contracts, database conventions,
+  CI/CD, deployment and integration testing.
 
 ### Ownership rules
 
@@ -257,21 +265,21 @@ integration points and controlled transaction boundaries.
 
 Key relationships:
 
--   M01 provides authentication and authorization capabilities.
--   M02 provides canonical institution, campus and programme references.
--   M03 provides approval and entitlement information.
--   M04 provides applicable regulatory policy versions and rules.
--   M05 and M06 handle submission and ingestion.
--   M07 provides identity verification outcomes.
--   M08 preserves admission lifecycle chronology.
--   M09 evaluates individual admission entitlement.
--   M10 performs cohort reconciliation and replay.
--   M11 manages human review and exception resolution.
--   M12 produces verifiable record and AEP artefacts.
--   M13 presents authorised reporting.
--   M14 provides external integration capabilities.
--   M15 provides cross-cutting security, privacy and governance
-    requirements.
+- M01 provides authentication and authorization capabilities.
+- M02 provides canonical institution, campus and programme references.
+- M03 provides approval and entitlement information.
+- M04 provides applicable regulatory policy versions and rules.
+- M05 and M06 handle submission and ingestion.
+- M07 provides identity verification outcomes.
+- M08 preserves admission lifecycle chronology.
+- M09 evaluates individual admission entitlement.
+- M10 performs cohort reconciliation and replay.
+- M11 manages human review and exception resolution.
+- M12 produces verifiable record and AEP artefacts.
+- M13 presents authorised reporting.
+- M14 provides external integration capabilities.
+- M15 provides cross-cutting security, privacy and governance
+  requirements.
 
 The actual dependency graph and interface details must follow the
 modular specifications and approved architecture.
@@ -411,57 +419,60 @@ register.
 This is a proposed task allocation, not a replacement for the approved
 module dependencies.
 
-  -----------------------------------------------------------------------------
-  Phase             Developer A          Developer B       Shared
-  ----------------- -------------------- ----------------- --------------------
-  0                 Research             Research rules,   Requirements and
-                    institutional data   identity and      scope
-                    and workflows        integrations      
+---
 
-  1                 Module-ready         Module-ready      Repository, DB, CI
-                    frontend/backend     backend/worker    and testing
-                    conventions          conventions       
+Phase Developer A Developer B Shared
 
-  2                 Integrate modules    Integrate modules M01 and M15
-                    with IAM contracts   with IAM          foundation
-                                         contracts         
+---
 
-  3                 M02 and M03          Review            Shared contracts
-                                         policy/engine     
-                                         dependencies      
+0 Research Research rules, Requirements and
+institutional data identity and scope
+and workflows integrations
 
-  4                 Approval data        M04               Policy-to-approval
-                    compatibility                          contract
+1 Module-ready Module-ready Repository, DB, CI
+frontend/backend backend/worker and testing
+conventions conventions
 
-  5                 M05 and M06          Ingestion         End-to-end upload
-                                         integration       
-                                         support           
+2 Integrate modules Integrate modules M01 and M15
+with IAM contracts with IAM foundation
+contracts
 
-  6                 M08                  M07               Identity/admission
-                                                           event contracts
+3 M02 and M03 Review Shared contracts
+policy/engine  
+dependencies
 
-  7                 Provide registry,    M09 and M10       End-to-end
-                    submission and                         evaluation
-                    ledger integration                     
+4 Approval data M04 Policy-to-approval
+compatibility contract
 
-  8                 Institution-facing   M11               Exception workflow
-                    response integration                   
+5 M05 and M06 Ingestion End-to-end upload
+integration  
+support
 
-  9                 M12                  M13 and           Role-specific E2E
-                                         verification      tests
-                                         integration       
+6 M08 M07 Identity/admission
+event contracts
 
-  10                Assigned data        M14 and provider  Integration
-                    integration support  adapters          validation
+7 Provide registry, M09 and M10 End-to-end
+submission and evaluation
+ledger integration
 
-  11                Security testing for Security testing  M15 and system-wide
-                    assigned modules     for assigned      audit
-                                         modules           
+8 Institution-facing M11 Exception workflow
+response integration
 
-  12                Demonstrate assigned Demonstrate       Complete
-                    workflows            assigned          demonstration
-                                         workflows         
-  -----------------------------------------------------------------------------
+9 M12 M13 and Role-specific E2E
+verification tests
+integration
+
+10 Assigned data M14 and provider Integration
+integration support adapters validation
+
+11 Security testing for Security testing M15 and system-wide
+assigned modules for assigned audit
+modules
+
+12 Demonstrate assigned Demonstrate Complete
+workflows assigned demonstration
+workflows
+-----------------------------------------------------------------------------
 
 ## 10. Vertical-slice development strategy
 
@@ -492,7 +503,7 @@ Integrate and test each slice before expanding it.
 
 Every phase ends with a formal approval checkpoint.
 
-``` text
+```text
 NOT_STARTED
     |
     v
@@ -528,9 +539,9 @@ At the end of every phase:
 
 Approved responses:
 
--   `APPROVE PHASE N` --- accept the phase and authorise the next phase.
--   `HOLD PHASE N` --- stop and wait.
--   `CHANGES REQUIRED PHASE N` --- fix issues and repeat validation.
+- `APPROVE PHASE N` --- accept the phase and authorise the next phase.
+- `HOLD PHASE N` --- stop and wait.
+- `CHANGES REQUIRED PHASE N` --- fix issues and repeat validation.
 
 Never infer approval from silence, a successful build or an agent's
 claim of completion. A coding agent must not approve its own work.
@@ -539,12 +550,12 @@ claim of completion. A coding agent must not approve its own work.
 
 Maintain `docs/09-delivery/DEVELOPMENT_STATUS.md` with:
 
--   Current phase and phase status.
--   Developer A, Developer B and shared module status.
--   Completed tasks and failed tests.
--   Open blockers and integration status.
--   Documentation status.
--   Approval status and approved next phase.
+- Current phase and phase status.
+- Developer A, Developer B and shared module status.
+- Completed tasks and failed tests.
+- Open blockers and integration status.
+- Documentation status.
+- Approval status and approved next phase.
 
 Do not start the next phase while the current phase awaits approval.
 
@@ -553,19 +564,19 @@ Do not start the next phase while the current phase awaits approval.
 A module or feature is complete only when applicable conditions are
 satisfied:
 
--   Requirements and user journey documented.
--   Role/permission matrix and scope requirements reviewed.
--   Privacy classification completed.
--   Database model reviewed and migrations applied.
--   RLS implemented where applicable.
--   Backend validation and authorization implemented.
--   Frontend workflow implemented.
--   API contract and error states documented.
--   Audit events implemented.
--   Unit, integration, tenant-isolation, privacy and applicable E2E
-    tests pass.
--   Documentation updated and code reviewed.
--   Acceptance criteria verified.
+- Requirements and user journey documented.
+- Role/permission matrix and scope requirements reviewed.
+- Privacy classification completed.
+- Database model reviewed and migrations applied.
+- RLS implemented where applicable.
+- Backend validation and authorization implemented.
+- Frontend workflow implemented.
+- API contract and error states documented.
+- Audit events implemented.
+- Unit, integration, tenant-isolation, privacy and applicable E2E
+  tests pass.
+- Documentation updated and code reviewed.
+- Acceptance criteria verified.
 
 A working screen or API alone is not a completed feature.
 

@@ -213,7 +213,8 @@ approvalRegistryRouter.get(
   async (req: Request, res: Response): Promise<void> => {
     try {
       const userId = req.user!.id;
-      const platformRoles = await AuthorizationService.getActivePlatformRoles(userId);
+      const platformRoles =
+        await AuthorizationService.getActivePlatformRoles(userId);
       const isPlatformAdmin = platformRoles.some(
         (r) =>
           r === UserRole.SUPER_ADMIN ||
@@ -224,7 +225,8 @@ approvalRegistryRouter.get(
       let institutionId = req.query.institutionId as string | undefined;
       if (!isPlatformAdmin) {
         // Enforce institution operator context
-        const memberships = await AuthorizationService.getUserMemberships(userId);
+        const memberships =
+          await AuthorizationService.getUserMemberships(userId);
         if (memberships.length === 0) {
           res.status(403).json({
             data: null,
@@ -343,7 +345,8 @@ approvalRegistryRouter.post(
           data: null,
           error: {
             code: ErrorCode.VALIDATION_ERROR,
-            message: "Approval order must include at least one seat entitlement",
+            message:
+              "Approval order must include at least one seat entitlement",
             correlationId: req.correlationId,
           },
         };

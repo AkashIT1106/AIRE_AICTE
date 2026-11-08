@@ -298,9 +298,17 @@ export class InstitutionRegistryService {
   static async matchProgrammeAlias(
     rawTitle: string,
     institutionId?: string,
-  ): Promise<{ programme: ProgrammeDto | null; confidence: number; matchedBy: "EXACT" | "ALIAS" | "NONE" }> {
+  ): Promise<{
+    programme: ProgrammeDto | null;
+    confidence: number;
+    matchedBy: "EXACT" | "ALIAS" | "NONE";
+  }> {
     const prisma = getPrismaClient();
-    const normalised = rawTitle.toLowerCase().replace(/[^a-z0-9]/g, " ").replace(/\s+/g, " ").trim();
+    const normalised = rawTitle
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
 
     // 1. Direct exact name match on canonical programme
     const exactProg = await prisma.programme.findFirst({
@@ -333,10 +341,7 @@ export class InstitutionRegistryService {
     // 2. Check registered programme aliases
     const aliasWhere: any = { normalisedTitle: normalised };
     if (institutionId) {
-      aliasWhere.OR = [
-        { institutionId },
-        { institutionId: null },
-      ];
+      aliasWhere.OR = [{ institutionId }, { institutionId: null }];
     }
 
     const alias = await prisma.programmeAlias.findFirst({
@@ -376,7 +381,11 @@ export class InstitutionRegistryService {
     const prisma = getPrismaClient();
     const normalised =
       input.normalisedTitle ||
-      input.rawTitle.toLowerCase().replace(/[^a-z0-9]/g, " ").replace(/\s+/g, " ").trim();
+      input.rawTitle
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
 
     const alias = await prisma.programmeAlias.create({
       data: {

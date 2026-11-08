@@ -18,7 +18,8 @@ institutionRegistryRouter.get(
   async (req: Request, res: Response): Promise<void> => {
     try {
       const institutionId = req.params.institutionId as string;
-      const institution = await InstitutionRegistryService.getInstitution(institutionId);
+      const institution =
+        await InstitutionRegistryService.getInstitution(institutionId);
 
       if (!institution) {
         const response: ApiResponse<null> = {
@@ -119,7 +120,8 @@ institutionRegistryRouter.get(
   async (req: Request, res: Response): Promise<void> => {
     try {
       const institutionId = req.params.institutionId as string;
-      const campuses = await InstitutionRegistryService.listCampuses(institutionId);
+      const campuses =
+        await InstitutionRegistryService.listCampuses(institutionId);
 
       const response: ApiResponse<typeof campuses> = {
         data: campuses,

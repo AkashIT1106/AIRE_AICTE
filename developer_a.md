@@ -21,14 +21,16 @@ specifications exist.
 
 ## 2. Assigned modules
 
-  Module   Name                                              Priority
-  -------- ------------------------------------------------- ----------
-  M02      Institution and Programme Registry                Core
-  M03      Approval and Seat Entitlement Registry            Core
-  M05      Institution Onboarding and Admission Submission   Core
-  M06      Data Ingestion and Normalisation                  Core
-  M08      Admission Lifecycle and Record Ledger             Core
-  M12      Verifiable Student Records and AEP Issuance       Core
+Module Name Priority
+
+---
+
+M02 Institution and Programme Registry Core
+M03 Approval and Seat Entitlement Registry Core
+M05 Institution Onboarding and Admission Submission Core
+M06 Data Ingestion and Normalisation Core
+M08 Admission Lifecycle and Record Ledger Core
+M12 Verifiable Student Records and AEP Issuance Core
 
 These are complete vertical module responsibilities.
 
@@ -183,21 +185,23 @@ specified.
 
 ## 4. Cross-module dependencies
 
-  Your module   Dependency   Required coordination
-  ------------- ------------ -------------------------------------------------
-  M02           M01          Access and scope authorization
-  M03           M02          Institution, campus and programme references
-  M03           M04          Approval and policy applicability compatibility
-  M05           M01          Authentication, membership and scope
-  M05           M06          Submission-to-ingestion contract
-  M06           M08          Normalised admission record contract
-  M06           M07          Identity verification handoff
-  M08           M07          Verification reference and status
-  M08           M09          Admission data contract for evaluation
-  M12           M09          Admission evaluation output
-  M12           M10          Cohort reconciliation and findings references
-  M12           M11          Authorised decision and review references
-  M12           M15          Privacy, audit and governance controls
+Your module Dependency Required coordination
+
+---
+
+M02 M01 Access and scope authorization
+M03 M02 Institution, campus and programme references
+M03 M04 Approval and policy applicability compatibility
+M05 M01 Authentication, membership and scope
+M05 M06 Submission-to-ingestion contract
+M06 M08 Normalised admission record contract
+M06 M07 Identity verification handoff
+M08 M07 Verification reference and status
+M08 M09 Admission data contract for evaluation
+M12 M09 Admission evaluation output
+M12 M10 Cohort reconciliation and findings references
+M12 M11 Authorised decision and review references
+M12 M15 Privacy, audit and governance controls
 
 Do not assume a dependency's internal implementation. Agree on its
 interface and contract with its owner.
@@ -206,31 +210,31 @@ interface and contract with its owner.
 
 ### Phase 0 --- Research and Requirements Validation
 
--   Understand institutional registry requirements.
--   Research approval and entitlement source data.
--   Understand institution admission submission formats.
--   Identify data-quality challenges and unresolved assumptions.
--   Document questions and evidence requirements.
--   Do not implement unconfirmed regulatory assumptions.
+- Understand institutional registry requirements.
+- Research approval and entitlement source data.
+- Understand institution admission submission formats.
+- Identify data-quality challenges and unresolved assumptions.
+- Document questions and evidence requirements.
+- Do not implement unconfirmed regulatory assumptions.
 
 ### Phase 1 --- Engineering Foundation
 
--   Review repository structure and module conventions.
--   Confirm database/migration, validation, testing, API and
-    error-response conventions.
--   Prepare assigned module implementation plans.
--   Do not create a separate application architecture.
+- Review repository structure and module conventions.
+- Confirm database/migration, validation, testing, API and
+  error-response conventions.
+- Prepare assigned module implementation plans.
+- Do not create a separate application architecture.
 
 ### Phase 2 --- Identity, Access and Security Foundation
 
--   Coordinate with M01 owners.
--   Define authorization requirements and institution/programme scope
-    boundaries.
--   Identify sensitive data handled by assigned modules.
--   Verify protected operations use centralized authorization.
--   Integrate with approved secure transaction and RLS approach.
--   Do not build institution-sensitive production workflows before the
-    Phase 2 security gate passes.
+- Coordinate with M01 owners.
+- Define authorization requirements and institution/programme scope
+  boundaries.
+- Identify sensitive data handled by assigned modules.
+- Verify protected operations use centralized authorization.
+- Integrate with approved secure transaction and RLS approach.
+- Do not build institution-sensitive production workflows before the
+  Phase 2 security gate passes.
 
 ### Phase 3 --- Institution, Programme and Approval Registry
 
@@ -239,11 +243,11 @@ Coordinate contracts with Developer B's policy and evaluation modules.
 
 ### Phase 4 --- Regulatory Policy Registry
 
--   Review how M04 selects applicable approval and programme references.
--   Validate compatibility between approval records and policy
-    applicability.
--   Provide documented contract feedback.
--   Do not duplicate M04's policy engine.
+- Review how M04 selects applicable approval and programme references.
+- Validate compatibility between approval records and policy
+  applicability.
+- Provide documented contract feedback.
+- Do not duplicate M04's policy engine.
 
 ### Phase 5 --- Institution Submission and Ingestion
 
@@ -319,23 +323,23 @@ Do not skip specification review.
 
 ## 7. Repository and collaboration rules
 
--   Work within assigned module boundaries unless a shared task is
-    agreed.
--   Do not modify Developer B's module internals without coordination.
--   Do not duplicate shared services.
--   Do not create alternative authorization systems.
--   Do not create conflicting database models.
--   Do not modify shared API contracts unilaterally.
--   Do not commit secrets or real student data.
--   Follow the repository's branch and commit conventions.
--   Keep commits focused and descriptive.
--   Notify Developer B when a contract or dependency changes.
--   Update shared documentation when an approved change affects
-    architecture.
+- Work within assigned module boundaries unless a shared task is
+  agreed.
+- Do not modify Developer B's module internals without coordination.
+- Do not duplicate shared services.
+- Do not create alternative authorization systems.
+- Do not create conflicting database models.
+- Do not modify shared API contracts unilaterally.
+- Do not commit secrets or real student data.
+- Follow the repository's branch and commit conventions.
+- Keep commits focused and descriptive.
+- Notify Developer B when a contract or dependency changes.
+- Update shared documentation when an approved change affects
+  architecture.
 
 ## 8. Module completion report
 
-``` text
+```text
 MODULE COMPLETION REPORT
 
 Developer: A

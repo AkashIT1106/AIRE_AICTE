@@ -154,7 +154,10 @@ export const campusInputSchema = z.object({
     .string()
     .min(2, "Campus code must be at least 2 characters")
     .max(50)
-    .regex(/^[A-Z0-9_-]+$/, "Campus code must be uppercase alphanumeric, dashes, or underscores"),
+    .regex(
+      /^[A-Z0-9_-]+$/,
+      "Campus code must be uppercase alphanumeric, dashes, or underscores",
+    ),
   name: z.string().min(2).max(200),
   address: z.string().max(255).optional(),
   state: z.string().min(2).max(100).optional(),
@@ -173,7 +176,10 @@ export const programmeInputSchema = z.object({
     .string()
     .min(2)
     .max(50)
-    .regex(/^[A-Z0-9_-]+$/, "Canonical code must be uppercase alphanumeric, dashes, or underscores"),
+    .regex(
+      /^[A-Z0-9_-]+$/,
+      "Canonical code must be uppercase alphanumeric, dashes, or underscores",
+    ),
   name: z.string().min(2).max(200),
   degreeLevel: z.enum(DEGREE_LEVELS),
   discipline: z.string().min(2).max(100),
@@ -193,7 +199,10 @@ export const approvalOrderInputSchema = z.object({
   institutionId: z.string().uuid(),
   academicYear: z
     .string()
-    .regex(/^\d{4}-\d{2,4}$/, "Academic year must be format YYYY-YY or YYYY-YYYY"),
+    .regex(
+      /^\d{4}-\d{2,4}$/,
+      "Academic year must be format YYYY-YY or YYYY-YYYY",
+    ),
   orderNumber: z.string().min(3).max(100),
   orderType: z.enum(["EOA", "LOA"]).default("EOA"),
   issueDate: z.coerce.date().default(() => new Date()),
@@ -206,7 +215,10 @@ export const seatEntitlementInputSchema = z
     approvalOrderId: z.string().uuid(),
     programmeId: z.string().uuid(),
     campusId: z.string().uuid().optional(),
-    sanctionedIntake: z.coerce.number().int().min(0, "Sanctioned intake must be non-negative"),
+    sanctionedIntake: z.coerce
+      .number()
+      .int()
+      .min(0, "Sanctioned intake must be non-negative"),
     openSeats: z.coerce.number().int().min(0).default(0),
     scSeats: z.coerce.number().int().min(0).default(0),
     stSeats: z.coerce.number().int().min(0).default(0),
@@ -218,7 +230,11 @@ export const seatEntitlementInputSchema = z
   .refine(
     (data) => {
       const categorySum =
-        data.openSeats + data.scSeats + data.stSeats + data.obcSeats + data.ewsSeats;
+        data.openSeats +
+        data.scSeats +
+        data.stSeats +
+        data.obcSeats +
+        data.ewsSeats;
       return categorySum <= data.sanctionedIntake;
     },
     {

@@ -88,18 +88,27 @@ async function main() {
   for (const prog of canonicalProgrammes) {
     const existing = await prisma.programme.upsert({
       where: { canonicalCode: prog.canonicalCode },
-      update: { name: prog.name, degreeLevel: prog.degreeLevel, discipline: prog.discipline },
+      update: {
+        name: prog.name,
+        degreeLevel: prog.degreeLevel,
+        discipline: prog.discipline,
+      },
       create: prog,
     });
     seededProgrammes[prog.canonicalCode] = existing;
   }
-  console.log(`Seeded ${canonicalProgrammes.length} canonical AICTE programmes.`);
+  console.log(
+    `Seeded ${canonicalProgrammes.length} canonical AICTE programmes.`,
+  );
 
   // Seed programme aliases
   const cseProg = seededProgrammes["UG-CSE-101"];
   if (cseProg) {
     const aliases = [
-      { rawTitle: "Computer Science & Engineering", normalisedTitle: "computer science and engineering" },
+      {
+        rawTitle: "Computer Science & Engineering",
+        normalisedTitle: "computer science and engineering",
+      },
       { rawTitle: "CSE", normalisedTitle: "cse" },
       { rawTitle: "B.Tech CSE", normalisedTitle: "b tech cse" },
     ];
@@ -210,7 +219,9 @@ async function main() {
       },
     });
   }
-  console.log(`Seeded AICTE approval order ${approvalOrder.orderNumber} with seat entitlements.`);
+  console.log(
+    `Seeded AICTE approval order ${approvalOrder.orderNumber} with seat entitlements.`,
+  );
 
   // 2. Helper to upsert user with credentials in Better Auth account table
   async function ensureUser(email: string, name: string, role: string) {

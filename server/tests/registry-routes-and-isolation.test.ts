@@ -60,7 +60,10 @@ describe("Phase 3: Registry Endpoints, Multi-Tenant Authorization & PostgreSQL R
     progId = prog.id;
 
     // Helper to register user
-    async function registerUser(email: string, name: string): Promise<[string, string[]]> {
+    async function registerUser(
+      email: string,
+      name: string,
+    ): Promise<[string, string[]]> {
       const res = await request(app).post("/api/auth/sign-up/email").send({
         email,
         password: "Password123!Secure",

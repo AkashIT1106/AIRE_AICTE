@@ -9,9 +9,7 @@ export class ApprovalRegistryService {
    */
   static async createApprovalOrder(
     input: ApprovalOrderInput,
-    entitlements: Array<
-      Omit<SeatEntitlementInput, "approvalOrderId">
-    >,
+    entitlements: Array<Omit<SeatEntitlementInput, "approvalOrderId">>,
     context: { actorId?: string; correlationId: string },
   ): Promise<ApprovalOrderDto> {
     const prisma = getPrismaClient();
@@ -147,9 +145,7 @@ export class ApprovalRegistryService {
   static async supersedeApprovalOrder(
     currentOrderId: string,
     newOrderInput: ApprovalOrderInput,
-    newEntitlements: Array<
-      Omit<SeatEntitlementInput, "approvalOrderId">
-    >,
+    newEntitlements: Array<Omit<SeatEntitlementInput, "approvalOrderId">>,
     context: { actorId?: string; correlationId: string },
   ): Promise<ApprovalOrderDto> {
     const prisma = getPrismaClient();
@@ -159,11 +155,15 @@ export class ApprovalRegistryService {
     });
 
     if (!currentOrder) {
-      throw new Error(`APPROVAL_ORDER_NOT_FOUND: Order ${currentOrderId} does not exist`);
+      throw new Error(
+        `APPROVAL_ORDER_NOT_FOUND: Order ${currentOrderId} does not exist`,
+      );
     }
 
     if (currentOrder.status === "SUPERSEDED") {
-      throw new Error(`APPROVAL_ORDER_ALREADY_SUPERSEDED: Order ${currentOrderId} is already superseded`);
+      throw new Error(
+        `APPROVAL_ORDER_ALREADY_SUPERSEDED: Order ${currentOrderId} is already superseded`,
+      );
     }
 
     // Invariant check: quota arithmetic
