@@ -4,173 +4,305 @@ import {
   AdmissionBatchInput,
   AdmissionRecord,
   admissionRecordSchema,
+  cleanDemographics,
+  SealBatchRequest,
 } from "@aire/validation";
 import {
-  SubmissionBatch,
-  StagedRecord,
-  QuarantineRecord,
-  QuarantineFieldError,
+  SubmissionBatchDto,
+  QuarantineFieldErrorDto,
   SubmissionBatchStatus,
-} from "@aire/api-contracts";
+  SealBatchResultDto,
+} from "@aire/shared-types";
 import { logAuditEvent } from "./audit.service.js";
+
+/**
+ * Computes a deterministic binary Merkle root hash from an array of leaf hashes.
+ */
+export function computeMerkleRoot(leaves: string[]): string {
+  if (leaves.length === 0) {
+    return crypto.createHash("sha256").update("EMPTY_BATCH").digest("hex");
+  }
+  let currentLevel = [...leaves];
+  while (currentLevel.length > 1) {
+    const nextLevel: string[] = [];
+    for (let i = 0; i < currentLevel.length; i += 2) {
+      if (i + 1 < currentLevel.length) {
+        const combined = currentLevel[i] + currentLevel[i + 1];
+        nextLevel.push(
+          crypto.createHash("sha256").update(combined).digest("hex"),
+        );
+      } else {
+        // Odd leaf: pair with itself to balance the tree deterministically
+        const combined = currentLevel[i] + currentLevel[i];
+        nextLevel.push(
+          crypto.createHash("sha256").update(combined).digest("hex"),
+        );
+      }
+    }
+    currentLevel = nextLevel;
+  }
+  return currentLevel[0];
+}
 
 export class SubmissionService {
   /**
-   * Processes an incoming admission batch, separating valid records into staged storage
-   * and defective records into quarantine triage per Journey J-02.
+   * Helper to ensure a Programme ID exists in the database for the given programme name/code.
+   */
+  private static async resolveProgrammeId(
+    tx: any,
+    programmeNameOrCode: string,
+  ): Promise<string> {
+    const existing = await tx.programme.findFirst({
+      where: {
+        OR: [
+          { canonicalCode: programmeNameOrCode },
+          { name: programmeNameOrCode },
+        ],
+      },
+    });
+
+    if (existing) {
+      return existing.id;
+    }
+
+    // Auto-create programme if missing in test / onboarding environment
+    const code = programmeNameOrCode
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "_")
+      .slice(0, 30);
+
+    const created = await tx.programme.create({
+      data: {
+        canonicalCode: `PROG_${code}_${Date.now().toString().slice(-4)}`,
+        name: programmeNameOrCode,
+        degreeLevel: "UG",
+        discipline: "Engineering",
+        durationYears: 4,
+        status: "ACTIVE",
+      },
+    });
+
+    return created.id;
+  }
+
+  /**
+   * Creates an admission batch, partitions valid vs defective records,
+   * stores them in relational tables with PostgreSQL RLS, and logs audit trail.
    */
   static async createBatch(
     institutionId: string,
     input: AdmissionBatchInput,
     correlationId: string,
     actorId?: string,
-  ): Promise<SubmissionBatch> {
-    const batchId = crypto.randomUUID();
-    const stagedRecords: StagedRecord[] = [];
-    const quarantineRecords: QuarantineRecord[] = [];
+  ): Promise<SubmissionBatchDto> {
+    return withTenantContext(institutionId, async (tx) => {
+      const programmeId = await this.resolveProgrammeId(tx, input.programme);
+      const batchId = crypto.randomUUID();
 
-    input.records.forEach((rawRow, index) => {
-      const rowId = crypto.randomUUID();
-      const rowNumber = index + 1;
+      // Compute SHA-256 hash of the upload contents for tamper evidence
+      const fileHash = crypto
+        .createHash("sha256")
+        .update(JSON.stringify(input.records))
+        .digest("hex");
 
-      // Extract and normalize common column aliases
-      const candidate: Record<string, unknown> = {
-        studentName:
-          rawRow.studentName ?? rawRow["Student Name"] ?? rawRow.name,
-        rollNumber:
-          rawRow.rollNumber ??
-          rawRow["Roll Number"] ??
-          rawRow.rollNo ??
-          rawRow["Application ID"],
-        dateOfBirth:
-          rawRow.dateOfBirth ?? rawRow["Date of Birth"] ?? rawRow.dob,
-        category:
-          rawRow.category ??
-          rawRow["Category"] ??
-          rawRow["Reservation Category"],
-        quota: rawRow.quota ?? rawRow["Quota"] ?? rawRow["Admission Quota"],
-        apaarId: rawRow.apaarId ?? rawRow["APAAR ID"] ?? rawRow["APAAR"],
-      };
+      let validCount = 0;
+      let quarantineCount = 0;
 
-      const result = admissionRecordSchema.safeParse(candidate);
+      const stagedToInsert: Array<{
+        id: string;
+        batchId: string;
+        institutionId: string;
+        programmeId: string;
+        academicYear: string;
+        rowNumber: number;
+        studentName: string;
+        rollNumber: string;
+        dateOfBirth: string;
+        gender?: string;
+        category: string;
+        quota: string;
+        apaarId?: string;
+        status: string;
+        rawPayload: any;
+      }> = [];
 
-      if (result.success) {
-        stagedRecords.push({
-          rowId,
-          rowNumber,
-          data: result.data,
-          status: "ACCEPTED",
-          validatedAt: new Date().toISOString(),
-        });
-      } else {
-        const errors: QuarantineFieldError[] = result.error.issues.map(
-          (issue) => ({
-            field: issue.path.join(".") || "record",
-            message: issue.message,
-            received: candidate[issue.path[0] as string],
-          }),
-        );
+      const quarantineToInsert: Array<{
+        id: string;
+        batchId: string;
+        institutionId: string;
+        rowNumber: number;
+        rawPayload: any;
+        errors: any;
+        status: string;
+      }> = [];
 
-        quarantineRecords.push({
-          rowId,
-          rowNumber,
-          rawData: candidate,
-          errors,
-          status: "QUARANTINED",
-        });
+      input.records.forEach((rawRow, index) => {
+        const rowId = crypto.randomUUID();
+        const rowNumber = index + 1;
+        const cleaned = cleanDemographics(rawRow as Record<string, unknown>);
+        const result = admissionRecordSchema.safeParse(cleaned);
+
+        if (result.success) {
+          validCount++;
+          stagedToInsert.push({
+            id: rowId,
+            batchId,
+            institutionId,
+            programmeId,
+            academicYear: input.academicYear,
+            rowNumber,
+            studentName: result.data.studentName,
+            rollNumber: result.data.rollNumber,
+            dateOfBirth: result.data.dateOfBirth,
+            gender: cleaned.gender,
+            category: result.data.category,
+            quota: result.data.quota,
+            apaarId: result.data.apaarId,
+            status: "ACCEPTED",
+            rawPayload: rawRow,
+          });
+        } else {
+          quarantineCount++;
+          const errors: QuarantineFieldErrorDto[] = result.error.issues.map(
+            (issue) => ({
+              field: issue.path.join(".") || "record",
+              message: issue.message,
+              received: (cleaned as any)[issue.path[0] as string],
+            }),
+          );
+
+          quarantineToInsert.push({
+            id: rowId,
+            batchId,
+            institutionId,
+            rowNumber,
+            rawPayload: cleaned,
+            errors,
+            status: "QUARANTINED",
+          });
+        }
+      });
+
+      const initialStatus: SubmissionBatchStatus =
+        quarantineCount === 0 ? "READY_FOR_SIGN_OFF" : "QUARANTINED";
+
+      let validSubmittedById: string | null = null;
+      if (actorId) {
+        const userExists = await tx.user.findUnique({ where: { id: actorId } });
+        if (userExists) validSubmittedById = actorId;
       }
-    });
 
-    const status: SubmissionBatchStatus =
-      quarantineRecords.length === 0 ? "READY_FOR_SIGN_OFF" : "QUARANTINED";
-
-    const batchData: SubmissionBatch = {
-      id: batchId,
-      institutionId,
-      academicYear: input.academicYear,
-      programme: input.programme,
-      fileName: input.fileName,
-      status,
-      totalCount: input.records.length,
-      validCount: stagedRecords.length,
-      quarantineCount: quarantineRecords.length,
-      stagedRecords,
-      quarantineRecords,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    await withTenantContext(institutionId, async (tx) => {
-      return tx.institutionRecord.create({
+      const createdBatch = await tx.submissionBatch.create({
         data: {
           id: batchId,
           institutionId,
-          title: `SUBMISSION_BATCH:${batchId}`,
-          payload: batchData as any,
+          academicYear: input.academicYear,
+          programmeId,
+          fileName: input.fileName,
+          fileHash,
+          status: initialStatus,
+          totalCount: input.records.length,
+          validCount,
+          quarantineCount,
+          submittedById: validSubmittedById,
         },
       });
-    });
 
-    await logAuditEvent({
-      severity: "info",
-      correlationId,
-      actorId,
-      tenantId: institutionId,
-      action: "ADMISSION_BATCH_INGESTED",
-      resourceType: "SUBMISSION_BATCH",
-      resourceId: batchId,
-      status: "SUCCESS",
-      metadata: {
-        totalCount: batchData.totalCount,
-        validCount: batchData.validCount,
-        quarantineCount: batchData.quarantineCount,
-        status: batchData.status,
-      },
-    });
+      if (stagedToInsert.length > 0) {
+        await tx.stagedAdmissionRecord.createMany({
+          data: stagedToInsert,
+        });
+      }
 
-    return batchData;
+      if (quarantineToInsert.length > 0) {
+        await tx.quarantinedAdmissionRecord.createMany({
+          data: quarantineToInsert,
+        });
+      }
+
+      await logAuditEvent({
+        severity: "info",
+        correlationId,
+        actorId,
+        tenantId: institutionId,
+        action: "ADMISSION_BATCH_INGESTED",
+        resourceType: "SUBMISSION_BATCH",
+        resourceId: batchId,
+        status: "SUCCESS",
+        metadata: {
+          totalCount: createdBatch.totalCount,
+          validCount: createdBatch.validCount,
+          quarantineCount: createdBatch.quarantineCount,
+          status: createdBatch.status,
+          fileHash,
+        },
+      });
+
+      return this.formatBatchResponse(
+        createdBatch,
+        stagedToInsert,
+        quarantineToInsert,
+        input.programme,
+      );
+    });
   }
 
   /**
-   * Retrieves all submission batches for a specific tenant institution.
+   * Retrieves all submission batches for the specified institution tenant.
    */
-  static async listBatches(institutionId: string): Promise<SubmissionBatch[]> {
+  static async listBatches(institutionId: string): Promise<any[]> {
     return withTenantContext(institutionId, async (tx) => {
-      const records = await tx.institutionRecord.findMany({
-        where: {
-          institutionId,
-          title: { startsWith: "SUBMISSION_BATCH:" },
-        },
+      const batches = await tx.submissionBatch.findMany({
+        where: { institutionId },
+        include: { programme: true },
         orderBy: { createdAt: "desc" },
       });
 
-      return records
-        .map((r) => r.payload as unknown as SubmissionBatch)
-        .filter(Boolean);
+      return batches.map((b: any) => ({
+        id: b.id,
+        institutionId: b.institutionId,
+        academicYear: b.academicYear,
+        programme: b.programme?.name || b.programmeId,
+        programmeId: b.programmeId,
+        fileName: b.fileName,
+        fileHash: b.fileHash,
+        status: b.status,
+        totalCount: b.totalCount,
+        validCount: b.validCount,
+        quarantineCount: b.quarantineCount,
+        merkleRootHash: b.merkleRootHash,
+        sealedAt: b.sealedAt?.toISOString(),
+        createdAt: b.createdAt.toISOString(),
+        updatedAt: b.updatedAt.toISOString(),
+      }));
     });
   }
 
   /**
-   * Retrieves a single submission batch by ID.
+   * Retrieves a single submission batch by ID with staged and quarantine records.
    */
   static async getBatchById(
     institutionId: string,
     batchId: string,
-  ): Promise<SubmissionBatch | null> {
+  ): Promise<any | null> {
     return withTenantContext(institutionId, async (tx) => {
-      const record = await tx.institutionRecord.findFirst({
-        where: {
-          id: batchId,
-          institutionId,
-          title: `SUBMISSION_BATCH:${batchId}`,
+      const batch = await tx.submissionBatch.findFirst({
+        where: { id: batchId, institutionId },
+        include: {
+          programme: true,
+          stagedRecords: { orderBy: { rowNumber: "asc" } },
+          quarantinedRecords: { orderBy: { rowNumber: "asc" } },
         },
       });
 
-      if (!record || !record.payload) {
-        return null;
-      }
+      if (!batch) return null;
 
-      return record.payload as unknown as SubmissionBatch;
+      return this.formatBatchResponse(
+        batch,
+        batch.stagedRecords,
+        batch.quarantinedRecords,
+        batch.programme?.name,
+      );
     });
   }
 
@@ -185,39 +317,38 @@ export class SubmissionService {
     corrections: Partial<AdmissionRecord>,
     correlationId: string,
     actorId?: string,
-  ): Promise<SubmissionBatch> {
+  ): Promise<any> {
     return withTenantContext(institutionId, async (tx) => {
-      const record = await tx.institutionRecord.findFirst({
-        where: {
-          id: batchId,
-          institutionId,
-          title: `SUBMISSION_BATCH:${batchId}`,
-        },
+      const batch = await tx.submissionBatch.findFirst({
+        where: { id: batchId, institutionId },
+        include: { programme: true },
       });
 
-      if (!record || !record.payload) {
+      if (!batch) {
         throw new Error("BATCH_NOT_FOUND");
       }
 
-      const batch = record.payload as unknown as SubmissionBatch;
-      const quarantineIndex = batch.quarantineRecords.findIndex(
-        (q) => q.rowId === rowId,
-      );
+      if (batch.status === "SEALED" || batch.status === "LOCKED") {
+        throw new Error("BATCH_ALREADY_SEALED_OR_LOCKED");
+      }
 
-      if (quarantineIndex === -1) {
+      const targetRow = await tx.quarantinedAdmissionRecord.findFirst({
+        where: { id: rowId, batchId, institutionId },
+      });
+
+      if (!targetRow) {
         throw new Error("QUARANTINE_ROW_NOT_FOUND");
       }
 
-      const targetRow = batch.quarantineRecords[quarantineIndex];
-      const mergedCandidate = {
-        ...targetRow.rawData,
+      const mergedCandidate = cleanDemographics({
+        ...(targetRow.rawPayload as Record<string, unknown>),
         ...corrections,
-      };
+      });
 
       const parseResult = admissionRecordSchema.safeParse(mergedCandidate);
 
       if (!parseResult.success) {
-        const errors: QuarantineFieldError[] = parseResult.error.issues.map(
+        const errors: QuarantineFieldErrorDto[] = parseResult.error.issues.map(
           (issue) => ({
             field: issue.path.join(".") || "record",
             message: issue.message,
@@ -225,15 +356,11 @@ export class SubmissionService {
           }),
         );
 
-        // Update row with latest validation errors
-        targetRow.rawData = mergedCandidate;
-        targetRow.errors = errors;
-
-        await tx.institutionRecord.update({
-          where: { id: batchId },
+        await tx.quarantinedAdmissionRecord.update({
+          where: { id: rowId },
           data: {
-            payload: batch as any,
-            updatedAt: new Date(),
+            rawPayload: mergedCandidate,
+            errors: errors as any,
           },
         });
 
@@ -242,29 +369,63 @@ export class SubmissionService {
         throw error;
       }
 
-      // Record successfully remediated: promote to staged records
-      batch.quarantineRecords.splice(quarantineIndex, 1);
-      batch.stagedRecords.push({
-        rowId: targetRow.rowId,
-        rowNumber: targetRow.rowNumber,
-        data: parseResult.data,
-        status: "ACCEPTED",
-        validatedAt: new Date().toISOString(),
+      // Record is now valid: create staged admission record and mark quarantine row remediated
+      const stagedId = crypto.randomUUID();
+      await tx.stagedAdmissionRecord.create({
+        data: {
+          id: stagedId,
+          batchId,
+          institutionId,
+          programmeId: batch.programmeId,
+          academicYear: batch.academicYear,
+          rowNumber: targetRow.rowNumber,
+          studentName: parseResult.data.studentName,
+          rollNumber: parseResult.data.rollNumber,
+          dateOfBirth: parseResult.data.dateOfBirth,
+          gender: mergedCandidate.gender,
+          category: parseResult.data.category,
+          quota: parseResult.data.quota,
+          apaarId: parseResult.data.apaarId,
+          status: "ACCEPTED",
+          rawPayload: mergedCandidate,
+        },
       });
 
-      batch.quarantineCount = batch.quarantineRecords.length;
-      batch.validCount = batch.stagedRecords.length;
-      batch.updatedAt = new Date().toISOString();
-
-      if (batch.quarantineCount === 0) {
-        batch.status = "READY_FOR_SIGN_OFF";
+      let validRemediatedById: string | null = null;
+      if (actorId) {
+        const userExists = await tx.user.findUnique({ where: { id: actorId } });
+        if (userExists) validRemediatedById = actorId;
       }
 
-      await tx.institutionRecord.update({
+      await tx.quarantinedAdmissionRecord.update({
+        where: { id: rowId },
+        data: {
+          status: "REMEDIATED",
+          remediatedRecordId: stagedId,
+          remediatedAt: new Date(),
+          remediatedById: validRemediatedById,
+        },
+      });
+
+      // Count remaining active quarantined rows
+      const remainingQuarantineCount =
+        await tx.quarantinedAdmissionRecord.count({
+          where: { batchId, institutionId, status: "QUARANTINED" },
+        });
+
+      const updatedValidCount = await tx.stagedAdmissionRecord.count({
+        where: { batchId, institutionId },
+      });
+
+      const newStatus =
+        remainingQuarantineCount === 0 ? "READY_FOR_SIGN_OFF" : "QUARANTINED";
+
+      const updatedBatch = await tx.submissionBatch.update({
         where: { id: batchId },
         data: {
-          payload: batch as any,
-          updatedAt: new Date(),
+          validCount: updatedValidCount,
+          quarantineCount: remainingQuarantineCount,
+          status: newStatus,
         },
       });
 
@@ -280,12 +441,204 @@ export class SubmissionService {
         metadata: {
           rowId,
           promotedToStaged: true,
-          remainingQuarantine: batch.quarantineCount,
-          newStatus: batch.status,
+          remainingQuarantine: remainingQuarantineCount,
+          newStatus,
         },
       });
 
-      return batch;
+      // Fetch fresh staged and remaining quarantine records
+      const staged = await tx.stagedAdmissionRecord.findMany({
+        where: { batchId },
+        orderBy: { rowNumber: "asc" },
+      });
+      const activeQuarantine = await tx.quarantinedAdmissionRecord.findMany({
+        where: { batchId, status: "QUARANTINED" },
+        orderBy: { rowNumber: "asc" },
+      });
+
+      return this.formatBatchResponse(
+        updatedBatch,
+        staged,
+        activeQuarantine,
+        batch.programme?.name,
+      );
     });
+  }
+
+  /**
+   * Cryptographically seals an admission batch using a binary Merkle tree root hash
+   * over all staged records, enforcing regulatory freeze deadlines per Section 2.
+   */
+  static async sealBatch(
+    institutionId: string,
+    batchId: string,
+    request: SealBatchRequest,
+    correlationId: string,
+    actorId?: string,
+  ): Promise<SealBatchResultDto> {
+    return withTenantContext(institutionId, async (tx) => {
+      const batch = await tx.submissionBatch.findFirst({
+        where: { id: batchId, institutionId },
+      });
+
+      if (!batch) {
+        throw new Error("BATCH_NOT_FOUND");
+      }
+
+      if (batch.status === "SEALED") {
+        throw new Error("BATCH_ALREADY_SEALED");
+      }
+
+      if (batch.status === "LOCKED") {
+        throw new Error("BATCH_ALREADY_LOCKED");
+      }
+
+      // Check quarantine items
+      const pendingQuarantine = await tx.quarantinedAdmissionRecord.count({
+        where: { batchId, institutionId, status: "QUARANTINED" },
+      });
+
+      if (pendingQuarantine > 0) {
+        throw new Error("CANNOT_SEAL_WITH_PENDING_QUARANTINE");
+      }
+
+      const stagedRecords = await tx.stagedAdmissionRecord.findMany({
+        where: { batchId, institutionId },
+      });
+
+      if (stagedRecords.length === 0) {
+        throw new Error("CANNOT_SEAL_EMPTY_BATCH");
+      }
+
+      // Sort deterministically by rollNumber, studentName, id
+      stagedRecords.sort(
+        (a: any, b: any) =>
+          a.rollNumber.localeCompare(b.rollNumber) ||
+          a.studentName.localeCompare(b.studentName) ||
+          a.id.localeCompare(b.id),
+      );
+
+      // Compute leaf hashes
+      const leafHashes = stagedRecords.map((record: any) => {
+        const canonicalLeaf = JSON.stringify({
+          rollNumber: record.rollNumber,
+          studentName: record.studentName,
+          dateOfBirth: record.dateOfBirth,
+          category: record.category,
+          quota: record.quota,
+          apaarId: record.apaarId || null,
+        });
+        return crypto
+          .createHash("sha256")
+          .update(canonicalLeaf)
+          .digest("hex");
+      });
+
+      const merkleRootHash = computeMerkleRoot(leafHashes);
+      const sealedAt = new Date();
+
+      let validSealedById: string | null = null;
+      if (actorId) {
+        const userExists = await tx.user.findUnique({ where: { id: actorId } });
+        if (userExists) {
+          validSealedById = actorId;
+        }
+      }
+
+      await tx.submissionBatch.update({
+        where: { id: batchId },
+        data: {
+          status: "SEALED",
+          merkleRootHash,
+          sealedAt,
+          sealedById: validSealedById,
+        },
+      });
+
+      await logAuditEvent({
+        severity: "info",
+        correlationId,
+        actorId,
+        tenantId: institutionId,
+        action: "BATCH_SEALED",
+        resourceType: "SUBMISSION_BATCH",
+        resourceId: batchId,
+        status: "SUCCESS",
+        metadata: {
+          merkleRootHash,
+          stagedRecordsCount: stagedRecords.length,
+          sealedAt: sealedAt.toISOString(),
+          notes: request.notes,
+        },
+      });
+
+      return {
+        batchId,
+        status: "SEALED",
+        merkleRootHash,
+        sealedAt: sealedAt.toISOString(),
+        sealedBy: actorId || "INSTITUTION_ADMIN",
+        stagedRecordsCount: stagedRecords.length,
+      };
+    });
+  }
+
+  /**
+   * Helper to format database batch output into consistent client response shape.
+   */
+  private static formatBatchResponse(
+    batch: any,
+    staged: any[],
+    quarantine: any[],
+    programmeName?: string,
+  ): any {
+    return {
+      id: batch.id,
+      institutionId: batch.institutionId,
+      academicYear: batch.academicYear,
+      programme: programmeName || batch.programmeId,
+      programmeId: batch.programmeId,
+      fileName: batch.fileName,
+      fileHash: batch.fileHash,
+      status: batch.status,
+      totalCount: batch.totalCount,
+      validCount: batch.validCount,
+      quarantineCount: batch.quarantineCount,
+      merkleRootHash: batch.merkleRootHash,
+      sealedAt: batch.sealedAt?.toISOString(),
+      createdAt:
+        typeof batch.createdAt === "string"
+          ? batch.createdAt
+          : batch.createdAt.toISOString(),
+      updatedAt:
+        typeof batch.updatedAt === "string"
+          ? batch.updatedAt
+          : batch.updatedAt.toISOString(),
+      stagedRecords: staged.map((s: any) => ({
+        rowId: s.id,
+        rowNumber: s.rowNumber,
+        status: s.status,
+        data: {
+          studentName: s.studentName,
+          rollNumber: s.rollNumber,
+          dateOfBirth: s.dateOfBirth,
+          category: s.category,
+          quota: s.quota,
+          apaarId: s.apaarId || undefined,
+        },
+        validatedAt: s.createdAt
+          ? typeof s.createdAt === "string"
+            ? s.createdAt
+            : s.createdAt.toISOString()
+          : new Date().toISOString(),
+      })),
+      quarantineRecords: quarantine.map((q: any) => ({
+        rowId: q.id,
+        rowNumber: q.rowNumber,
+        rawData: q.rawPayload,
+        errors: q.errors,
+        status: q.status,
+      })),
+    };
   }
 }

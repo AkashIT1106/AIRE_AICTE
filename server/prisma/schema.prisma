@@ -65,20 +65,23 @@ model OutboxEvent {
 // -----------------------------------------------------------------------------
 
 model User {
-  id            String    @id @default(uuid())
+  id            String   @id @default(uuid())
   name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false) @map("email_verified")
+  email         String   @unique
+  emailVerified Boolean  @default(false) @map("email_verified")
   image         String?
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
-  sessions      Session[]
-  accounts      Account[]
-  memberships   InstitutionMember[]
-  platformRoles PlatformUserRole[]
-  authoredPolicies  PolicyPack[]              @relation("PolicyAuthor")
-  reviewedSignoffs  PolicyActivationSignoff[] @relation("PolicySignoffReviewer")
+  sessions                 Session[]
+  accounts                 Account[]
+  memberships              InstitutionMember[]
+  platformRoles            PlatformUserRole[]
+  authoredPolicies         PolicyPack[]                 @relation("PolicyAuthor")
+  reviewedSignoffs         PolicyActivationSignoff[]    @relation("PolicySignoffReviewer")
+  submittedBatches         SubmissionBatch[]            @relation("BatchSubmittedBy")
+  sealedBatches            SubmissionBatch[]            @relation("BatchSealedBy")
+  remediatedQuarantineRows QuarantinedAdmissionRecord[] @relation("QuarantineRemediatedBy")
 
   @@map("user")
 }
@@ -149,11 +152,14 @@ model Institution {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  members          InstitutionMember[]
-  records          InstitutionRecord[]
-  campuses         Campus[]
-  approvalOrders   ApprovalOrder[]
-  programmeAliases ProgrammeAlias[]
+  members            InstitutionMember[]
+  records            InstitutionRecord[]
+  campuses           Campus[]
+  approvalOrders     ApprovalOrder[]
+  programmeAliases   ProgrammeAlias[]
+  submissionBatches  SubmissionBatch[]
+  stagedRecords      StagedAdmissionRecord[]
+  quarantinedRecords QuarantinedAdmissionRecord[]
 
   @@map("institutions")
 }
@@ -192,8 +198,10 @@ model Programme {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
-  aliases          ProgrammeAlias[]
-  seatEntitlements SeatEntitlement[]
+  aliases           ProgrammeAlias[]
+  seatEntitlements  SeatEntitlement[]
+  submissionBatches SubmissionBatch[]
+  stagedRecords     StagedAdmissionRecord[]
 
   @@index([degreeLevel])
   @@index([discipline])
@@ -222,16 +230,16 @@ model ProgrammeAlias {
 
 /// Annual AICTE Approval Orders (EOA / LOA)
 model ApprovalOrder {
-  id             String    @id @default(uuid())
-  institutionId  String    @map("institution_id")
-  academicYear   String    @map("academic_year")
-  orderNumber    String    @unique @map("order_number")
-  orderType      String    @default("EOA") @map("order_type") // EOA, LOA
-  issueDate      DateTime  @default(now()) @map("issue_date")
-  status         String    @default("ACTIVE") // DRAFT, ACTIVE, SUPERSEDED
-  supersededById String?   @map("superseded_by_id")
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @updatedAt @map("updated_at")
+  id             String   @id @default(uuid())
+  institutionId  String   @map("institution_id")
+  academicYear   String   @map("academic_year")
+  orderNumber    String   @unique @map("order_number")
+  orderType      String   @default("EOA") @map("order_type") // EOA, LOA
+  issueDate      DateTime @default(now()) @map("issue_date")
+  status         String   @default("ACTIVE") // DRAFT, ACTIVE, SUPERSEDED
+  supersededById String?  @map("superseded_by_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
   institution  Institution       @relation(fields: [institutionId], references: [id], onDelete: Cascade)
   supersededBy ApprovalOrder?    @relation("OrderSupersession", fields: [supersededById], references: [id])
@@ -279,8 +287,8 @@ model InstitutionMember {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
-  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([institutionId, userId])
   @@index([userId, status])
@@ -291,12 +299,12 @@ model InstitutionMember {
 model PlatformUserRole {
   id        String   @id @default(uuid())
   userId    String   @map("user_id")
-  role      String   // SUPER_ADMIN, AICTE_ADMIN, AICTE_REVIEWER, AUDITOR
+  role      String // SUPER_ADMIN, AICTE_ADMIN, AICTE_REVIEWER, AUDITOR
   status    String   @default("ACTIVE") // ACTIVE, REVOKED
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, role])
   @@index([userId, status])
@@ -312,7 +320,7 @@ model InstitutionRecord {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
-  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
 
   @@index([institutionId])
   @@map("institution_records")
@@ -330,7 +338,7 @@ model AuditEvent {
   action        String
   resourceType  String   @map("resource_type")
   resourceId    String?  @map("resource_id")
-  status        String   // SUCCESS, FAILURE, DENIED
+  status        String // SUCCESS, FAILURE, DENIED
   metadata      Json?
 
   @@index([correlationId])
@@ -347,7 +355,7 @@ model AuditEvent {
 model PolicyPack {
   id               String    @id @default(uuid())
   code             String    @unique // e.g. "AICTE-APH-2026-27-V1.0"
-  name             String    // e.g. "AICTE Approval Process Handbook 2026-27"
+  name             String // e.g. "AICTE Approval Process Handbook 2026-27"
   academicYear     String    @map("academic_year") // e.g. "2026-27"
   edition          String    @default("1.0")
   status           String    @default("DRAFT") // DRAFT, COUNCIL_REVIEW, GAZETTE_NOTIFIED, IN_FORCE, SUPERSEDED, AMENDED
@@ -362,13 +370,13 @@ model PolicyPack {
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
 
-  author           User                      @relation("PolicyAuthor", fields: [authorId], references: [id])
-  supersededBy     PolicyPack?               @relation("PolicyPackSupersession", fields: [supersededById], references: [id])
-  supersedes       PolicyPack[]              @relation("PolicyPackSupersession")
-  parentPack       PolicyPack?               @relation("PolicyPackAmendments", fields: [parentPackId], references: [id])
-  amendments       PolicyPack[]              @relation("PolicyPackAmendments")
-  rules            PolicyRule[]
-  fixtures         PolicyTestFixture[]
+  author             User                      @relation("PolicyAuthor", fields: [authorId], references: [id])
+  supersededBy       PolicyPack?               @relation("PolicyPackSupersession", fields: [supersededById], references: [id])
+  supersedes         PolicyPack[]              @relation("PolicyPackSupersession")
+  parentPack         PolicyPack?               @relation("PolicyPackAmendments", fields: [parentPackId], references: [id])
+  amendments         PolicyPack[]              @relation("PolicyPackAmendments")
+  rules              PolicyRule[]
+  fixtures           PolicyTestFixture[]
   activationSignoffs PolicyActivationSignoff[]
 
   @@index([academicYear, status])
@@ -382,7 +390,7 @@ model PolicyRule {
   policyPackId    String   @map("policy_pack_id")
   code            String   @map("code") // e.g., "RULE_INTAKE_CEILING", "RULE_STATUTORY_RESERVATION", "RULE_PENAL_NO_ADMISSION"
   name            String
-  category        String   // CAPACITY, QUOTA, ELIGIBILITY, TIMELINE, PENAL_ACTION
+  category        String // CAPACITY, QUOTA, ELIGIBILITY, TIMELINE, PENAL_ACTION
   clauseReference String   @map("clause_reference") // e.g., "APH 2026-27 Section 2.4", "APH Chapter VII"
   description     String?
   severity        String   @default("VIOLATION") // VIOLATION, WARNING
@@ -390,7 +398,7 @@ model PolicyRule {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
-  policyPack      PolicyPack @relation(fields: [policyPackId], references: [id], onDelete: Cascade)
+  policyPack PolicyPack @relation(fields: [policyPackId], references: [id], onDelete: Cascade)
 
   @@unique([policyPackId, code])
   @@index([policyPackId])
@@ -410,7 +418,7 @@ model PolicyTestFixture {
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
 
-  policyPack     PolicyPack @relation(fields: [policyPackId], references: [id], onDelete: Cascade)
+  policyPack PolicyPack @relation(fields: [policyPackId], references: [id], onDelete: Cascade)
 
   @@index([policyPackId])
   @@map("policy_test_fixtures")
@@ -427,10 +435,99 @@ model PolicyActivationSignoff {
   signoffNotes              String?  @map("signoff_notes")
   activatedAt               DateTime @default(now()) @map("activated_at")
 
-  policyPack                PolicyPack @relation(fields: [policyPackId], references: [id], onDelete: Cascade)
-  reviewer                  User       @relation("PolicySignoffReviewer", fields: [reviewerId], references: [id])
+  policyPack PolicyPack @relation(fields: [policyPackId], references: [id], onDelete: Cascade)
+  reviewer   User       @relation("PolicySignoffReviewer", fields: [reviewerId], references: [id])
 
   @@index([policyPackId])
   @@index([reviewerId])
   @@map("policy_activation_signoffs")
+}
+
+/// Institutional Admission Batch Submission Lifecycle per Journey J-02 and Module M05
+model SubmissionBatch {
+  id              String    @id @default(uuid())
+  institutionId   String    @map("institution_id")
+  academicYear    String    @map("academic_year") // Format: YYYY-YY (e.g. 2026-27)
+  programmeId     String    @map("programme_id")
+  fileName        String    @map("file_name")
+  fileSize        Int?      @map("file_size")
+  fileHash        String?   @map("file_hash") // SHA-256 of original upload
+  status          String    @default("DRAFT") // DRAFT, VALIDATING, VALIDATED, SEALED, LOCKED, REJECTED
+  totalCount      Int       @default(0) @map("total_count")
+  validCount      Int       @default(0) @map("valid_count")
+  quarantineCount Int       @default(0) @map("quarantine_count")
+  merkleRootHash  String?   @map("merkle_root_hash")
+  sealedAt        DateTime? @map("sealed_at")
+  sealedById      String?   @map("sealed_by_id")
+  submittedById   String?   @map("submitted_by_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  institution        Institution                  @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  programme          Programme                    @relation(fields: [programmeId], references: [id])
+  submittedBy        User?                        @relation("BatchSubmittedBy", fields: [submittedById], references: [id])
+  sealedBy           User?                        @relation("BatchSealedBy", fields: [sealedById], references: [id])
+  stagedRecords      StagedAdmissionRecord[]
+  quarantinedRecords QuarantinedAdmissionRecord[]
+
+  @@index([institutionId])
+  @@index([institutionId, academicYear])
+  @@index([institutionId, status])
+  @@map("submission_batches")
+}
+
+/// Valid Staged Student Admission Records ready for Cohort Sealing and Reconciliation
+model StagedAdmissionRecord {
+  id            String   @id @default(uuid())
+  batchId       String   @map("batch_id")
+  institutionId String   @map("institution_id")
+  programmeId   String   @map("programme_id")
+  academicYear  String   @map("academic_year")
+  rowNumber     Int      @map("row_number")
+  studentName   String   @map("student_name")
+  rollNumber    String   @map("roll_number")
+  dateOfBirth   String   @map("date_of_birth") // YYYY-MM-DD
+  gender        String?
+  category      String // GEN, OBC-NCL, SC, ST, EWS
+  quota         String // General / All India, Home State Quota, etc.
+  apaarId       String?  @map("apaar_id")
+  status        String   @default("ACCEPTED") // ACCEPTED, FLAGGED
+  rawPayload    Json?    @map("raw_payload")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  batch       SubmissionBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  institution Institution     @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  programme   Programme       @relation(fields: [programmeId], references: [id])
+
+  @@index([institutionId])
+  @@index([batchId])
+  @@index([institutionId, rollNumber])
+  @@index([institutionId, programmeId])
+  @@map("staged_admission_records")
+}
+
+/// Defective Admission Rows Quarantined for Inline Remediation per Journey J-02 Step 5
+model QuarantinedAdmissionRecord {
+  id                 String    @id @default(uuid())
+  batchId            String    @map("batch_id")
+  institutionId      String    @map("institution_id")
+  rowNumber          Int       @map("row_number")
+  rawPayload         Json      @map("raw_payload")
+  errors             Json // Array of QuarantineFieldError
+  status             String    @default("QUARANTINED") // QUARANTINED, REMEDIATED, DISCARDED
+  remediatedRecordId String?   @map("remediated_record_id")
+  remediatedAt       DateTime? @map("remediated_at")
+  remediatedById     String?   @map("remediated_by_id")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  batch        SubmissionBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  institution  Institution     @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  remediatedBy User?           @relation("QuarantineRemediatedBy", fields: [remediatedById], references: [id])
+
+  @@index([institutionId])
+  @@index([batchId])
+  @@index([batchId, status])
+  @@map("quarantined_admission_records")
 }

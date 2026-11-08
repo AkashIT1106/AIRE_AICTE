@@ -131,6 +131,183 @@ export type AdmissionRecord = z.infer<typeof admissionRecordSchema>;
 export type AdmissionBatchInput = z.infer<typeof admissionBatchInputSchema>;
 export type QuarantineRemediation = z.infer<typeof quarantineRemediationSchema>;
 
+/**
+ * Luhn-variant checksum validation for 12-digit student identifiers (APAAR ID).
+ * Accepts formatted ('9821-4412-1042') or unformatted ('982144121042') strings.
+ */
+export function isValidLuhnApaar(apaar?: string | null): boolean {
+  if (!apaar) return false;
+  const digits = apaar.replace(/[\s-]/g, "");
+  if (!/^\d{12}$/.test(digits)) return false;
+
+  let sum = 0;
+  for (let i = 0; i < 12; i++) {
+    let digit = parseInt(digits.charAt(11 - i), 10);
+    // Double every second digit from right
+    if (i % 2 === 1) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+  }
+  return sum % 10 === 0;
+}
+
+/**
+ * Standardizes common spreadsheet column variations to canonical schema fields.
+ */
+export const CANONICAL_COLUMN_MAPPINGS: Record<string, string> = {
+  // Student Name
+  studentname: "studentName",
+  "student name": "studentName",
+  candidatename: "studentName",
+  "candidate name": "studentName",
+  name: "studentName",
+  student_name: "studentName",
+  candidate_name: "studentName",
+
+  // Roll Number
+  rollnumber: "rollNumber",
+  "roll number": "rollNumber",
+  rollno: "rollNumber",
+  "roll no": "rollNumber",
+  roll_no: "rollNumber",
+  roll_number: "rollNumber",
+  "application id": "rollNumber",
+  applicationid: "rollNumber",
+  "registration no": "rollNumber",
+
+  // Date of Birth
+  dateofbirth: "dateOfBirth",
+  "date of birth": "dateOfBirth",
+  dob: "dateOfBirth",
+  birthdate: "dateOfBirth",
+  date_of_birth: "dateOfBirth",
+
+  // Category
+  category: "category",
+  "reservation category": "category",
+  "reservation_category": "category",
+  "caste category": "category",
+
+  // Quota
+  quota: "quota",
+  "admission quota": "quota",
+  "admission_quota": "quota",
+  "seat quota": "quota",
+
+  // APAAR
+  apaar: "apaarId",
+  apaarid: "apaarId",
+  "apaar id": "apaarId",
+  "apaar_id": "apaarId",
+
+  // Gender
+  gender: "gender",
+  sex: "gender",
+};
+
+/**
+ * Deterministically cleans and normalizes raw student demographic fields.
+ */
+export function cleanDemographics(raw: Record<string, unknown>): {
+  studentName?: string;
+  rollNumber?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  category?: string;
+  quota?: string;
+  apaarId?: string;
+} {
+  const result: Record<string, string> = {};
+
+  // Map known fields
+  for (const [key, value] of Object.entries(raw)) {
+    if (value === null || value === undefined) continue;
+    const normalizedKey = key.trim().toLowerCase();
+    const targetKey = CANONICAL_COLUMN_MAPPINGS[normalizedKey] || key;
+    const strVal = String(value).trim();
+    if (strVal.length > 0) {
+      result[targetKey] = strVal;
+    }
+  }
+
+  // Normalize studentName: collapse whitespace
+  if (result.studentName) {
+    result.studentName = result.studentName.replace(/\s+/g, " ").trim();
+  }
+
+  // Normalize rollNumber: trim and uppercase
+  if (result.rollNumber) {
+    result.rollNumber = result.rollNumber.trim().toUpperCase();
+  }
+
+  // Normalize Date of Birth: support DD/MM/YYYY, DD-MM-YYYY -> YYYY-MM-DD
+  if (result.dateOfBirth) {
+    const dmyMatch = result.dateOfBirth.match(
+      /^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/,
+    );
+    if (dmyMatch) {
+      const day = dmyMatch[1].padStart(2, "0");
+      const month = dmyMatch[2].padStart(2, "0");
+      const year = dmyMatch[3];
+      result.dateOfBirth = `${year}-${month}-${day}`;
+    }
+  }
+
+  // Normalize Category: uppercase, handle common aliases
+  if (result.category) {
+    const cat = result.category.toUpperCase().replace(/\s+/g, "");
+    if (cat === "OBC" || cat === "OBCNCL" || cat === "OBC-NCL") {
+      result.category = "OBC-NCL";
+    } else if (cat === "GEN" || cat === "GENERAL" || cat === "OPEN") {
+      result.category = "GEN";
+    } else if (cat === "SC") {
+      result.category = "SC";
+    } else if (cat === "ST") {
+      result.category = "ST";
+    } else if (cat === "EWS") {
+      result.category = "EWS";
+    }
+  }
+
+  // Normalize Quota: map standard names
+  if (result.quota) {
+    const qLower = result.quota.toLowerCase();
+    if (qLower.includes("home")) {
+      result.quota = "Home State Quota";
+    } else if (qLower.includes("management")) {
+      result.quota = "Management Quota";
+    } else if (qLower.includes("supernumerary")) {
+      result.quota = "Supernumerary";
+    } else if (qLower.includes("waiver") || qLower.includes("tfw")) {
+      result.quota = "Tuition Fee Waiver";
+    } else if (qLower.includes("lateral")) {
+      result.quota = "Lateral Entry";
+    } else if (
+      qLower.includes("general") ||
+      qLower.includes("all india") ||
+      qLower === "regular"
+    ) {
+      result.quota = "General / All India";
+    }
+  }
+
+  return result;
+}
+
+export const sealBatchRequestSchema = z.object({
+  signatureConfirmation: z.literal(true, {
+    errorMap: () => ({
+      message:
+        "Cryptographic batch seal requires explicit signature confirmation",
+    }),
+  }),
+  notes: z.string().max(500).optional(),
+});
+
+export type SealBatchRequest = z.infer<typeof sealBatchRequestSchema>;
+
 // -----------------------------------------------------------------------------
 // Phase 3: Modules M02 & M03 Registry Schemas
 // -----------------------------------------------------------------------------

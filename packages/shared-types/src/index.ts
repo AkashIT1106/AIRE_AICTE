@@ -325,3 +325,109 @@ export interface ReplaySimulationResultDto {
     warningCount: number;
   };
 }
+
+// -----------------------------------------------------------------------------
+// Phase 5: Submission Management & Data Ingestion Types (M05 & M06)
+// -----------------------------------------------------------------------------
+
+export type SubmissionBatchStatus =
+  | "DRAFT"
+  | "VALIDATING"
+  | "QUARANTINED"
+  | "VALIDATED"
+  | "READY_FOR_SIGN_OFF"
+  | "SEALED"
+  | "LOCKED"
+  | "REJECTED";
+
+export type QuarantineRowStatus = "QUARANTINED" | "REMEDIATED" | "DISCARDED";
+export type StagedRowStatus = "ACCEPTED" | "FLAGGED";
+
+export type IngestionErrorCode =
+  | "ERR_INVALID_APAAR_FORMAT"
+  | "ERR_UNKNOWN_PROGRAMME_CODE"
+  | "ERR_INVALID_CATEGORY"
+  | "ERR_INVALID_QUOTA"
+  | "ERR_INVALID_DOB"
+  | "ERR_INVALID_ROLL_NUMBER"
+  | "ERR_MISSING_REQUIRED_FIELD"
+  | "ERR_HEADER_MISMATCH"
+  | "ERR_MALFORMED_ROW";
+
+export interface QuarantineFieldErrorDto {
+  field: string;
+  message: string;
+  code?: IngestionErrorCode | string;
+  received: unknown;
+}
+
+export interface StagedAdmissionRecordDto {
+  id: string;
+  batchId: string;
+  institutionId: string;
+  programmeId: string;
+  academicYear: string;
+  rowNumber: number;
+  studentName: string;
+  rollNumber: string;
+  dateOfBirth: string;
+  gender?: string | null;
+  category: string;
+  quota: string;
+  apaarId?: string | null;
+  status: StagedRowStatus;
+  rawPayload?: Record<string, unknown> | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface QuarantinedAdmissionRecordDto {
+  id: string;
+  batchId: string;
+  institutionId: string;
+  rowNumber: number;
+  rawPayload: Record<string, unknown>;
+  errors: QuarantineFieldErrorDto[];
+  status: QuarantineRowStatus;
+  remediatedRecordId?: string | null;
+  remediatedAt?: string | null;
+  remediatedById?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SubmissionBatchDto {
+  id: string;
+  institutionId: string;
+  academicYear: string;
+  programmeId: string;
+  fileName: string;
+  fileSize?: number | null;
+  fileHash?: string | null;
+  status: SubmissionBatchStatus;
+  totalCount: number;
+  validCount: number;
+  quarantineCount: number;
+  merkleRootHash?: string | null;
+  sealedAt?: string | null;
+  sealedById?: string | null;
+  submittedById?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  stagedRecords?: StagedAdmissionRecordDto[];
+  quarantinedRecords?: QuarantinedAdmissionRecordDto[];
+}
+
+export interface SealBatchRequestDto {
+  signatureConfirmation: boolean;
+  notes?: string;
+}
+
+export interface SealBatchResultDto {
+  batchId: string;
+  status: "SEALED";
+  merkleRootHash: string;
+  sealedAt: string;
+  sealedBy: string;
+  stagedRecordsCount: number;
+}

@@ -9,3 +9,4 @@ export const redisConnectionOptions: ConnectionOptions = {
 };
 
 export const OUTBOX_QUEUE_NAME = "aire-outbox-events";
+export const INGESTION_QUEUE_NAME = "aire-submission-ingestion";

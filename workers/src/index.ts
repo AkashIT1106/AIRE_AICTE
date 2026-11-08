@@ -42,9 +42,15 @@ outboxWorker.on("failed", (job: Job | undefined, err: Error) => {
   });
 });
 
+export { ingestionWorker, processIngestionJob } from "./ingestion.worker.js";
+export { parseCsv } from "./parser.js";
+export { INGESTION_QUEUE_NAME } from "./queue.js";
+
 async function gracefulShutdown(signal: string): Promise<void> {
   logger.info({ eventType: "WORKER_SHUTDOWN", signal });
   await outboxWorker.close();
+  const { ingestionWorker } = await import("./ingestion.worker.js");
+  await ingestionWorker.close();
   process.exit(0);
 }
 

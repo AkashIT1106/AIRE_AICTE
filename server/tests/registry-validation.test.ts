@@ -76,4 +76,43 @@ describe("Phase 3 Registry Schemas Validation", () => {
       );
     }
   });
+
+  it("validates Luhn-variant APAAR checksums correctly", async () => {
+    const { isValidLuhnApaar } = await import("@aire/validation");
+    // Valid 12-digit Luhn numbers
+    expect(isValidLuhnApaar("982144121042")).toBe(true);
+    expect(isValidLuhnApaar("9821-4412-1042")).toBe(true);
+    // Invalid checks
+    expect(isValidLuhnApaar("982144121040")).toBe(false);
+    expect(isValidLuhnApaar("123")).toBe(false);
+    expect(isValidLuhnApaar("")).toBe(false);
+  });
+
+  it("cleans and normalizes demographic fields deterministically", async () => {
+    const { cleanDemographics } = await import("@aire/validation");
+    const raw = {
+      "Candidate Name": "  SNEHAN   SUNDARAM  ",
+      "Roll No": " 2026-cse-01 ",
+      "Date of Birth": "12/04/2005",
+      "Reservation Category": " obc-ncl ",
+      "Admission Quota": "Home State Quota",
+      "APAAR ID": "9821-4412-1040",
+    };
+    const cleaned = cleanDemographics(raw);
+    expect(cleaned.studentName).toBe("SNEHAN SUNDARAM");
+    expect(cleaned.rollNumber).toBe("2026-CSE-01");
+    expect(cleaned.dateOfBirth).toBe("2005-04-12");
+    expect(cleaned.category).toBe("OBC-NCL");
+    expect(cleaned.quota).toBe("Home State Quota");
+    expect(cleaned.apaarId).toBe("9821-4412-1040");
+  });
+
+  it("validates seal batch request schema", async () => {
+    const { sealBatchRequestSchema } = await import("@aire/validation");
+    const valid = sealBatchRequestSchema.safeParse({ signatureConfirmation: true, notes: "All verified" });
+    expect(valid.success).toBe(true);
+
+    const invalid = sealBatchRequestSchema.safeParse({ signatureConfirmation: false });
+    expect(invalid.success).toBe(false);
+  });
 });
