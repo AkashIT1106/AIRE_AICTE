@@ -7,6 +7,7 @@ See `proposal.md` for motivation and background. Prior phases established authen
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Replace generic `InstitutionRecord` storage with dedicated relational models: `SubmissionBatch`, `StagedAdmissionRecord`, and `QuarantinedAdmissionRecord` with full multi-tenant RLS isolation.
 - Provide asynchronous spreadsheet ingestion via BullMQ (`aire-submission-ingestion`), supporting CSV and XLSX format parsing and canonical column normalization.
 - Enforce strict state progression: `DRAFT` -> `VALIDATING` -> `VALIDATED` -> `SEALED` -> `LOCKED`.
@@ -16,6 +17,7 @@ See `proposal.md` for motivation and background. Prior phases established authen
 - Enforce regulatory freeze deadlines to prevent submissions past annual cutoff.
 
 **Non-Goals:**
+
 - External APAAR API network verification and Identity Vault encryption (deferred to Phase 6 / M07 & M08).
 - Multi-institution reconciliation and intake quota breach adjudication (deferred to Phase 7 / M09 & M10).
 - Formal show-cause exception workbench (deferred to Phase 8 / M11).
@@ -24,21 +26,25 @@ See `proposal.md` for motivation and background. Prior phases established authen
 ## Decisions
 
 ### Decision 1: Relational Schema vs JSON Document Storage
+
 - **Choice:** Dedicated PostgreSQL tables (`SubmissionBatch`, `StagedAdmissionRecord`, `QuarantinedAdmissionRecord`) with foreign keys to `Institution` and `Programme`.
 - **Rationale:** Staged records will be directly evaluated and linked to the Admission Ledger in Phase 6 and Reconciliation Engine in Phase 7. Relational tables with indexes on `(institution_id, programme_id)` and `(batch_id, roll_number)` provide deterministic query performance and enable database-level RLS enforcement.
 - **Alternatives Considered:** Continuing to store records in JSON payloads inside `InstitutionRecord`. Rejected because it prevents efficient pagination, foreign-key consistency, and index-accelerated duplicate detection.
 
 ### Decision 2: Asynchronous Ingestion via BullMQ Queue
+
 - **Choice:** Dispatch upload jobs to `aire-submission-ingestion` queue in BullMQ, handled by worker instances with progress updates.
 - **Rationale:** Batch uploads may contain up to 5,000 student records per institution programme. Synchronous HTTP handling risks gateway timeouts and blocking the event loop.
 - **Alternatives Considered:** In-memory synchronous parsing. Rejected due to HTTP request timeout limits and lack of fault tolerance if the server restarts mid-parse.
 
 ### Decision 3: Deterministic Merkle Root Calculation for Sealing
+
 - **Choice:** Compute a deterministic binary Merkle tree hash across all staged records sorted lexicographically by `(rollNumber, studentName, id)`.
 - **Rationale:** Merkle trees allow cryptographic proof of inclusion for individual student records during subsequent verification and audits without revealing the entire cohort.
 - **Alternatives Considered:** Simple single SHA-256 hash of the JSON payload. Rejected because it cannot generate per-student inclusion proofs for verifiable credentials.
 
 ### Decision 4: Quarantine Triage and Inline Remediation Strategy
+
 - **Choice:** Defective rows are saved to `QuarantinedAdmissionRecord` with raw payload and an array of error diagnostics. The remediation endpoint re-evaluates only corrected fields; if valid, a new `StagedAdmissionRecord` is created, the quarantine row status is updated to `REMEDIATED`, and batch counts are updated atomically.
 - **Rationale:** Prevents whole-batch rejections when only a tiny fraction of rows have syntax or typo errors, aligning with user journey J-02.
 - **Alternatives Considered:** Rejecting the whole upload if any row has errors. Rejected as it creates massive operator friction.

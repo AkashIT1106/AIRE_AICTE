@@ -7,33 +7,47 @@ Enforces the institutional admission batch lifecycle progression, regulatory fre
 ## Requirements
 
 ### Requirement: Admission Batch Lifecycle Progression
+
 The system SHALL govern admission batch state progression through DRAFT, VALIDATED, SEALED, and LOCKED states.
 
 #### Scenario: Successful batch creation and transition to validated
+
 - **WHEN** an institution operator uploads an admission batch file and schema validation succeeds
 - **THEN** the batch transitions from DRAFT to VALIDATED state with updated record metrics
 
 #### Scenario: Block unauthorized state jump
+
 - **WHEN** an operator attempts to seal a batch that is still in DRAFT or has unaddressed quarantine items
 - **THEN** the system rejects the sealing request with an invalid state transition error
 
 ### Requirement: Cryptographic Batch Sealing and Integrity Hash
-The system SHALL compute a deterministic Merkle root hash and cryptographic SHA-256 seal over all staged student records when an authorized administrator seals a batch.
+
+The system SHALL compute a deterministic Merkle root hash and cryptographic SHA-256 seal over all staged student records when an authorized administrator seals a batch, promoting staged records to active admission records in the ledger and encrypting PII in the Identity Vault.
 
 #### Scenario: Batch sealed with cryptographic signature
+
 - **WHEN** an authorized institution administrator submits a sign-off request for a validated batch
 - **THEN** the system generates a Merkle root hash of all staged student records, marks the batch as SEALED, records the sealing administrator identity, and prevents subsequent record edits
 
+#### Scenario: Promotion to admission ledger and identity vault upon sealing
+
+- **WHEN** a validated admission batch is successfully sealed
+- **THEN** each staged student record is transformed into an active AdmissionRecord with pseudonymous token, student PII is encrypted in the Identity Vault, and an initial ADMITTED ledger event is created
+
 ### Requirement: Regulatory Freeze Enforcement
+
 The system SHALL enforce regulatory cutoff dates by disallowing modifications, uploads, or seal operations after the annual regulatory deadline.
 
 #### Scenario: Modification attempted past regulatory freeze date
+
 - **WHEN** an institution attempts to create, edit, or seal a batch after the regulatory freeze deadline has passed
 - **THEN** the system rejects the operation with a regulatory freeze error and logs the attempt
 
 ### Requirement: Multi-Tenant Submission Isolation and Security
+
 The system SHALL restrict all submission batch queries, uploads, and sealing operations to the authenticated institution's tenant context.
 
 #### Scenario: Cross-institution submission blocked
+
 - **WHEN** a client attempts to access or submit records for an institution ID different from the authenticated tenant session
 - **THEN** the system blocks the request with an authorization error and emits a security audit event

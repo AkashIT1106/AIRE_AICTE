@@ -237,7 +237,8 @@ describe("Journey J-02: Admission Batch Ingestion & Quarantine Triage", () => {
   });
 
   it("SubmissionService.sealBatch cryptographically seals the batch with deterministic Merkle root hash", async () => {
-    const { SubmissionService } = await import("../src/services/submission.service.js");
+    const { SubmissionService } =
+      await import("../src/services/submission.service.js");
     const sealResult = await SubmissionService.sealBatch(
       inst1Id,
       createdBatchId,
@@ -321,12 +322,16 @@ describe("Journey J-02: Admission Batch Ingestion & Quarantine Triage", () => {
       .send({ signatureConfirmation: true });
 
     expect(resSealFail.status).toBe(400);
-    expect(resSealFail.body.error.message).toContain("CANNOT_SEAL_WITH_PENDING_QUARANTINE");
+    expect(resSealFail.body.error.message).toContain(
+      "CANNOT_SEAL_WITH_PENDING_QUARANTINE",
+    );
   });
 
   it("POST /api/v1/institutions/:instId/submissions/:batchId/seal seals a clean batch", async () => {
     const resSeal = await request(app)
-      .post(`/api/v1/institutions/${inst1Id}/submissions/${createdBatchId}/seal`)
+      .post(
+        `/api/v1/institutions/${inst1Id}/submissions/${createdBatchId}/seal`,
+      )
       .set("Cookie", operatorCookie)
       .set("X-Institution-ID", inst1Id)
       .send({

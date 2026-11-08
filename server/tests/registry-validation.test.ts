@@ -109,10 +109,15 @@ describe("Phase 3 Registry Schemas Validation", () => {
 
   it("validates seal batch request schema", async () => {
     const { sealBatchRequestSchema } = await import("@aire/validation");
-    const valid = sealBatchRequestSchema.safeParse({ signatureConfirmation: true, notes: "All verified" });
+    const valid = sealBatchRequestSchema.safeParse({
+      signatureConfirmation: true,
+      notes: "All verified",
+    });
     expect(valid.success).toBe(true);
 
-    const invalid = sealBatchRequestSchema.safeParse({ signatureConfirmation: false });
+    const invalid = sealBatchRequestSchema.safeParse({
+      signatureConfirmation: false,
+    });
     expect(invalid.success).toBe(false);
   });
 });

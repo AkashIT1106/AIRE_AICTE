@@ -14,6 +14,7 @@ import {
   SealBatchResultDto,
 } from "@aire/shared-types";
 import { logAuditEvent } from "./audit.service.js";
+import { AdmissionLedgerService } from "./admission-ledger.service.js";
 
 /**
  * Computes a deterministic binary Merkle root hash from an array of leaf hashes.
@@ -528,10 +529,7 @@ export class SubmissionService {
           quota: record.quota,
           apaarId: record.apaarId || null,
         });
-        return crypto
-          .createHash("sha256")
-          .update(canonicalLeaf)
-          .digest("hex");
+        return crypto.createHash("sha256").update(canonicalLeaf).digest("hex");
       });
 
       const merkleRootHash = computeMerkleRoot(leafHashes);
@@ -554,6 +552,15 @@ export class SubmissionService {
           sealedById: validSealedById,
         },
       });
+
+      // Promote staged records to active AdmissionRecord in admission ledger & Identity Vault (Phase 6 / M08 / M15)
+      await AdmissionLedgerService.promoteBatchToLedger(
+        institutionId,
+        batchId,
+        actorId || "INSTITUTION_ADMIN",
+        correlationId,
+        tx,
+      );
 
       await logAuditEvent({
         severity: "info",

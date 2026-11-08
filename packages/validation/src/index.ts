@@ -187,20 +187,20 @@ export const CANONICAL_COLUMN_MAPPINGS: Record<string, string> = {
   // Category
   category: "category",
   "reservation category": "category",
-  "reservation_category": "category",
+  reservation_category: "category",
   "caste category": "category",
 
   // Quota
   quota: "quota",
   "admission quota": "quota",
-  "admission_quota": "quota",
+  admission_quota: "quota",
   "seat quota": "quota",
 
   // APAAR
   apaar: "apaarId",
   apaarid: "apaarId",
   "apaar id": "apaarId",
-  "apaar_id": "apaarId",
+  apaar_id: "apaarId",
 
   // Gender
   gender: "gender",
@@ -569,3 +569,61 @@ export type CreatePolicyFixtureInput = z.infer<
 >;
 export type ActivatePolicyPackInput = z.infer<typeof activatePolicyPackSchema>;
 export type ReplaySimulationInput = z.infer<typeof replaySimulationSchema>;
+
+// -----------------------------------------------------------------------------
+// Phase 6: Identity Gateway & Admission Ledger (Modules M07, M08, M15)
+// -----------------------------------------------------------------------------
+
+export const branchChangeRequestSchema = z.object({
+  newProgrammeId: z.string().min(1, "New programme ID is required"),
+  reason: z.string().min(3, "Reason must be at least 3 characters").max(500),
+  approvalReference: z
+    .string()
+    .min(3, "Approval reference order is required")
+    .max(100),
+});
+
+export const cancellationRequestSchema = z.object({
+  cancellationReason: z
+    .string()
+    .min(3, "Cancellation reason must be at least 3 characters")
+    .max(500),
+  evidenceDocumentHash: z
+    .string()
+    .min(10, "Evidence document hash is required for seat surrender")
+    .max(128),
+});
+
+export const migrationRequestSchema = z.object({
+  destinationInstitution: z
+    .string()
+    .min(2, "Destination institution name is required")
+    .max(200),
+  migrationOrderNumber: z
+    .string()
+    .min(3, "Migration order number is required")
+    .max(100),
+  noObjectionCertHash: z
+    .string()
+    .min(10, "NOC document hash is required")
+    .max(128),
+});
+
+export const vaultAccessRequestSchema = z.object({
+  purposeCode: z.enum([
+    "GRIEVANCE_REDRESSAL",
+    "COURT_AUDIT",
+    "REGULATORY_SCRUTINY",
+    "STUDENT_SELF_ACCESS",
+    "ADMISSION_VERIFICATION",
+  ]),
+});
+
+export type BranchChangeRequestInput = z.infer<
+  typeof branchChangeRequestSchema
+>;
+export type CancellationRequestInput = z.infer<
+  typeof cancellationRequestSchema
+>;
+export type MigrationRequestInput = z.infer<typeof migrationRequestSchema>;
+export type VaultAccessRequestInput = z.infer<typeof vaultAccessRequestSchema>;

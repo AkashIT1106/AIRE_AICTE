@@ -44,5 +44,10 @@ Phase 12: Demonstration, Evaluation & Delivery
 ## 2. Phase Detail & Dependencies
 
 - **Phase 1 (Complete):** Established monorepo, Docker services, Prisma client, BullMQ worker, React placeholder.
-- **Phase 2 (Active):** Repair migration baseline (`0_init`), initialize restricted `aire_app_user` role, implement Better Auth authentication, centralized authorization middleware, and PostgreSQL Forced RLS.
-- **Phases 3–12:** Follow approved sequence in accordance with `PROJECT_PLAN.md` §40.
+- **Phase 2 (Complete):** Repaired migration baseline (`0_init`), restricted `aire_app_user` role, Better Auth authentication, centralized authorization middleware, and PostgreSQL Forced RLS.
+- **Phase 3 (Complete):** Institution, Campus, Programme, and Approval/Entitlement Registry (M02, M03).
+- **Phase 4 (Complete):** Regulatory Policy Registry & Rule Engine (M04).
+- **Phase 5 (Complete):** Institution Submission & Ingestion Pipeline (M05, M06).
+- **Phase 6 (Complete):** Identity Gateway (M07), Admission Ledger (M08), and Identity Vault (M15).
+- **Phase 7 (Active / Next):** Entitlement & Reconciliation Engines (M09, M10).
+- **Phases 8–12:** Follow approved sequence in accordance with `PROJECT_PLAN.md` §40.

@@ -82,6 +82,7 @@ model User {
   submittedBatches         SubmissionBatch[]            @relation("BatchSubmittedBy")
   sealedBatches            SubmissionBatch[]            @relation("BatchSealedBy")
   remediatedQuarantineRows QuarantinedAdmissionRecord[] @relation("QuarantineRemediatedBy")
+  ledgerEvents             LedgerEvent[]                @relation("LedgerEventActor")
 
   @@map("user")
 }
@@ -160,6 +161,8 @@ model Institution {
   submissionBatches  SubmissionBatch[]
   stagedRecords      StagedAdmissionRecord[]
   quarantinedRecords QuarantinedAdmissionRecord[]
+  admissionRecords   AdmissionRecord[]
+  ledgerEvents       LedgerEvent[]
 
   @@map("institutions")
 }
@@ -202,6 +205,7 @@ model Programme {
   seatEntitlements  SeatEntitlement[]
   submissionBatches SubmissionBatch[]
   stagedRecords     StagedAdmissionRecord[]
+  admissionRecords  AdmissionRecord[]
 
   @@index([degreeLevel])
   @@index([discipline])
@@ -469,6 +473,7 @@ model SubmissionBatch {
   sealedBy           User?                        @relation("BatchSealedBy", fields: [sealedById], references: [id])
   stagedRecords      StagedAdmissionRecord[]
   quarantinedRecords QuarantinedAdmissionRecord[]
+  admissionRecords   AdmissionRecord[]
 
   @@index([institutionId])
   @@index([institutionId, academicYear])
@@ -530,4 +535,77 @@ model QuarantinedAdmissionRecord {
   @@index([batchId])
   @@index([batchId, status])
   @@map("quarantined_admission_records")
+}
+
+// -----------------------------------------------------------------------------
+// Phase 6: Identity Gateway & Admission Ledger (Modules M07, M08, M15)
+// -----------------------------------------------------------------------------
+
+/// Authoritative student admission record in operational schema (M08)
+model AdmissionRecord {
+  id              String    @id @default(uuid())
+  tenantId        String    @map("tenant_id")
+  batchId         String    @map("batch_id")
+  programmeId     String    @map("programme_id")
+  academicYear    String    @map("academic_year")
+  studentToken    String    @unique @map("student_token")
+  apaarStatus     String    @default("UNVERIFIED") @map("apaar_status") // UNVERIFIED, VERIFIED, FAILED, TIMEOUT
+  apaarVerifiedAt DateTime? @map("apaar_verified_at")
+  category        String    // GEN, OBC-NCL, SC, ST, EWS
+  quota           String    // General, Home State, etc.
+  status          String    @default("ACTIVE") // ACTIVE, CANCELLED, TRANSFERRED, MIGRATED
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  institution  Institution     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  batch        SubmissionBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  programme    Programme       @relation(fields: [programmeId], references: [id])
+  ledgerEvents LedgerEvent[]
+
+  @@index([tenantId])
+  @@index([tenantId, academicYear])
+  @@index([tenantId, programmeId])
+  @@index([batchId])
+  @@index([studentToken])
+  @@map("admission_records")
+}
+
+/// Append-only chronological lifecycle event ledger (M08)
+model LedgerEvent {
+  id                String   @id @default(uuid())
+  admissionRecordId String   @map("admission_record_id")
+  institutionId     String   @map("institution_id")
+  eventType         String   @map("event_type") // ADMITTED, BRANCH_CHANGE, LATERAL_ENTRY, CANCELLATION, MIGRATION
+  sequenceNumber    Int      @map("sequence_number")
+  previousHash      String   @map("previous_hash")
+  hash              String   @map("hash")
+  payload           Json     @default("{}")
+  actorId           String?  @map("actor_id")
+  timestamp         DateTime @default(now())
+
+  admissionRecord AdmissionRecord @relation(fields: [admissionRecordId], references: [id], onDelete: Cascade)
+  institution     Institution     @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  actor           User?           @relation("LedgerEventActor", fields: [actorId], references: [id])
+
+  @@unique([admissionRecordId, sequenceNumber])
+  @@index([admissionRecordId])
+  @@index([institutionId])
+  @@index([timestamp])
+  @@map("ledger_events")
+}
+
+/// DPDP Act 2023 compliant Identity Vault isolated PII store (M15)
+model IdentityVaultRecord {
+  id               String   @id @default(uuid())
+  studentToken     String   @unique @map("student_token")
+  encryptedPayload String   @map("encrypted_payload") // AES-256-GCM ciphertext + IV + AuthTag
+  encryptedDek     String   @map("encrypted_dek")     // DEK wrapped under Master KEK
+  apaarHash        String?  @map("apaar_hash")        // Blinded search HMAC/SHA-256
+  keyVersion       String   @default("v1") @map("key_version")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@index([studentToken])
+  @@index([apaarHash])
+  @@map("identity_vault_records")
 }
