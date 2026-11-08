@@ -137,14 +137,135 @@ model Institution {
   id        String   @id @default(uuid())
   code      String   @unique
   name      String
+  aicteId   String?  @unique @map("aicte_id")
+  legalName String?  @map("legal_name")
+  address   String?
+  state     String?
+  district  String?
+  pincode   String?
   status    String   @default("ACTIVE") // ACTIVE, SUSPENDED, INACTIVE
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  members InstitutionMember[]
-  records InstitutionRecord[]
+  members          InstitutionMember[]
+  records          InstitutionRecord[]
+  campuses         Campus[]
+  approvalOrders   ApprovalOrder[]
+  programmeAliases ProgrammeAlias[]
 
   @@map("institutions")
+}
+
+/// Physical campus under an institution
+model Campus {
+  id            String   @id @default(uuid())
+  institutionId String   @map("institution_id")
+  code          String
+  name          String
+  address       String?
+  state         String?
+  district      String?
+  pincode       String?
+  status        String   @default("ACTIVE") // ACTIVE, INACTIVE
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  institution      Institution       @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  seatEntitlements SeatEntitlement[]
+
+  @@unique([institutionId, code])
+  @@index([institutionId])
+  @@map("campuses")
+}
+
+/// Canonical AICTE academic programme catalog
+model Programme {
+  id            String   @id @default(uuid())
+  canonicalCode String   @unique @map("canonical_code")
+  name          String
+  degreeLevel   String   @map("degree_level") // UG, PG, DIPLOMA, POST_DIPLOMA
+  discipline    String
+  durationYears Int      @default(4) @map("duration_years")
+  status        String   @default("ACTIVE") // ACTIVE, DISCONTINUED
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  aliases          ProgrammeAlias[]
+  seatEntitlements SeatEntitlement[]
+
+  @@index([degreeLevel])
+  @@index([discipline])
+  @@map("programmes")
+}
+
+/// Programme aliases for normalisation of variants
+model ProgrammeAlias {
+  id              String   @id @default(uuid())
+  programmeId     String   @map("programme_id")
+  rawTitle        String   @map("raw_title")
+  normalisedTitle String   @map("normalised_title")
+  institutionId   String?  @map("institution_id")
+  confidence      Float    @default(1.0)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  programme   Programme    @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  institution Institution? @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+
+  @@unique([normalisedTitle, institutionId])
+  @@index([normalisedTitle])
+  @@index([programmeId])
+  @@map("programme_aliases")
+}
+
+/// Annual AICTE Approval Orders (EOA / LOA)
+model ApprovalOrder {
+  id             String    @id @default(uuid())
+  institutionId  String    @map("institution_id")
+  academicYear   String    @map("academic_year")
+  orderNumber    String    @unique @map("order_number")
+  orderType      String    @default("EOA") @map("order_type") // EOA, LOA
+  issueDate      DateTime  @default(now()) @map("issue_date")
+  status         String    @default("ACTIVE") // DRAFT, ACTIVE, SUPERSEDED
+  supersededById String?   @map("superseded_by_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  institution  Institution       @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  supersededBy ApprovalOrder?    @relation("OrderSupersession", fields: [supersededById], references: [id])
+  supersedes   ApprovalOrder[]   @relation("OrderSupersession")
+  entitlements SeatEntitlement[]
+
+  @@index([institutionId, academicYear])
+  @@index([status])
+  @@map("approval_orders")
+}
+
+/// Programme-level sanctioned intake and category quotas
+model SeatEntitlement {
+  id                 String   @id @default(uuid())
+  approvalOrderId    String   @map("approval_order_id")
+  programmeId        String   @map("programme_id")
+  campusId           String?  @map("campus_id")
+  sanctionedIntake   Int      @map("sanctioned_intake")
+  openSeats          Int      @default(0) @map("open_seats")
+  scSeats            Int      @default(0) @map("sc_seats")
+  stSeats            Int      @default(0) @map("st_seats")
+  obcSeats           Int      @default(0) @map("obc_seats")
+  ewsSeats           Int      @default(0) @map("ews_seats")
+  tfwSeats           Int      @default(0) @map("tfw_seats")
+  supernumerarySeats Int      @default(0) @map("supernumerary_seats")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  approvalOrder ApprovalOrder @relation(fields: [approvalOrderId], references: [id], onDelete: Cascade)
+  programme     Programme     @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  campus        Campus?       @relation(fields: [campusId], references: [id], onDelete: Cascade)
+
+  @@unique([approvalOrderId, programmeId, campusId])
+  @@index([approvalOrderId])
+  @@index([programmeId])
+  @@map("seat_entitlements")
 }
 
 model InstitutionMember {

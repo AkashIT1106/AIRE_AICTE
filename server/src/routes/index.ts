@@ -2,6 +2,8 @@ import { Router } from "express";
 import { healthRouter } from "./health.routes.js";
 import { tenantRouter } from "./tenant.routes.js";
 import { submissionRouter } from "./submission.routes.js";
+import { institutionRegistryRouter } from "./institution-registry.routes.js";
+import { approvalRegistryRouter } from "./approval-registry.routes.js";
 
 export const apiV1Router: Router = Router();
 
@@ -13,3 +15,9 @@ apiV1Router.use("/", tenantRouter);
 
 // Mount admission batch submission and quarantine triage (J-02)
 apiV1Router.use("/", submissionRouter);
+
+// Mount Phase 3: Institution & Programme Registry (M02)
+apiV1Router.use("/", institutionRegistryRouter);
+
+// Mount Phase 3: Approval & Entitlement Registry (M03)
+apiV1Router.use("/", approvalRegistryRouter);

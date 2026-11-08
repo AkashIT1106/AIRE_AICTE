@@ -55,6 +55,14 @@ export interface SubmissionBatch {
 export interface ApiRoutes {
   HEALTH: "/api/v1/health";
   READY: "/api/v1/ready";
+  INSTITUTIONS: "/api/v1/institutions";
+  INSTITUTION_DETAIL: "/api/v1/institutions/:institutionId";
+  INSTITUTION_CAMPUSES: "/api/v1/institutions/:institutionId/campuses";
+  PROGRAMMES: "/api/v1/programmes";
+  PROGRAMME_DETAIL: "/api/v1/programmes/:programmeId";
+  APPROVAL_ORDERS: "/api/v1/approvals";
+  APPROVAL_ORDER_DETAIL: "/api/v1/approvals/:approvalId";
+  APPROVAL_SUPERSEDE: "/api/v1/approvals/:approvalId/supersede";
   INSTITUTION_SUBMISSIONS: "/api/v1/institutions/:institutionId/submissions";
   INSTITUTION_SUBMISSION_DETAIL: "/api/v1/institutions/:institutionId/submissions/:batchId";
   INSTITUTION_QUARANTINE_REMEDIATE: "/api/v1/institutions/:institutionId/submissions/:batchId/quarantine/:rowId";
@@ -63,6 +71,14 @@ export interface ApiRoutes {
 export const API_ROUTES: ApiRoutes = {
   HEALTH: "/api/v1/health",
   READY: "/api/v1/ready",
+  INSTITUTIONS: "/api/v1/institutions",
+  INSTITUTION_DETAIL: "/api/v1/institutions/:institutionId",
+  INSTITUTION_CAMPUSES: "/api/v1/institutions/:institutionId/campuses",
+  PROGRAMMES: "/api/v1/programmes",
+  PROGRAMME_DETAIL: "/api/v1/programmes/:programmeId",
+  APPROVAL_ORDERS: "/api/v1/approvals",
+  APPROVAL_ORDER_DETAIL: "/api/v1/approvals/:approvalId",
+  APPROVAL_SUPERSEDE: "/api/v1/approvals/:approvalId/supersede",
   INSTITUTION_SUBMISSIONS: "/api/v1/institutions/:institutionId/submissions",
   INSTITUTION_SUBMISSION_DETAIL:
     "/api/v1/institutions/:institutionId/submissions/:batchId",

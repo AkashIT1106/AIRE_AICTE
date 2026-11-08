@@ -61,3 +61,94 @@ export interface SystemHealth {
     };
   };
 }
+
+// -----------------------------------------------------------------------------
+// Phase 3: Modules M02 & M03 Domain Entities DTOs
+// -----------------------------------------------------------------------------
+
+export interface CampusDto {
+  id: string;
+  institutionId: string;
+  code: string;
+  name: string;
+  address?: string | null;
+  state?: string | null;
+  district?: string | null;
+  pincode?: string | null;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProgrammeDto {
+  id: string;
+  canonicalCode: string;
+  name: string;
+  degreeLevel: string;
+  discipline: string;
+  durationYears: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProgrammeAliasDto {
+  id: string;
+  programmeId: string;
+  rawTitle: string;
+  normalisedTitle: string;
+  institutionId?: string | null;
+  confidence: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InstitutionDto {
+  id: string;
+  code: string;
+  name: string;
+  aicteId?: string | null;
+  legalName?: string | null;
+  address?: string | null;
+  state?: string | null;
+  district?: string | null;
+  pincode?: string | null;
+  status: string;
+  campuses?: CampusDto[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SeatEntitlementDto {
+  id: string;
+  approvalOrderId: string;
+  programmeId: string;
+  campusId?: string | null;
+  sanctionedIntake: number;
+  openSeats: number;
+  scSeats: number;
+  stSeats: number;
+  obcSeats: number;
+  ewsSeats: number;
+  tfwSeats: number;
+  supernumerarySeats: number;
+  programme?: ProgrammeDto;
+  campus?: CampusDto;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApprovalOrderDto {
+  id: string;
+  institutionId: string;
+  academicYear: string;
+  orderNumber: string;
+  orderType: string;
+  issueDate: string;
+  status: string;
+  supersededById?: string | null;
+  entitlements?: SeatEntitlementDto[];
+  institution?: InstitutionDto;
+  createdAt: string;
+  updatedAt: string;
+}
