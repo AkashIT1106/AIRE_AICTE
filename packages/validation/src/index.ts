@@ -250,3 +250,28 @@ export type ProgrammeInput = z.infer<typeof programmeInputSchema>;
 export type ProgrammeAliasInput = z.infer<typeof programmeAliasInputSchema>;
 export type ApprovalOrderInput = z.infer<typeof approvalOrderInputSchema>;
 export type SeatEntitlementInput = z.infer<typeof seatEntitlementInputSchema>;
+
+// -----------------------------------------------------------------------------
+// Authentication & Session Schemas (M01 & J-01)
+// -----------------------------------------------------------------------------
+
+export const signInSchema = z.object({
+  email: z.string().email("Valid email address is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export const signUpSchema = z.object({
+  email: z.string().email("Valid email address is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  name: z.string().min(2, "Name must be at least 2 characters").max(100),
+});
+
+export const stepUpSchema = z.object({
+  password: z
+    .string()
+    .min(1, "Password is required for step-up authentication"),
+});
+
+export type SignInInput = z.infer<typeof signInSchema>;
+export type SignUpInput = z.infer<typeof signUpSchema>;
+export type StepUpInput = z.infer<typeof stepUpSchema>;

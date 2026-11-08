@@ -152,3 +152,45 @@ export interface ApprovalOrderDto {
   createdAt: string;
   updatedAt: string;
 }
+
+// -----------------------------------------------------------------------------
+// Authentication & Session DTOs (M01 & J-01)
+// -----------------------------------------------------------------------------
+
+export interface AuthUserDto {
+  id: string;
+  email: string;
+  name: string;
+  emailVerified: boolean;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
+
+export interface AuthSessionDto {
+  id: string;
+  userId: string;
+  expiresAt: string | Date;
+  token: string;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+}
+
+export interface AuthResponseDto {
+  user: AuthUserDto;
+  session?: AuthSessionDto | null;
+}
+
+export interface StepUpResponseDto {
+  stepUpVerified: boolean;
+  verifiedAt: string;
+}
+
+export interface SessionTouchResponseDto {
+  touched: boolean;
+  updatedAt: string;
+}
+
+export interface SessionRevocationResponseDto {
+  revoked: boolean;
+  count: number;
+}
