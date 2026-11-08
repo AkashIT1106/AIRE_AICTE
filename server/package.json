@@ -17,6 +17,7 @@
   "dependencies": {
     "@aire/api-contracts": "workspace:*",
     "@aire/authorization": "workspace:*",
+    "@aire/policy-engine": "workspace:*",
     "@aire/shared-types": "workspace:*",
     "@aire/validation": "workspace:*",
     "@better-auth/prisma-adapter": "^1.7.15",

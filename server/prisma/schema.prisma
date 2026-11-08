@@ -77,6 +77,8 @@ model User {
   accounts      Account[]
   memberships   InstitutionMember[]
   platformRoles PlatformUserRole[]
+  authoredPolicies  PolicyPack[]              @relation("PolicyAuthor")
+  reviewedSignoffs  PolicyActivationSignoff[] @relation("PolicySignoffReviewer")
 
   @@map("user")
 }
@@ -335,4 +337,100 @@ model AuditEvent {
   @@index([tenantId])
   @@index([timestamp])
   @@map("audit_events")
+}
+
+// -----------------------------------------------------------------------------
+// Phase 4: Regulatory Policy Registry & Rule Engine (Module M04)
+// -----------------------------------------------------------------------------
+
+/// Regulatory Policy Pack representing an AICTE Approval Process Handbook (APH) edition
+model PolicyPack {
+  id               String    @id @default(uuid())
+  code             String    @unique // e.g. "AICTE-APH-2026-27-V1.0"
+  name             String    // e.g. "AICTE Approval Process Handbook 2026-27"
+  academicYear     String    @map("academic_year") // e.g. "2026-27"
+  edition          String    @default("1.0")
+  status           String    @default("DRAFT") // DRAFT, COUNCIL_REVIEW, GAZETTE_NOTIFIED, IN_FORCE, SUPERSEDED, AMENDED
+  stateCode        String?   @map("state_code") // null for National AICTE norms, or state code (e.g., "MH", "TN")
+  gazetteReference String?   @map("gazette_reference") // Official Gazette notification number
+  contentHash      String?   @map("content_hash") // SHA-256 hash of rules & parameters
+  authorId         String    @map("author_id")
+  effectiveFrom    DateTime? @map("effective_from")
+  effectiveTo      DateTime? @map("effective_to")
+  supersededById   String?   @map("superseded_by_id")
+  parentPackId     String?   @map("parent_pack_id") // For AMENDED corrigenda packs
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  author           User                      @relation("PolicyAuthor", fields: [authorId], references: [id])
+  supersededBy     PolicyPack?               @relation("PolicyPackSupersession", fields: [supersededById], references: [id])
+  supersedes       PolicyPack[]              @relation("PolicyPackSupersession")
+  parentPack       PolicyPack?               @relation("PolicyPackAmendments", fields: [parentPackId], references: [id])
+  amendments       PolicyPack[]              @relation("PolicyPackAmendments")
+  rules            PolicyRule[]
+  fixtures         PolicyTestFixture[]
+  activationSignoffs PolicyActivationSignoff[]
+
+  @@index([academicYear, status])
+  @@index([status])
+  @@map("policy_packs")
+}
+
+/// Declarative Regulatory Evaluation Rule within a Policy Pack
+model PolicyRule {
+  id              String   @id @default(uuid())
+  policyPackId    String   @map("policy_pack_id")
+  code            String   @map("code") // e.g., "RULE_INTAKE_CEILING", "RULE_STATUTORY_RESERVATION", "RULE_PENAL_NO_ADMISSION"
+  name            String
+  category        String   // CAPACITY, QUOTA, ELIGIBILITY, TIMELINE, PENAL_ACTION
+  clauseReference String   @map("clause_reference") // e.g., "APH 2026-27 Section 2.4", "APH Chapter VII"
+  description     String?
+  severity        String   @default("VIOLATION") // VIOLATION, WARNING
+  parameters      Json     @default("{}") // rule coefficients, statutory percentages, rounding rules
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  policyPack      PolicyPack @relation(fields: [policyPackId], references: [id], onDelete: Cascade)
+
+  @@unique([policyPackId, code])
+  @@index([policyPackId])
+  @@map("policy_rules")
+}
+
+/// Synthetic Test Fixtures for Policy Pack Automated Regression Validation
+model PolicyTestFixture {
+  id             String    @id @default(uuid())
+  policyPackId   String    @map("policy_pack_id")
+  name           String
+  description    String?
+  inputData      Json      @map("input_data") // Synthetic cohort input payload
+  expectedOutput Json      @map("expected_output") // Expected evaluation results
+  lastRunStatus  String?   @map("last_run_status") // PASSED, FAILED
+  lastRunAt      DateTime? @map("last_run_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  policyPack     PolicyPack @relation(fields: [policyPackId], references: [id], onDelete: Cascade)
+
+  @@index([policyPackId])
+  @@map("policy_test_fixtures")
+}
+
+/// Immutable Dual-Authorization Activation Record
+model PolicyActivationSignoff {
+  id                        String   @id @default(uuid())
+  policyPackId              String   @map("policy_pack_id")
+  reviewerId                String   @map("reviewer_id")
+  gazetteNotificationNumber String   @map("gazette_notification_number")
+  stepUpVerifiedAt          DateTime @map("step_up_verified_at")
+  fixtureRunEvidenceHash    String   @map("fixture_run_evidence_hash")
+  signoffNotes              String?  @map("signoff_notes")
+  activatedAt               DateTime @default(now()) @map("activated_at")
+
+  policyPack                PolicyPack @relation(fields: [policyPackId], references: [id], onDelete: Cascade)
+  reviewer                  User       @relation("PolicySignoffReviewer", fields: [reviewerId], references: [id])
+
+  @@index([policyPackId])
+  @@index([reviewerId])
+  @@map("policy_activation_signoffs")
 }

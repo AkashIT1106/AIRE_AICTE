@@ -5,6 +5,7 @@ import { tenantRouter } from "./tenant.routes.js";
 import { submissionRouter } from "./submission.routes.js";
 import { institutionRegistryRouter } from "./institution-registry.routes.js";
 import { approvalRegistryRouter } from "./approval-registry.routes.js";
+import { policyRouter } from "./policy.routes.js";
 
 export const apiV1Router: Router = Router();
 
@@ -25,3 +26,6 @@ apiV1Router.use("/", institutionRegistryRouter);
 
 // Mount Phase 3: Approval & Entitlement Registry (M03)
 apiV1Router.use("/", approvalRegistryRouter);
+
+// Mount Phase 4: Regulatory Policy Registry & Rule Engine (M04)
+apiV1Router.use("/policies", policyRouter);

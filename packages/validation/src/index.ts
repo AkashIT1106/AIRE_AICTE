@@ -275,3 +275,120 @@ export const stepUpSchema = z.object({
 export type SignInInput = z.infer<typeof signInSchema>;
 export type SignUpInput = z.infer<typeof signUpSchema>;
 export type StepUpInput = z.infer<typeof stepUpSchema>;
+
+// -----------------------------------------------------------------------------
+// Policy Engine & Regulatory Policy Registry Schemas (M04 & S-23 / S-40)
+// -----------------------------------------------------------------------------
+
+export const policyPackStatusSchema = z.enum([
+  "DRAFT",
+  "COUNCIL_REVIEW",
+  "GAZETTE_NOTIFIED",
+  "IN_FORCE",
+  "SUPERSEDED",
+  "AMENDED",
+]);
+
+export const ruleCategorySchema = z.enum([
+  "CAPACITY",
+  "QUOTA",
+  "ELIGIBILITY",
+  "TIMELINE",
+  "PENAL_ACTION",
+]);
+
+export const ruleSeveritySchema = z.enum(["VIOLATION", "WARNING"]);
+
+export const institutionalPenalStatusSchema = z.enum([
+  "APPROVED",
+  "REDUCED_INTAKE",
+  "NO_ADMISSION",
+  "WITHDRAWAL_OF_APPROVAL",
+  "RESTORATION",
+]);
+
+export const createPolicyPackSchema = z.object({
+  code: z
+    .string()
+    .min(3, "Policy pack code must be at least 3 characters")
+    .max(100),
+  name: z
+    .string()
+    .min(3, "Policy pack name must be at least 3 characters")
+    .max(200),
+  academicYear: z
+    .string()
+    .regex(
+      /^\d{4}-\d{2}$/,
+      "Academic year must follow YYYY-YY format (e.g. 2026-27)",
+    ),
+  edition: z.string().default("1.0"),
+  stateCode: z.string().length(2).optional().nullable(),
+  effectiveFrom: z.string().datetime().optional().nullable(),
+  effectiveTo: z.string().datetime().optional().nullable(),
+});
+
+export const createPolicyRuleSchema = z.object({
+  code: z
+    .string()
+    .min(3, "Rule code must be at least 3 characters")
+    .regex(
+      /^[A-Z0-9_]+$/,
+      "Rule code must be uppercase alphanumeric with underscores",
+    ),
+  name: z.string().min(3).max(200),
+  category: ruleCategorySchema,
+  clauseReference: z.string().min(1, "Clause reference is required"),
+  description: z.string().optional().nullable(),
+  severity: ruleSeveritySchema.default("VIOLATION"),
+  parameters: z.record(z.unknown()).default({}),
+});
+
+export const createPolicyFixtureSchema = z.object({
+  name: z.string().min(3).max(200),
+  description: z.string().optional().nullable(),
+  inputData: z.record(z.unknown()),
+  expectedOutput: z.record(z.unknown()),
+});
+
+export const activatePolicyPackSchema = z.object({
+  gazetteNotificationNumber: z
+    .string()
+    .min(3, "Gazette notification reference is required"),
+  signoffNotes: z.string().max(1000).optional().nullable(),
+});
+
+export const replaySimulationSchema = z.object({
+  policyPackId: z.string().uuid("Target policyPackId must be a valid UUID"),
+  baselinePolicyPackId: z
+    .string()
+    .uuid("Baseline policyPackId must be a valid UUID")
+    .optional(),
+  cohort: z.object({
+    academicYear: z
+      .string()
+      .regex(/^\d{4}-\d{2}$/, "Academic year must follow YYYY-YY format"),
+    sanctionedIntake: z.number().int().min(0),
+    admittedRegularCount: z.number().int().min(0),
+    categories: z.object({
+      OPEN: z.number().int().min(0),
+      SC: z.number().int().min(0),
+      ST: z.number().int().min(0),
+      OBC: z.number().int().min(0),
+    }),
+    supernumerary: z.object({
+      EWS: z.number().int().min(0).default(0),
+      TFW: z.number().int().min(0).default(0),
+      lateralEntry: z.number().int().min(0).default(0),
+    }),
+    institutionalStatus: institutionalPenalStatusSchema.default("APPROVED"),
+  }),
+});
+
+export type CreatePolicyPackInput = z.infer<typeof createPolicyPackSchema>;
+export type CreatePolicyRuleInput = z.infer<typeof createPolicyRuleSchema>;
+export type CreatePolicyFixtureInput = z.infer<
+  typeof createPolicyFixtureSchema
+>;
+export type ActivatePolicyPackInput = z.infer<typeof activatePolicyPackSchema>;
+export type ReplaySimulationInput = z.infer<typeof replaySimulationSchema>;

@@ -194,3 +194,134 @@ export interface SessionRevocationResponseDto {
   revoked: boolean;
   count: number;
 }
+
+// -----------------------------------------------------------------------------
+// Policy Engine & Regulatory Policy Registry DTOs (M04 & S-23 / S-40)
+// -----------------------------------------------------------------------------
+
+export type PolicyPackStatus =
+  | "DRAFT"
+  | "COUNCIL_REVIEW"
+  | "GAZETTE_NOTIFIED"
+  | "IN_FORCE"
+  | "SUPERSEDED"
+  | "AMENDED";
+
+export type RuleCategory =
+  "CAPACITY" | "QUOTA" | "ELIGIBILITY" | "TIMELINE" | "PENAL_ACTION";
+
+export type RuleSeverity = "VIOLATION" | "WARNING";
+
+export type EvaluationResultStatus =
+  "COMPLIANT" | "VIOLATION" | "WARNING" | "INCONCLUSIVE";
+
+export type InstitutionalPenalStatus =
+  | "APPROVED"
+  | "REDUCED_INTAKE"
+  | "NO_ADMISSION"
+  | "WITHDRAWAL_OF_APPROVAL"
+  | "RESTORATION";
+
+export interface PolicyRuleDto {
+  id: string;
+  policyPackId: string;
+  code: string;
+  name: string;
+  category: RuleCategory;
+  clauseReference: string;
+  description?: string | null;
+  severity: RuleSeverity;
+  parameters: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PolicyTestFixtureDto {
+  id: string;
+  policyPackId: string;
+  name: string;
+  description?: string | null;
+  inputData: Record<string, unknown>;
+  expectedOutput: Record<string, unknown>;
+  lastRunStatus?: "PASSED" | "FAILED" | null;
+  lastRunAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PolicyActivationSignoffDto {
+  id: string;
+  policyPackId: string;
+  reviewerId: string;
+  gazetteNotificationNumber: string;
+  stepUpVerifiedAt: string;
+  fixtureRunEvidenceHash: string;
+  signoffNotes?: string | null;
+  activatedAt: string;
+}
+
+export interface PolicyPackDto {
+  id: string;
+  code: string;
+  name: string;
+  academicYear: string;
+  edition: string;
+  status: PolicyPackStatus;
+  stateCode?: string | null;
+  gazetteReference?: string | null;
+  contentHash?: string | null;
+  authorId: string;
+  effectiveFrom?: string | null;
+  effectiveTo?: string | null;
+  supersededById?: string | null;
+  parentPackId?: string | null;
+  rules?: PolicyRuleDto[];
+  fixtures?: PolicyTestFixtureDto[];
+  activationSignoffs?: PolicyActivationSignoffDto[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ReplaySimulationRequestDto {
+  policyPackId: string;
+  baselinePolicyPackId?: string;
+  cohort: {
+    academicYear: string;
+    sanctionedIntake: number;
+    admittedRegularCount: number;
+    categories: {
+      OPEN: number;
+      SC: number;
+      ST: number;
+      OBC: number;
+    };
+    supernumerary: {
+      EWS: number;
+      TFW: number;
+      lateralEntry?: number;
+    };
+    institutionalStatus?: InstitutionalPenalStatus;
+  };
+}
+
+export interface ReplaySimulationResultDto {
+  policyPackId: string;
+  policyCode: string;
+  evaluatedAt: string;
+  headcountEvaluated: number;
+  overallStatus: EvaluationResultStatus;
+  ruleResults: Array<{
+    ruleCode: string;
+    ruleName: string;
+    clauseReference: string;
+    status: EvaluationResultStatus;
+    message: string;
+    breachMagnitude?: number;
+    details?: Record<string, unknown>;
+  }>;
+  summary: {
+    compliantCount: number;
+    violationCount: number;
+    warningCount: number;
+  };
+}
