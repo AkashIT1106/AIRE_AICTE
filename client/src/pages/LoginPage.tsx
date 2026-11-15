@@ -60,7 +60,7 @@ const TRUST_INDICATORS = [
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const { signIn } = useAuthStore();
+  const { signIn, loginAsDemo } = useAuthStore();
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -336,6 +336,24 @@ export function LoginPage() {
                 />
               )}
               {isSubmitting ? "Signing in…" : "Sign In"}
+            </button>
+
+            {/* Quick Demo Access */}
+            <div className="relative flex py-2 items-center">
+              <div className="flex-grow border-t border-neutral-200"></div>
+              <span className="flex-shrink mx-3 text-[11px] text-neutral-600 uppercase tracking-wider font-semibold">Or Instant Preview</span>
+              <div className="flex-grow border-t border-neutral-200"></div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                loginAsDemo();
+                navigate("/dashboard", { replace: true });
+              }}
+              className="w-full flex items-center justify-center gap-2 rounded-control border border-brand-primary bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-primary shadow-sm transition-colors hover:bg-brand-100 min-h-[44px]"
+            >
+              Enter AICTE Regulatory Console (Demo Session) →
             </button>
           </form>
 

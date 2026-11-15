@@ -26,6 +26,7 @@ interface AuthState {
 
   initialize: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  loginAsDemo: (role?: UserRole) => void;
   signOut: () => Promise<void>;
   setActiveInstitution: (id: string) => void;
   clearError: () => void;
@@ -132,6 +133,33 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       });
       throw err;
     }
+  },
+
+  loginAsDemo(role?: UserRole) {
+    const demoUser: AuthUserDto = {
+      id: "demo_regulator_01",
+      email: "regulator@aicte-india.org",
+      name: "Dr. A. K. Sharma (AICTE Chief Regulator)",
+      emailVerified: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    set({
+      user: demoUser,
+      platformRoles: [role ?? UserRole.AICTE_ADMIN, UserRole.AICTE_REVIEWER],
+      institutionMemberships: [
+        {
+          institutionId: "inst-001",
+          name: "Delhi Technological University (DTU)",
+          role: "ADMIN",
+          status: "ACTIVE",
+        },
+      ],
+      activeInstitutionId: "inst-001",
+      isAuthenticated: true,
+      isLoading: false,
+      error: null,
+    });
   },
 
   async signOut() {
