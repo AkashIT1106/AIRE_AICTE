@@ -11,13 +11,15 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
   const location = useLocation();
-  const { isAuthenticated, isLoading, platformRoles, initialize } = useAuthStore();
+  const { isAuthenticated, isLoading, platformRoles, user, initialize } = useAuthStore();
 
   useEffect(() => {
-    initialize();
-  }, [initialize]);
+    if (!isAuthenticated && !user) {
+      initialize();
+    }
+  }, [isAuthenticated, user, initialize]);
 
-  if (isLoading) {
+  if (isLoading && !isAuthenticated && !user) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-neutral-50">
         <LoadingState message="Verifying regulatory session..." />
@@ -27,7 +29,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
 
   // If not authenticated, allow demo viewing in development or redirect to login
   const isDemo = import.meta.env.DEV || import.meta.env.VITE_DEMO_MODE === "true";
-  if (!isAuthenticated && !isDemo) {
+  if (!isAuthenticated && !user && !isDemo) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

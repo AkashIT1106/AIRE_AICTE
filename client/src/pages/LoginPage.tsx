@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Shield, Lock, FileCheck } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { AireAlert } from "@/components/aire/AireAlert";
+import { UserRole } from "@aire/authorization";
 
 // ---------------------------------------------------------------------------
 // Validation schema
@@ -69,11 +70,17 @@ export function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
+
+  const handleQuickFill = (email: string) => {
+    setValue("email", email);
+    setValue("password", "Password123!Secure");
+  };
 
   const onSubmit = async (values: LoginFormValues) => {
     setErrorMessage(null);
@@ -361,6 +368,69 @@ export function LoginPage() {
               Enter AICTE Regulatory Console (Demo Session) →
             </button>
           </form>
+
+          {/* Quick Demo Credentials Box */}
+          <div className="mt-6 rounded-card border border-neutral-200 bg-neutral-50 p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-bold text-neutral-800">
+                Official Demonstration Accounts:
+              </p>
+              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-brand-100 text-brand-primary font-semibold">1-Click Sign In</span>
+            </div>
+            <div className="grid grid-cols-1 gap-2 text-xs">
+              <button
+                type="button"
+                onClick={() => {
+                  handleQuickFill("regulator@aicte-india.org");
+                  loginAsDemo(UserRole.AICTE_ADMIN, "regulator@aicte-india.org", "Dr. A. K. Sharma (AICTE Chief Regulator)");
+                  navigate("/dashboard", { replace: true });
+                }}
+                className="flex items-center justify-between p-2.5 rounded-control border border-neutral-200 bg-neutral-0 hover:border-brand-primary hover:bg-brand-50 transition-colors text-left group"
+              >
+                <div>
+                  <span className="font-semibold text-neutral-800 group-hover:text-brand-primary block">1. AICTE National Regulator</span>
+                  <span className="text-[11px] font-mono text-neutral-600">regulator@aicte-india.org</span>
+                </div>
+                <span className="text-[11px] font-semibold text-brand-primary">Sign In →</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleQuickFill("admin@inst101.edu");
+                  loginAsDemo(UserRole.INSTITUTION_ADMIN, "admin@inst101.edu", "Dr. Sunita Rao (Registrar)");
+                  navigate("/dashboard", { replace: true });
+                }}
+                className="flex items-center justify-between p-2.5 rounded-control border border-neutral-200 bg-neutral-0 hover:border-brand-primary hover:bg-brand-50 transition-colors text-left group"
+              >
+                <div>
+                  <span className="font-semibold text-neutral-800 group-hover:text-brand-primary block">2. Institutional Admin (Registrar)</span>
+                  <span className="text-[11px] font-mono text-neutral-600">admin@inst101.edu</span>
+                </div>
+                <span className="text-[11px] font-semibold text-brand-primary">Sign In →</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleQuickFill("operator@inst101.edu");
+                  loginAsDemo(UserRole.INSTITUTION_OPERATOR, "operator@inst101.edu", "Rajesh Kumar (Operator)");
+                  navigate("/dashboard", { replace: true });
+                }}
+                className="flex items-center justify-between p-2.5 rounded-control border border-neutral-200 bg-neutral-0 hover:border-brand-primary hover:bg-brand-50 transition-colors text-left group"
+              >
+                <div>
+                  <span className="font-semibold text-neutral-800 group-hover:text-brand-primary block">3. Institutional Operator</span>
+                  <span className="text-[11px] font-mono text-neutral-600">operator@inst101.edu</span>
+                </div>
+                <span className="text-[11px] font-semibold text-brand-primary">Sign In →</span>
+              </button>
+            </div>
+            <div className="flex items-center justify-between text-[11px] text-neutral-600 pt-1 border-t border-neutral-200">
+              <span>Default password for all:</span>
+              <code className="font-mono font-bold text-neutral-800 bg-neutral-100 px-1.5 py-0.5 rounded">Password123!Secure</code>
+            </div>
+          </div>
 
           {/* Environment notice */}
           <div className="mt-8 rounded-card border border-state-warning-border bg-state-warning-bg px-4 py-3">
