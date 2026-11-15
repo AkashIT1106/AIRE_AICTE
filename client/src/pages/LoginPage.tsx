@@ -82,15 +82,20 @@ export function LoginPage() {
       navigate("/dashboard", { replace: true });
     } catch (err: unknown) {
       if (err instanceof Error) {
-        const status = (err as Error & { status?: number }).status;
-        if (status === 401) {
-          setErrorMessage("Invalid credentials. Please try again.");
-        } else if (
-          err.message.toLowerCase().includes("fetch") ||
-          err.message.toLowerCase().includes("network") ||
-          err.message.toLowerCase().includes("failed to fetch")
+        const msg = err.message.toLowerCase();
+        if (
+          msg.includes("500") ||
+          msg.includes("offline") ||
+          msg.includes("server_unavailable") ||
+          msg.includes("database_offline") ||
+          msg.includes("parse response") ||
+          msg.includes("unavailable")
         ) {
-          setErrorMessage("Service unavailable. Please try again.");
+          setErrorMessage(
+            "Backend database service (PostgreSQL) is currently offline. Click 'Enter AICTE Regulatory Console (Demo Session)' below for instant access."
+          );
+        } else if (msg.includes("401") || msg.includes("invalid") || msg.includes("unauthorized")) {
+          setErrorMessage("Invalid credentials. Please try again.");
         } else {
           setErrorMessage(err.message || "An unexpected error occurred.");
         }

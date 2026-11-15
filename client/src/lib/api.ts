@@ -47,6 +47,12 @@ async function request<T>(
   try {
     json = (await res.json()) as ApiResponse<T>;
   } catch {
+    if (res.status === 500 || res.status === 502 || res.status === 503 || res.status === 504) {
+      throw new ApiError(
+        "SERVER_UNAVAILABLE",
+        `Backend service or database is unavailable (HTTP ${res.status}).`,
+      );
+    }
     throw new ApiError(
       "PARSE_ERROR",
       `Failed to parse response from ${method} ${path} (HTTP ${res.status})`,
@@ -54,6 +60,18 @@ async function request<T>(
   }
 
   if (json.error) {
+    const errorDetails = typeof json.error.details === "string" ? json.error.details : "";
+    if (
+      json.error.code === "INTERNAL_ERROR" &&
+      (errorDetails.includes("findFirst") || errorDetails.includes("connect") || errorDetails.includes("prisma"))
+    ) {
+      throw new ApiError(
+        "DATABASE_OFFLINE",
+        "Backend database service is offline (PostgreSQL connection required).",
+        json.error.correlationId,
+        json.error.details,
+      );
+    }
     throw new ApiError(
       json.error.code,
       json.error.message,
