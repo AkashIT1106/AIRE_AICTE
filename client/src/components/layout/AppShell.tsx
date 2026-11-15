@@ -21,8 +21,8 @@ export function AppShell() {
         {/* Top Header Bar */}
         <Topbar />
 
-        {/* Content Area with independent scroll */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+        {/* Content Area with independent scroll & smooth entrance */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 animate-fade-in scrollbar-thin">
           <Outlet />
         </main>
       </div>

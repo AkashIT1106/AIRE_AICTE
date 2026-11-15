@@ -77,17 +77,17 @@ export function MetricCard({
   return (
     <div
       className={clsx(
-        "rounded-card border p-5 font-sans",
+        "rounded-card border p-5 font-sans card-hover cursor-default group shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1",
         styles.container,
         className,
       )}
     >
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
-          <span className="text-xs font-medium uppercase tracking-wide text-neutral-600">
+          <span className="text-xs font-semibold uppercase tracking-wide text-neutral-600">
             {label}
           </span>
-          <span className={clsx("text-2xl font-bold leading-tight", styles.value)}>
+          <span className={clsx("text-2xl font-bold leading-tight tracking-tight", styles.value)}>
             {value}
           </span>
           {trend && (
@@ -97,14 +97,14 @@ export function MetricCard({
                 trendColors[trend.direction],
               )}
             >
-              <TrendIcon className="h-3.5 w-3.5" />
+              <TrendIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
               {trend.percent}%{trend.label ? ` ${trend.label}` : ""}
             </span>
           )}
         </div>
         <div
           className={clsx(
-            "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-control",
+            "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-control shadow-sm transition-all duration-200 group-hover:scale-110",
             styles.icon,
           )}
         >
